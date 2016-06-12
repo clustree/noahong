@@ -94,11 +94,7 @@ public:
    typedef std::vector<Chars> Strings;
 
 public:
-   AhoCorasickTrie()
-   : is_compiled(false) {
-      // born with root node
-      nodes.push_back(Node());
-   }
+   AhoCorasickTrie();
 
    void add_string(char const* s, size_t n, PayloadT payload = 0);
 
@@ -113,7 +109,7 @@ public:
    // Only makes fail links but, I'm hitching on the idea from regexps.
    // You never need to use this, it's done automatically, it's just here
    // in case you want manual control.
-   void compile() { ensure_compiled(); }
+   void compile();
 
    void print() const;
 
@@ -126,8 +122,8 @@ public:
 
 
 private:
-   static bool is_valid(Index ichild) { return 0 <= ichild; }
-   void ensure_compiled() { if (not is_compiled) make_failure_links(); }
+   static bool is_valid(Index ichild);
+   void ensure_compiled();
 
    /// Does the actual 'compilation', ie builds the failure links
    void make_failure_links();
@@ -135,19 +131,9 @@ private:
    /// traversal I'm not sure this is necessary, actually.
    void clear_failure_links();
 
-   Index child_at(Index i, AC_CHAR_TYPE a) const {
-      Index ichild = nodes[i].child_at(a);
-      // The root is a special case - every char that's not an actual
-      // child of the root, points back to the root.
-      if (not is_valid(ichild) and i == 0)
-         ichild = 0;
-      return ichild;
-   }
+   Index child_at(Index i, AC_CHAR_TYPE a) const;
 
-   Node::Index add_node() {
-      nodes.push_back(Node());
-      return nodes.size() - 1;
-   }
+   Node::Index add_node();
 
    Strings follow_failure_chain(Node::Index inode,
                                 Chars chars, int istart,

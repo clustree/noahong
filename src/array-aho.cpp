@@ -76,6 +76,13 @@ AhoCorasickTrie::Chars to_chars(char const* s, int num_ucs4_chars) {
 }
 
 
+AhoCorasickTrie::AhoCorasickTrie()
+    : is_compiled(false) {
+    // born with root node
+    nodes.push_back(Node());
+}
+
+
 void AhoCorasickTrie::add_string(char const* char_s, size_t n,
                                  PayloadT payload) {
    AC_CHAR_TYPE const* c = reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
@@ -126,6 +133,11 @@ int AhoCorasickTrie::num_keys() const {
    }
 
    return num;
+}
+
+
+void AhoCorasickTrie::compile() {
+    ensure_compiled();
 }
 
 
@@ -191,6 +203,32 @@ void AhoCorasickTrie::clear_failure_links() {
    // root fails to root
 
    is_compiled = false;
+}
+
+
+bool AhoCorasickTrie::is_valid(Index ichild) {
+   return 0 <= ichild;
+}
+
+void AhoCorasickTrie::ensure_compiled() {
+   if (not is_compiled)
+       make_failure_links();
+}
+
+
+Node::Index AhoCorasickTrie::child_at(Index i, AC_CHAR_TYPE a) const {
+    Index ichild = nodes[i].child_at(a);
+    // The root is a special case - every char that's not an actual
+    // child of the root, points back to the root.
+    if (not is_valid(ichild) and i == 0)
+        ichild = 0;
+    return ichild;
+}
+
+
+Node::Index AhoCorasickTrie::add_node() {
+    nodes.push_back(Node());
+    return nodes.size() - 1;
 }
 
 
