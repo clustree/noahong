@@ -65,18 +65,6 @@ std::ostream& operator<<(std::ostream& os, AhoCorasickTrie::Strings const& texts
 }
 
 
-AhoCorasickTrie::Chars to_chars(char const* s, int num_ucs4_chars) {
-   AC_CHAR_TYPE const* ucs4 = (AC_CHAR_TYPE const*)s;
-   AC_CHAR_TYPE const* u = ucs4;
-
-   AhoCorasickTrie::Chars chars;
-   for (u = ucs4; u < ucs4 + num_ucs4_chars; ++u) {
-      chars.push_back(*u);
-   }
-   return chars;
-}
-
-
 AhoCorasickTrie::AhoCorasickTrie()
     : is_compiled(false) {
     // born with root node
@@ -256,16 +244,6 @@ PayloadT AhoCorasickTrie::find_short(char const* char_s, size_t n,
       if (nodes[istate].length and nodes[istate].length <= c + 1 - start) {
          *out_iend = c - original_start + 1;
          *inout_istart = *out_iend - nodes[istate].length;
-
-// This is what Aho-Corasick proper does (but it may do more; this
-// start at implementation below catches only embedded suffixes, eg
-// given keys 'pq' and 'q' and text 'pq' it will catch 'pq' and 'q',
-// but given keys 'pqp' and 'q', and text 'pqp', will only catch 'q'
-// (if using short; otherwise of course will catch only 'pqp').
-// First move at attempt full Aho-Corasick
-//Chars chars = to_chars(char_s, n);
-//Strings chain = follow_failure_chain(istate, chars, original_istart, *out_iend);
-
          return nodes[istate].payload;
       }
    }
