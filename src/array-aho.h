@@ -29,6 +29,7 @@
 #include <cassert>
 #include <cstddef>
 #include <iosfwd>
+#include <deque>
 
 // We could include Python.h like this and return PyObject*s directly
 // but, the author just prefers the cleanliness of not having Python
@@ -146,7 +147,7 @@ private:
    // pointers (esp. on 64 bit machines) and enhances continuity (ie
    // prefetchability of cache)). At least, that's the author's
    // untested reason for doing it this way.
-   typedef std::vector<Node> Nodes;
+   typedef std::deque<Node> Nodes;
    Nodes nodes;
    bool is_compiled;
 };
