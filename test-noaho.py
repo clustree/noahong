@@ -20,6 +20,10 @@ class AhoCorasickTest(unittest.TestCase):
     def tearDown(self):
         self.tree = None
 
+    def test_compile_before_use(self):
+        self.tree.add('bar')
+        self.assertRaises(AssertionError,
+                          lambda: self.tree.find_short('xxxbaryyy'))
 
     def test_keyword_as_prefix_of_another(self):
         """According to John, there's a problem with the matcher.
@@ -27,6 +31,7 @@ class AhoCorasickTest(unittest.TestCase):
         self.tree.add('foobar')
         self.tree.add('foo')
         self.tree.add('bar')
+        self.tree.compile()
         self.assertEqual((3, 6, None), self.tree.find_short('xxxfooyyy'))
         self.assertEqual((0, 3, None), self.tree.find_short('foo'))
         self.assertEqual((3, 6, None), self.tree.find_short('xxxbaryyy'))
@@ -38,6 +43,7 @@ class AhoCorasickTest(unittest.TestCase):
         least."""
         self.tree.add("Python")
         self.tree.add("PLT Scheme")
+        self.tree.compile()
         self.assertEqual((19, 25, None),
                          self.tree.find_short("I am learning both Python and PLT Scheme"))
         self.assertEqual((0, 10, None),
@@ -47,6 +53,7 @@ class AhoCorasickTest(unittest.TestCase):
     def test_simple_construction(self):
         self.tree.add("foo")
         self.tree.add("bar")
+        self.tree.compile()
         self.assertEqual((10, 13, None),
                          self.tree.find_short("this is a foo message"))
         self.assertEqual(self.tree.children_count(), 6)
@@ -55,6 +62,7 @@ class AhoCorasickTest(unittest.TestCase):
     def test_find_longest(self):
         self.tree.add("a")
         self.tree.add("alphabet");
+        self.tree.compile()
         self.assertEqual((0, 1, None), self.tree.find_short("alphabet soup"));
         self.assertEqual((0, 8, None), self.tree.find_long("alphabet soup"))
         self.assertEqual((13, 14, None), self.tree.find_long("yummy, I see an alphabet soup bowl"))
@@ -64,6 +72,7 @@ class AhoCorasickTest(unittest.TestCase):
         """Make sure that longest search will match the whole string."""
         longString = "supercalifragilisticexpialidocious"
         self.tree.add(longString)
+        self.tree.compile()
         self.assertEqual((0, len(longString), None),
                          self.tree.find_short(longString))
 
@@ -72,17 +81,20 @@ class AhoCorasickTest(unittest.TestCase):
         """Make sure that longest search will match the whole string."""
         longString = "supercalifragilisticexpialidocious"
         self.tree.add(longString)
+        self.tree.compile()
         self.assertEqual((0, len(longString), None),
                          self.tree.find_long(longString))
 
     def test_find_longest_with_no_match(self):
         self.tree.add("foobar")
+        self.tree.compile()
         self.assertEqual((None, None, None), self.tree.find_long("fooba"))
 
 
     def test_with_expected_non_match(self):
         """Check to see that we don't always get a successful match."""
         self.tree.add("wise man")
+        self.tree.compile()
         self.assertEqual((None, None, None),
                          self.tree.find_short("where fools and wise men fear to tread"))
 
@@ -104,12 +116,14 @@ class AhoCorasickTest(unittest.TestCase):
     def test_embedded_nulls(self):
         """Check to see if we can accept embedded nulls"""
         self.tree.add("hell\0 world")
+        self.tree.compile()
         self.assertEqual((None, None, None), self.tree.find_short("ello\0 world"))
         self.assertEqual((0, 11, None), self.tree.find_short("hell\0 world"))
 
 
     def test_embedded_nulls_again(self):
         self.tree.add("\0\0\0")
+        self.tree.compile()
         self.assertEqual((0, 3, None), self.tree.find_short("\0\0\0\0\0\0\0\0"))
 
 
@@ -119,6 +133,7 @@ class AhoCorasickTest(unittest.TestCase):
         self.tree.add("scheme")
         self.tree.add("java")
         self.tree.add("pythonperl")
+        self.tree.compile()
         self.assertEqual([(0, 6, None), (6, 10, None), (10, 16, None), (16, 20, None)],
                          list(self.tree.findall_short("pythonperlschemejava")))
         self.assertEqual([(0, 10, None), (10, 16, None), (16, 20, None)],
@@ -136,6 +151,7 @@ class AhoCorasickTest(unittest.TestCase):
         self.tree.add('cisco', 'cisco')
         self.tree.add('em', 'em')
         self.tree.add('cisco systems australia', 'cisco systems')
+        self.tree.compile()
         self.assertEqual([(0, 5, 'cisco'), (10, 12, 'em')],
                          list(self.tree.findall_long('cisco systems')))
 
@@ -143,14 +159,17 @@ class AhoCorasickTest(unittest.TestCase):
       self.tree.add('an', None)
       self.tree.add('canal', None)
       self.tree.add('e can oilfield', None)
+      self.tree.compile()
       self.assertEqual([(4, 4+5, None)],
                        list(self.tree.findall_long('one canal')))
 
     def test_add_and_find_mix_freely(self):
         text = """We got pickles and crocks, We got bagels and lox"""
         self.tree.add('lox')
+        self.tree.compile()
         self.assertEqual((45, 48, None), self.tree.find_long(text))
         self.tree.add('pickles')
+        self.tree.compile()
         self.assertEqual((7, 14, None), self.tree.find_long(text))
 
     def test_explicit_compilation_still_ok(self):
@@ -160,6 +179,7 @@ class AhoCorasickTest(unittest.TestCase):
         self.tree.compile()
         self.assertEqual((45, 48, None), self.tree.find_long(text))
         self.tree["pickles"] = None
+        self.tree.compile()
         self.assertEqual((7, 14, None), self.tree.find_long(text))
 
 
@@ -175,6 +195,7 @@ class AhoCorasickTest(unittest.TestCase):
         # no payload, comes out None
         self.tree.add("C++")
         self.tree.add("dylan", obj)
+        self.tree.compile()
 
         self.assertEqual((0, 6, "yes-python"), self.tree.find_short("python"))
         self.assertEqual((0, 4, ""), self.tree.find_short("perl"))

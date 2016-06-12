@@ -100,11 +100,11 @@ public:
 
    PayloadT find_short(char const* s, size_t n,
                        int* inout_start,
-                       int* out_end);
+                       int* out_end) const;
 
    PayloadT find_longest(char const* s, size_t n,
                          int* inout_start,
-                         int* out_end);
+                         int* out_end) const;
 
    // Only makes fail links but, I'm hitching on the idea from regexps.
    // You never need to use this, it's done automatically, it's just here
@@ -125,7 +125,7 @@ public:
 
 private:
    static bool is_valid(Index ichild);
-   void ensure_compiled();
+   void assert_compiled() const;
 
    /// Does the actual 'compilation', ie builds the failure links
    void make_failure_links();
@@ -149,7 +149,7 @@ private:
    // untested reason for doing it this way.
    typedef std::vector<Node> Nodes;
    Nodes nodes;
-   mutable bool is_compiled;
+   bool is_compiled;
 };
 
 // for debugging

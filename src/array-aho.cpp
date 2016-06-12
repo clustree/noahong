@@ -148,7 +148,7 @@ int AhoCorasickTrie::num_total_children() const {
 
 
 void AhoCorasickTrie::compile() {
-    ensure_compiled();
+    make_failure_links();
 }
 
 
@@ -221,9 +221,9 @@ bool AhoCorasickTrie::is_valid(Index ichild) {
    return 0 <= ichild;
 }
 
-void AhoCorasickTrie::ensure_compiled() {
+void AhoCorasickTrie::assert_compiled() const {
    if (not is_compiled)
-       make_failure_links();
+       throw std::runtime_error("trie must be compiled before use");
 }
 
 
@@ -245,8 +245,8 @@ Node::Index AhoCorasickTrie::add_node() {
 
 PayloadT AhoCorasickTrie::find_short(char const* char_s, size_t n,
                                      int* inout_istart,
-                                     int* out_iend) {
-   ensure_compiled();
+                                     int* out_iend) const {
+   assert_compiled();
    Index istate = 0;
    PayloadT last_payload = 0;
    AC_CHAR_TYPE const* original_start = reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
@@ -299,12 +299,12 @@ PayloadT AhoCorasickTrie::find_short(char const* char_s, size_t n,
  */
 PayloadT AhoCorasickTrie::find_longest(char const* char_s, size_t n,
                                        int* inout_istart,
-                                       int* out_iend) {
+                                       int* out_iend) const {
    // longest terminal length, among a contiguous bunch of terminals.
    int length_longest = -1;
    int end_longest = -1;
 
-   ensure_compiled();
+   assert_compiled();
    Index istate = 0;
    bool have_match = false;
 

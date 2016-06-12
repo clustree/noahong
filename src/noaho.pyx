@@ -53,9 +53,9 @@ cdef extern from "array-aho.h":
         void add_string(char* text, int len, void* payload)
         void compile()
         void* find_short(char* text, int len,
-                         int* out_start, int* out_end)
+                         int* out_start, int* out_end) except +AssertionError
         void* find_longest(char* text, int len,
-                           int* out_start, int* out_end)
+                           int* out_start, int* out_end) except +AssertionError
         int num_keys()
         int num_total_children()
         void* get_payload(char* text, int len)

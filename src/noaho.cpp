@@ -272,6 +272,10 @@ static CYTHON_INLINE float __PYX_NAN() {
 #include "string.h"
 #include "stdio.h"
 #include "array-aho.h"
+#include "ios"
+#include "new"
+#include "stdexcept"
+#include "typeinfo"
 #ifdef _OPENMP
 #include <omp.h>
 #endif /* _OPENMP */
@@ -798,6 +802,7 @@ static PyObject *__pyx_f_5noaho_py_from_void_payload(void *); /*proto*/
 int __pyx_module_is_main_noaho = 0;
 
 /* Implementation of 'noaho' */
+static PyObject *__pyx_builtin_AssertionError;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_KeyError;
 static PyObject *__pyx_builtin_StopIteration;
@@ -815,9 +820,11 @@ static const char __pyx_k_ValueError[] = "ValueError";
 static const char __pyx_k_py_payload[] = "py_payload";
 static const char __pyx_k_want_longest[] = "want_longest";
 static const char __pyx_k_StopIteration[] = "StopIteration";
+static const char __pyx_k_AssertionError[] = "AssertionError";
 static const char __pyx_k_num_ucs4_chars[] = "num_ucs4_chars";
 static const char __pyx_k_Key_cannot_be_empty_would_cause[] = "Key cannot be empty (would cause Aho-Corasick automaton to spin)";
 static const char __pyx_k_Requires_unicode_or_str_text_inp[] = "Requires unicode or str text input, got %s";
+static PyObject *__pyx_n_s_AssertionError;
 static PyObject *__pyx_n_s_KeyError;
 static PyObject *__pyx_kp_s_Key_cannot_be_empty_would_cause;
 static PyObject *__pyx_kp_s_Requires_unicode_or_str_text_inp;
@@ -2204,7 +2211,8 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_short(struct __pyx_obj_5noaho_NoA
   PyObject *(*__pyx_t_5)(PyObject *);
   int __pyx_t_6;
   char *__pyx_t_7;
-  int __pyx_t_8;
+  void *__pyx_t_8;
+  int __pyx_t_9;
   __Pyx_RefNannySetupContext("find_short", 0);
 
   /* "noaho.pyx":144
@@ -2307,7 +2315,13 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_short(struct __pyx_obj_5noaho_NoA
  *         py_payload = py_from_void_payload(void_payload)
  *         if start == end:
  */
-  __pyx_v_void_payload = __pyx_v_self->thisptr->find_short(__pyx_t_7, __pyx_v_num_ucs4_chars, (&__pyx_v_start), (&__pyx_v_end));
+  try {
+    __pyx_t_8 = __pyx_v_self->thisptr->find_short(__pyx_t_7, __pyx_v_num_ucs4_chars, (&__pyx_v_start), (&__pyx_v_end));
+  } catch(...) {
+    try { throw; } catch(const std::exception& exn) { PyErr_SetString(__pyx_builtin_AssertionError, exn.what()); } catch(...) { PyErr_SetNone(__pyx_builtin_AssertionError); }
+    __PYX_ERR(0, 147, __pyx_L1_error)
+  }
+  __pyx_v_void_payload = __pyx_t_8;
 
   /* "noaho.pyx":149
  *         void_payload = self.thisptr.find_short(ucs4_data, num_ucs4_chars,
@@ -2328,8 +2342,8 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_short(struct __pyx_obj_5noaho_NoA
  *             return None, None, None
  *         else:
  */
-  __pyx_t_8 = ((__pyx_v_start == __pyx_v_end) != 0);
-  if (__pyx_t_8) {
+  __pyx_t_9 = ((__pyx_v_start == __pyx_v_end) != 0);
+  if (__pyx_t_9) {
 
     /* "noaho.pyx":151
  *         py_payload = py_from_void_payload(void_payload)
@@ -2442,7 +2456,8 @@ static PyObject *__pyx_pf_5noaho_5NoAho_20find_long(struct __pyx_obj_5noaho_NoAh
   PyObject *(*__pyx_t_5)(PyObject *);
   int __pyx_t_6;
   char *__pyx_t_7;
-  int __pyx_t_8;
+  void *__pyx_t_8;
+  int __pyx_t_9;
   __Pyx_RefNannySetupContext("find_long", 0);
 
   /* "noaho.pyx":161
@@ -2545,7 +2560,13 @@ static PyObject *__pyx_pf_5noaho_5NoAho_20find_long(struct __pyx_obj_5noaho_NoAh
  *         py_payload = py_from_void_payload(void_payload)
  *         if start == end:
  */
-  __pyx_v_void_payload = __pyx_v_self->thisptr->find_longest(__pyx_t_7, __pyx_v_num_ucs4_chars, (&__pyx_v_start), (&__pyx_v_end));
+  try {
+    __pyx_t_8 = __pyx_v_self->thisptr->find_longest(__pyx_t_7, __pyx_v_num_ucs4_chars, (&__pyx_v_start), (&__pyx_v_end));
+  } catch(...) {
+    try { throw; } catch(const std::exception& exn) { PyErr_SetString(__pyx_builtin_AssertionError, exn.what()); } catch(...) { PyErr_SetNone(__pyx_builtin_AssertionError); }
+    __PYX_ERR(0, 164, __pyx_L1_error)
+  }
+  __pyx_v_void_payload = __pyx_t_8;
 
   /* "noaho.pyx":166
  *         void_payload = self.thisptr.find_longest(ucs4_data, num_ucs4_chars,
@@ -2566,8 +2587,8 @@ static PyObject *__pyx_pf_5noaho_5NoAho_20find_long(struct __pyx_obj_5noaho_NoAh
  *             return None, None, None
  *         else:
  */
-  __pyx_t_8 = ((__pyx_v_start == __pyx_v_end) != 0);
-  if (__pyx_t_8) {
+  __pyx_t_9 = ((__pyx_v_start == __pyx_v_end) != 0);
+  if (__pyx_t_9) {
 
     /* "noaho.pyx":168
  *         py_payload = py_from_void_payload(void_payload)
@@ -3215,10 +3236,11 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   char *__pyx_t_2;
-  PyObject *__pyx_t_3 = NULL;
-  int __pyx_t_4;
-  PyObject *__pyx_t_5 = NULL;
+  void *__pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  int __pyx_t_5;
   PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("__next__", 0);
 
   /* "noaho.pyx":220
@@ -3247,7 +3269,13 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
  *                 self.ucs4_data, self.num_ucs4_chars,
  *                 &self.start, &self.end)
  */
-    __pyx_v_void_payload = __pyx_v_self->aho_obj->thisptr->find_longest(__pyx_t_2, __pyx_v_self->num_ucs4_chars, (&__pyx_v_self->start), (&__pyx_v_self->end));
+    try {
+      __pyx_t_3 = __pyx_v_self->aho_obj->thisptr->find_longest(__pyx_t_2, __pyx_v_self->num_ucs4_chars, (&__pyx_v_self->start), (&__pyx_v_self->end));
+    } catch(...) {
+      try { throw; } catch(const std::exception& exn) { PyErr_SetString(__pyx_builtin_AssertionError, exn.what()); } catch(...) { PyErr_SetNone(__pyx_builtin_AssertionError); }
+      __PYX_ERR(0, 221, __pyx_L1_error)
+    }
+    __pyx_v_void_payload = __pyx_t_3;
 
     /* "noaho.pyx":220
  *         # I figured a runtime switch was worth not having 2
@@ -3284,7 +3312,13 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
  *                 self.ucs4_data, self.num_ucs4_chars,
  *                 &self.start, &self.end)
  */
-    __pyx_v_void_payload = __pyx_v_self->aho_obj->thisptr->find_short(__pyx_t_2, __pyx_v_self->num_ucs4_chars, (&__pyx_v_self->start), (&__pyx_v_self->end));
+    try {
+      __pyx_t_3 = __pyx_v_self->aho_obj->thisptr->find_short(__pyx_t_2, __pyx_v_self->num_ucs4_chars, (&__pyx_v_self->start), (&__pyx_v_self->end));
+    } catch(...) {
+      try { throw; } catch(const std::exception& exn) { PyErr_SetString(__pyx_builtin_AssertionError, exn.what()); } catch(...) { PyErr_SetNone(__pyx_builtin_AssertionError); }
+      __PYX_ERR(0, 225, __pyx_L1_error)
+    }
+    __pyx_v_void_payload = __pyx_t_3;
   }
   __pyx_L3:;
 
@@ -3295,10 +3329,10 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
  *         if self.start < self.end:
  *             # set up for next time
  */
-  __pyx_t_3 = __pyx_f_5noaho_py_from_void_payload(__pyx_v_void_payload); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 229, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_v_py_payload = __pyx_t_3;
-  __pyx_t_3 = 0;
+  __pyx_t_4 = __pyx_f_5noaho_py_from_void_payload(__pyx_v_void_payload); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 229, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_v_py_payload = __pyx_t_4;
+  __pyx_t_4 = 0;
 
   /* "noaho.pyx":230
  * 
@@ -3317,8 +3351,8 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
  *             out_end = self.end
  *             self.start = self.end
  */
-    __pyx_t_4 = __pyx_v_self->start;
-    __pyx_v_out_start = __pyx_t_4;
+    __pyx_t_5 = __pyx_v_self->start;
+    __pyx_v_out_start = __pyx_t_5;
 
     /* "noaho.pyx":233
  *             # set up for next time
@@ -3327,8 +3361,8 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
  *             self.start = self.end
  *             return out_start, out_end, py_payload
  */
-    __pyx_t_4 = __pyx_v_self->end;
-    __pyx_v_out_end = __pyx_t_4;
+    __pyx_t_5 = __pyx_v_self->end;
+    __pyx_v_out_end = __pyx_t_5;
 
     /* "noaho.pyx":234
  *             out_start = self.start
@@ -3337,8 +3371,8 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
  *             return out_start, out_end, py_payload
  *         else:
  */
-    __pyx_t_4 = __pyx_v_self->end;
-    __pyx_v_self->start = __pyx_t_4;
+    __pyx_t_5 = __pyx_v_self->end;
+    __pyx_v_self->start = __pyx_t_5;
 
     /* "noaho.pyx":235
  *             out_end = self.end
@@ -3348,23 +3382,23 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
  *             raise StopIteration
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_out_start); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 235, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_out_end); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 235, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = PyTuple_New(3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 235, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_out_start); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 235, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_out_end); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_3);
-    __Pyx_GIVEREF(__pyx_t_5);
-    PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_t_5);
+    __pyx_t_7 = PyTuple_New(3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 235, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_GIVEREF(__pyx_t_4);
+    PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4);
+    __Pyx_GIVEREF(__pyx_t_6);
+    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_6);
     __Pyx_INCREF(__pyx_v_py_payload);
     __Pyx_GIVEREF(__pyx_v_py_payload);
-    PyTuple_SET_ITEM(__pyx_t_6, 2, __pyx_v_py_payload);
-    __pyx_t_3 = 0;
-    __pyx_t_5 = 0;
-    __pyx_r = __pyx_t_6;
+    PyTuple_SET_ITEM(__pyx_t_7, 2, __pyx_v_py_payload);
+    __pyx_t_4 = 0;
     __pyx_t_6 = 0;
+    __pyx_r = __pyx_t_7;
+    __pyx_t_7 = 0;
     goto __pyx_L0;
 
     /* "noaho.pyx":230
@@ -3396,9 +3430,9 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_7);
   __Pyx_AddTraceback("noaho.AhoIterator.__next__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -3701,6 +3735,7 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
+  {&__pyx_n_s_AssertionError, __pyx_k_AssertionError, sizeof(__pyx_k_AssertionError), 0, 0, 1, 1},
   {&__pyx_n_s_KeyError, __pyx_k_KeyError, sizeof(__pyx_k_KeyError), 0, 0, 1, 1},
   {&__pyx_kp_s_Key_cannot_be_empty_would_cause, __pyx_k_Key_cannot_be_empty_would_cause, sizeof(__pyx_k_Key_cannot_be_empty_would_cause), 0, 0, 1, 0},
   {&__pyx_kp_s_Requires_unicode_or_str_text_inp, __pyx_k_Requires_unicode_or_str_text_inp, sizeof(__pyx_k_Requires_unicode_or_str_text_inp), 0, 0, 1, 0},
@@ -3721,6 +3756,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
+  __pyx_builtin_AssertionError = __Pyx_GetBuiltinName(__pyx_n_s_AssertionError); if (!__pyx_builtin_AssertionError) __PYX_ERR(0, 56, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 34, __pyx_L1_error)
   __pyx_builtin_KeyError = __Pyx_GetBuiltinName(__pyx_n_s_KeyError); if (!__pyx_builtin_KeyError) __PYX_ERR(0, 101, __pyx_L1_error)
   __pyx_builtin_StopIteration = __Pyx_GetBuiltinName(__pyx_n_s_StopIteration); if (!__pyx_builtin_StopIteration) __PYX_ERR(0, 237, __pyx_L1_error)
