@@ -34,8 +34,9 @@ using namespace std;
 
 
 std::ostream& operator<<(std::ostream& os, Node const& node) {
-   for (Node::Children::const_iterator i = node.children.begin(),
-           end = node.children.end();
+   const Node::Children& children = node.get_children();
+   for (Node::Children::const_iterator i = children.begin(),
+           end = children.end();
         i != end; ++i) {
       os << (char)i->first << ';';
    }
@@ -140,7 +141,7 @@ int AhoCorasickTrie::num_total_children() const {
    int num = 0;
    for (Nodes::const_iterator it = nodes.begin(), end = nodes.end();
         it != end; ++it) {
-      num += it->children.size();
+      num += it->get_children().size();
    }
 
    return num;
@@ -173,8 +174,9 @@ PayloadT AhoCorasickTrie::get_payload(char const* s, size_t n) const {
 //   http://www.quretec.com/u/vilo/edu/2005-06/Text_Algorithms/index.cgi?f=L2_Multiple_String&p=ACpre
 void AhoCorasickTrie::make_failure_links() {
    queue<Node*> q;
-   for (Node::Children::const_iterator i = nodes[(Index)0].children.begin(),
-           end = nodes[(Index)0].children.end();
+   const Node::Children& children = nodes[Index(0)].get_children();
+   for (Node::Children::const_iterator i = children.begin(),
+           end = children.end();
         i != end; ++i) {
       Node* child = &nodes[i->second];
       q.push(child);
@@ -186,8 +188,9 @@ void AhoCorasickTrie::make_failure_links() {
    while (not q.empty()) {
       Node* r = q.front();
       q.pop();
-      for (Node::Children::const_iterator is = r->children.begin(),
-              end = r->children.end();
+      const Node::Children& children = r->get_children();
+      for (Node::Children::const_iterator is = children.begin(),
+              end = children.end();
            is != end; ++is) {
          AC_CHAR_TYPE a = is->first;
          Node* s = &nodes[is->second];
@@ -389,8 +392,9 @@ void AhoCorasickTrie::print() const {
       }
       Index inode = p.second;
       if (is_valid(inode)) {
-         for (Node::Children::const_iterator i = nodes[inode].children.begin(),
-                 end = nodes[inode].children.end();
+         const Node::Children& children = nodes[inode].get_children();
+         for (Node::Children::const_iterator i = children.begin(),
+                 end = children.end();
               i != end; ++i) {
             // structurally the same; will it work?
             q.push(make_pair(i->first, i->second));

@@ -78,10 +78,15 @@ struct Node {
       children[c] = idx;
    }
 
+   const Children& get_children() const {
+      return children;
+   }
+
    unsigned short length;
    Index ifailure_state;
    PayloadT payload;
 
+private:
    Children children;
 };
 
