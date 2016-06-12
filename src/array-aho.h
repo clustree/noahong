@@ -131,9 +131,6 @@ private:
 
    /// Does the actual 'compilation', ie builds the failure links
    void make_failure_links();
-   /// Clears the failure links. Given that we do a breadth-first
-   /// traversal I'm not sure this is necessary, actually.
-   void clear_failure_links();
 
    Index child_at(Index i, AC_CHAR_TYPE a) const;
 

@@ -2097,7 +2097,12 @@ static PyObject *__pyx_pf_5noaho_5NoAho_14add(struct __pyx_obj_5noaho_NoAho *__p
  * # Nice-to-have...
  */
   __pyx_t_10 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_10) && PyErr_Occurred())) __PYX_ERR(0, 129, __pyx_L1_error)
-  __pyx_v_self->thisptr->add_string(__pyx_t_10, __pyx_v_num_ucs4_chars, __pyx_v_void_payload);
+  try {
+    __pyx_v_self->thisptr->add_string(__pyx_t_10, __pyx_v_num_ucs4_chars, __pyx_v_void_payload);
+  } catch(...) {
+    try { throw; } catch(const std::exception& exn) { PyErr_SetString(__pyx_builtin_AssertionError, exn.what()); } catch(...) { PyErr_SetNone(__pyx_builtin_AssertionError); }
+    __PYX_ERR(0, 129, __pyx_L1_error)
+  }
 
   /* "noaho.pyx":112
  * #        return
@@ -3756,7 +3761,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_AssertionError = __Pyx_GetBuiltinName(__pyx_n_s_AssertionError); if (!__pyx_builtin_AssertionError) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_builtin_AssertionError = __Pyx_GetBuiltinName(__pyx_n_s_AssertionError); if (!__pyx_builtin_AssertionError) __PYX_ERR(0, 53, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 34, __pyx_L1_error)
   __pyx_builtin_KeyError = __Pyx_GetBuiltinName(__pyx_n_s_KeyError); if (!__pyx_builtin_KeyError) __PYX_ERR(0, 101, __pyx_L1_error)
   __pyx_builtin_StopIteration = __Pyx_GetBuiltinName(__pyx_n_s_StopIteration); if (!__pyx_builtin_StopIteration) __PYX_ERR(0, 237, __pyx_L1_error)

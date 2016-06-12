@@ -24,6 +24,9 @@ class AhoCorasickTest(unittest.TestCase):
         self.tree.add('bar')
         self.assertRaises(AssertionError,
                           lambda: self.tree.find_short('xxxbaryyy'))
+        self.tree.compile()
+        self.tree.find_short('xxxbaryyy')
+        self.assertRaises(AssertionError, lambda: self.tree.add('foo'))
 
     def test_keyword_as_prefix_of_another(self):
         """According to John, there's a problem with the matcher.
@@ -155,25 +158,6 @@ class AhoCorasickTest(unittest.TestCase):
         self.tree.compile()
         self.assertEqual([(4, 4+5, None)],
                          list(self.tree.findall_long('one canal')))
-
-    def test_add_and_find_mix_freely(self):
-        text = """We got pickles and crocks, We got bagels and lox"""
-        self.tree.add('lox')
-        self.tree.compile()
-        self.assertEqual((45, 48, None), self.tree.find_long(text))
-        self.tree.add('pickles')
-        self.tree.compile()
-        self.assertEqual((7, 14, None), self.tree.find_long(text))
-
-    def test_explicit_compilation_still_ok(self):
-        # ... but vestigial
-        text = """We got pickles and crocks, We got bagels and lox"""
-        self.tree["lox"] = None
-        self.tree.compile()
-        self.assertEqual((45, 48, None), self.tree.find_long(text))
-        self.tree["pickles"] = None
-        self.tree.compile()
-        self.assertEqual((7, 14, None), self.tree.find_long(text))
 
     def test_payload(self):
         class RandomClass(object):

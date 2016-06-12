@@ -50,7 +50,7 @@ cdef extern from "array-aho.h":
     cdef cppclass AhoCorasickTrie:
         AhoCorasickTrie()
 # http://groups.google.com/group/cython-users/browse_thread/thread/d0c57ee21a278db7/ffb90297821483d8?lnk=gst&q=map+return+object#ffb90297821483d8
-        void add_string(char* text, int len, void* payload)
+        void add_string(char* text, int len, void* payload) except +AssertionError
         void compile()
         void* find_short(char* text, int len,
                          int* out_start, int* out_end) except +AssertionError

@@ -86,6 +86,10 @@ AhoCorasickTrie::AhoCorasickTrie()
 
 void AhoCorasickTrie::add_string(char const* char_s, size_t n,
                                  PayloadT payload) {
+
+   if(is_compiled)
+      throw std::runtime_error("cannot add entry to compiled trie");
+
    AC_CHAR_TYPE const* c = reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
 
    Index iparent = 0;
@@ -103,11 +107,6 @@ void AhoCorasickTrie::add_string(char const* char_s, size_t n,
    }
    nodes[ichild].payload = payload;
    nodes[ichild].length = n;
-
-   if (is_compiled) {
-      clear_failure_links();
-      is_compiled = false;
-   }
 }
 
 
@@ -209,20 +208,10 @@ void AhoCorasickTrie::make_failure_links() {
 }
 
 
-void AhoCorasickTrie::clear_failure_links() {
-   for (Nodes::iterator i = nodes.begin(), end = nodes.end();
-        i != end; ++i) {
-      i->ifailure_state = (Index)0;
-   }
-   // root fails to root
-
-   is_compiled = false;
-}
-
-
 bool AhoCorasickTrie::is_valid(Index ichild) {
    return 0 <= ichild;
 }
+
 
 void AhoCorasickTrie::assert_compiled() const {
    if (not is_compiled)
