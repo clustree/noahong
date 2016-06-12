@@ -136,6 +136,17 @@ int AhoCorasickTrie::num_keys() const {
 }
 
 
+int AhoCorasickTrie::num_total_children() const {
+   int num = 0;
+   for (Nodes::const_iterator it = nodes.begin(), end = nodes.end();
+        it != end; ++it) {
+      num += it->children.size();
+   }
+
+   return num;
+}
+
+
 void AhoCorasickTrie::compile() {
     ensure_compiled();
 }

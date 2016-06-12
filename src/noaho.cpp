@@ -495,7 +495,7 @@ static const char *__pyx_f[] = {
 struct __pyx_obj_5noaho_NoAho;
 struct __pyx_obj_5noaho_AhoIterator;
 
-/* "noaho.pyx":64
+/* "noaho.pyx":65
  * 
  * 
  * cdef class NoAho:             # <<<<<<<<<<<<<<
@@ -509,7 +509,7 @@ struct __pyx_obj_5noaho_NoAho {
 };
 
 
-/* "noaho.pyx":188
+/* "noaho.pyx":192
  * 
  * # http://groups.google.com/group/cython-users/browse_thread/thread/69b6eeb930826bcb/0b20e6e265e719a3?lnk=gst&q=iterator#0b20e6e265e719a3
  * cdef class AhoIterator:             # <<<<<<<<<<<<<<
@@ -838,15 +838,16 @@ static PyObject *__pyx_n_s_want_longest;
 static int __pyx_pf_5noaho_5NoAho___cinit__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self); /* proto */
 static void __pyx_pf_5noaho_5NoAho_2__dealloc__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self); /* proto */
 static Py_ssize_t __pyx_pf_5noaho_5NoAho_4__len__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self); /* proto */
-static int __pyx_pf_5noaho_5NoAho_6__contains__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_key_text); /* proto */
-static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text); /* proto */
-static int __pyx_pf_5noaho_5NoAho_10__setitem__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text, PyObject *__pyx_v_py_payload); /* proto */
-static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text, PyObject *__pyx_v_py_payload); /* proto */
-static PyObject *__pyx_pf_5noaho_5NoAho_14compile(struct __pyx_obj_5noaho_NoAho *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text); /* proto */
-static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text); /* proto */
-static PyObject *__pyx_pf_5noaho_5NoAho_20findall_short(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text); /* proto */
-static PyObject *__pyx_pf_5noaho_5NoAho_22findall_long(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text); /* proto */
+static PyObject *__pyx_pf_5noaho_5NoAho_6children_count(struct __pyx_obj_5noaho_NoAho *__pyx_v_self); /* proto */
+static int __pyx_pf_5noaho_5NoAho_8__contains__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_key_text); /* proto */
+static PyObject *__pyx_pf_5noaho_5NoAho_10__getitem__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text); /* proto */
+static int __pyx_pf_5noaho_5NoAho_12__setitem__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text, PyObject *__pyx_v_py_payload); /* proto */
+static PyObject *__pyx_pf_5noaho_5NoAho_14add(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text, PyObject *__pyx_v_py_payload); /* proto */
+static PyObject *__pyx_pf_5noaho_5NoAho_16compile(struct __pyx_obj_5noaho_NoAho *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5noaho_5NoAho_18find_short(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text); /* proto */
+static PyObject *__pyx_pf_5noaho_5NoAho_20find_long(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text); /* proto */
+static PyObject *__pyx_pf_5noaho_5NoAho_22findall_short(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text); /* proto */
+static PyObject *__pyx_pf_5noaho_5NoAho_24findall_long(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text); /* proto */
 static int __pyx_pf_5noaho_11AhoIterator___init__(struct __pyx_obj_5noaho_AhoIterator *__pyx_v_self, PyObject *__pyx_v_aho_obj, PyObject *__pyx_v_ucs4_data, PyObject *__pyx_v_num_ucs4_chars, PyObject *__pyx_v_want_longest); /* proto */
 static PyObject *__pyx_pf_5noaho_11AhoIterator_2__iter__(struct __pyx_obj_5noaho_AhoIterator *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho_AhoIterator *__pyx_v_self); /* proto */
@@ -1092,7 +1093,7 @@ static PyObject *__pyx_f_5noaho_py_from_void_payload(void *__pyx_v_void_payload)
   return __pyx_r;
 }
 
-/* "noaho.pyx":67
+/* "noaho.pyx":68
  *     cdef AhoCorasickTrie *thisptr
  *     cdef object payloads_to_decref
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -1122,7 +1123,7 @@ static int __pyx_pf_5noaho_5NoAho___cinit__(struct __pyx_obj_5noaho_NoAho *__pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "noaho.pyx":68
+  /* "noaho.pyx":69
  *     cdef object payloads_to_decref
  *     def __cinit__(self):
  *         self.thisptr = new AhoCorasickTrie()             # <<<<<<<<<<<<<<
@@ -1131,14 +1132,14 @@ static int __pyx_pf_5noaho_5NoAho___cinit__(struct __pyx_obj_5noaho_NoAho *__pyx
  */
   __pyx_v_self->thisptr = new AhoCorasickTrie();
 
-  /* "noaho.pyx":69
+  /* "noaho.pyx":70
  *     def __cinit__(self):
  *         self.thisptr = new AhoCorasickTrie()
  *         self.payloads_to_decref = []             # <<<<<<<<<<<<<<
  * 
  *     def __dealloc__(self):
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v_self->payloads_to_decref);
@@ -1146,7 +1147,7 @@ static int __pyx_pf_5noaho_5NoAho___cinit__(struct __pyx_obj_5noaho_NoAho *__pyx
   __pyx_v_self->payloads_to_decref = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "noaho.pyx":67
+  /* "noaho.pyx":68
  *     cdef AhoCorasickTrie *thisptr
  *     cdef object payloads_to_decref
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -1166,7 +1167,7 @@ static int __pyx_pf_5noaho_5NoAho___cinit__(struct __pyx_obj_5noaho_NoAho *__pyx
   return __pyx_r;
 }
 
-/* "noaho.pyx":71
+/* "noaho.pyx":72
  *         self.payloads_to_decref = []
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -1194,7 +1195,7 @@ static void __pyx_pf_5noaho_5NoAho_2__dealloc__(struct __pyx_obj_5noaho_NoAho *_
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "noaho.pyx":72
+  /* "noaho.pyx":73
  * 
  *     def __dealloc__(self):
  *         for payload in self.payloads_to_decref:             # <<<<<<<<<<<<<<
@@ -1205,26 +1206,26 @@ static void __pyx_pf_5noaho_5NoAho_2__dealloc__(struct __pyx_obj_5noaho_NoAho *_
     __pyx_t_1 = __pyx_v_self->payloads_to_decref; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
     __pyx_t_3 = NULL;
   } else {
-    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_self->payloads_to_decref); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
+    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_self->payloads_to_decref); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 73, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 72, __pyx_L1_error)
+    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 73, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_3)) {
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_COMPILING_IN_CPYTHON
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 72, __pyx_L1_error)
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 73, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 72, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 73, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       } else {
         if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_COMPILING_IN_CPYTHON
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 72, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 73, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 72, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 73, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       }
@@ -1234,7 +1235,7 @@ static void __pyx_pf_5noaho_5NoAho_2__dealloc__(struct __pyx_obj_5noaho_NoAho *_
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 72, __pyx_L1_error)
+          else __PYX_ERR(0, 73, __pyx_L1_error)
         }
         break;
       }
@@ -1243,7 +1244,7 @@ static void __pyx_pf_5noaho_5NoAho_2__dealloc__(struct __pyx_obj_5noaho_NoAho *_
     __Pyx_XDECREF_SET(__pyx_v_payload, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "noaho.pyx":73
+    /* "noaho.pyx":74
  *     def __dealloc__(self):
  *         for payload in self.payloads_to_decref:
  *             Py_DECREF(payload)             # <<<<<<<<<<<<<<
@@ -1252,7 +1253,7 @@ static void __pyx_pf_5noaho_5NoAho_2__dealloc__(struct __pyx_obj_5noaho_NoAho *_
  */
     Py_DECREF(__pyx_v_payload);
 
-    /* "noaho.pyx":72
+    /* "noaho.pyx":73
  * 
  *     def __dealloc__(self):
  *         for payload in self.payloads_to_decref:             # <<<<<<<<<<<<<<
@@ -1262,7 +1263,7 @@ static void __pyx_pf_5noaho_5NoAho_2__dealloc__(struct __pyx_obj_5noaho_NoAho *_
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "noaho.pyx":74
+  /* "noaho.pyx":75
  *         for payload in self.payloads_to_decref:
  *             Py_DECREF(payload)
  *         del self.thisptr             # <<<<<<<<<<<<<<
@@ -1271,7 +1272,7 @@ static void __pyx_pf_5noaho_5NoAho_2__dealloc__(struct __pyx_obj_5noaho_NoAho *_
  */
   delete __pyx_v_self->thisptr;
 
-  /* "noaho.pyx":71
+  /* "noaho.pyx":72
  *         self.payloads_to_decref = []
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -1290,7 +1291,7 @@ static void __pyx_pf_5noaho_5NoAho_2__dealloc__(struct __pyx_obj_5noaho_NoAho *_
   __Pyx_RefNannyFinishContext();
 }
 
-/* "noaho.pyx":76
+/* "noaho.pyx":77
  *         del self.thisptr
  * 
  *     def __len__(self):             # <<<<<<<<<<<<<<
@@ -1316,17 +1317,17 @@ static Py_ssize_t __pyx_pf_5noaho_5NoAho_4__len__(struct __pyx_obj_5noaho_NoAho 
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__len__", 0);
 
-  /* "noaho.pyx":77
+  /* "noaho.pyx":78
  * 
  *     def __len__(self):
  *         return self.thisptr.num_keys()             # <<<<<<<<<<<<<<
  * 
- *     def __contains__(self, key_text):
+ *     def children_count(self):
  */
   __pyx_r = __pyx_v_self->thisptr->num_keys();
   goto __pyx_L0;
 
-  /* "noaho.pyx":76
+  /* "noaho.pyx":77
  *         del self.thisptr
  * 
  *     def __len__(self):             # <<<<<<<<<<<<<<
@@ -1340,8 +1341,68 @@ static Py_ssize_t __pyx_pf_5noaho_5NoAho_4__len__(struct __pyx_obj_5noaho_NoAho 
   return __pyx_r;
 }
 
-/* "noaho.pyx":79
+/* "noaho.pyx":80
  *         return self.thisptr.num_keys()
+ * 
+ *     def children_count(self):             # <<<<<<<<<<<<<<
+ *         return self.thisptr.num_total_children()
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5noaho_5NoAho_7children_count(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5noaho_5NoAho_7children_count(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("children_count (wrapper)", 0);
+  __pyx_r = __pyx_pf_5noaho_5NoAho_6children_count(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5noaho_5NoAho_6children_count(struct __pyx_obj_5noaho_NoAho *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("children_count", 0);
+
+  /* "noaho.pyx":81
+ * 
+ *     def children_count(self):
+ *         return self.thisptr.num_total_children()             # <<<<<<<<<<<<<<
+ * 
+ *     def __contains__(self, key_text):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->thisptr->num_total_children()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "noaho.pyx":80
+ *         return self.thisptr.num_keys()
+ * 
+ *     def children_count(self):             # <<<<<<<<<<<<<<
+ *         return self.thisptr.num_total_children()
+ * 
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("noaho.NoAho.children_count", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "noaho.pyx":83
+ *         return self.thisptr.num_total_children()
  * 
  *     def __contains__(self, key_text):             # <<<<<<<<<<<<<<
  *         cdef bytes ucs4_data
@@ -1349,19 +1410,19 @@ static Py_ssize_t __pyx_pf_5noaho_5NoAho_4__len__(struct __pyx_obj_5noaho_NoAho 
  */
 
 /* Python wrapper */
-static int __pyx_pw_5noaho_5NoAho_7__contains__(PyObject *__pyx_v_self, PyObject *__pyx_v_key_text); /*proto*/
-static int __pyx_pw_5noaho_5NoAho_7__contains__(PyObject *__pyx_v_self, PyObject *__pyx_v_key_text) {
+static int __pyx_pw_5noaho_5NoAho_9__contains__(PyObject *__pyx_v_self, PyObject *__pyx_v_key_text); /*proto*/
+static int __pyx_pw_5noaho_5NoAho_9__contains__(PyObject *__pyx_v_self, PyObject *__pyx_v_key_text) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__contains__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5noaho_5NoAho_6__contains__(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_key_text));
+  __pyx_r = __pyx_pf_5noaho_5NoAho_8__contains__(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_key_text));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_5noaho_5NoAho_6__contains__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_key_text) {
+static int __pyx_pf_5noaho_5NoAho_8__contains__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_key_text) {
   PyObject *__pyx_v_ucs4_data = 0;
   int __pyx_v_num_ucs4_chars;
   int __pyx_r;
@@ -1375,14 +1436,14 @@ static int __pyx_pf_5noaho_5NoAho_6__contains__(struct __pyx_obj_5noaho_NoAho *_
   char *__pyx_t_7;
   __Pyx_RefNannySetupContext("__contains__", 0);
 
-  /* "noaho.pyx":82
+  /* "noaho.pyx":86
  *         cdef bytes ucs4_data
  *         cdef int num_ucs4_chars
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(key_text)             # <<<<<<<<<<<<<<
  *         return self.thisptr.contains(ucs4_data, num_ucs4_chars)
  * 
  */
-  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_key_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 82, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_key_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
     PyObject* sequence = __pyx_t_1;
@@ -1394,7 +1455,7 @@ static int __pyx_pf_5noaho_5NoAho_6__contains__(struct __pyx_obj_5noaho_NoAho *_
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 82, __pyx_L1_error)
+      __PYX_ERR(0, 86, __pyx_L1_error)
     }
     #if CYTHON_COMPILING_IN_CPYTHON
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -1407,15 +1468,15 @@ static int __pyx_pf_5noaho_5NoAho_6__contains__(struct __pyx_obj_5noaho_NoAho *_
     __Pyx_INCREF(__pyx_t_2);
     __Pyx_INCREF(__pyx_t_3);
     #else
-    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 82, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 86, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 82, __pyx_L1_error)
+    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 86, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 82, __pyx_L1_error)
+    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 86, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_5 = Py_TYPE(__pyx_t_4)->tp_iternext;
@@ -1423,7 +1484,7 @@ static int __pyx_pf_5noaho_5NoAho_6__contains__(struct __pyx_obj_5noaho_NoAho *_
     __Pyx_GOTREF(__pyx_t_2);
     index = 1; __pyx_t_3 = __pyx_t_5(__pyx_t_4); if (unlikely(!__pyx_t_3)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_3);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 82, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 86, __pyx_L1_error)
     __pyx_t_5 = NULL;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     goto __pyx_L4_unpacking_done;
@@ -1431,29 +1492,29 @@ static int __pyx_pf_5noaho_5NoAho_6__contains__(struct __pyx_obj_5noaho_NoAho *_
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_5 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 82, __pyx_L1_error)
+    __PYX_ERR(0, 86, __pyx_L1_error)
     __pyx_L4_unpacking_done:;
   }
-  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 82, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 82, __pyx_L1_error)
+  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 86, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_ucs4_data = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
   __pyx_v_num_ucs4_chars = __pyx_t_6;
 
-  /* "noaho.pyx":83
+  /* "noaho.pyx":87
  *         cdef int num_ucs4_chars
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(key_text)
  *         return self.thisptr.contains(ucs4_data, num_ucs4_chars)             # <<<<<<<<<<<<<<
  * 
  *     def __getitem__(self, text):
  */
-  __pyx_t_7 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 87, __pyx_L1_error)
   __pyx_r = __pyx_v_self->thisptr->contains(__pyx_t_7, __pyx_v_num_ucs4_chars);
   goto __pyx_L0;
 
-  /* "noaho.pyx":79
- *         return self.thisptr.num_keys()
+  /* "noaho.pyx":83
+ *         return self.thisptr.num_total_children()
  * 
  *     def __contains__(self, key_text):             # <<<<<<<<<<<<<<
  *         cdef bytes ucs4_data
@@ -1474,7 +1535,7 @@ static int __pyx_pf_5noaho_5NoAho_6__contains__(struct __pyx_obj_5noaho_NoAho *_
   return __pyx_r;
 }
 
-/* "noaho.pyx":85
+/* "noaho.pyx":89
  *         return self.thisptr.contains(ucs4_data, num_ucs4_chars)
  * 
  *     def __getitem__(self, text):             # <<<<<<<<<<<<<<
@@ -1483,19 +1544,19 @@ static int __pyx_pf_5noaho_5NoAho_6__contains__(struct __pyx_obj_5noaho_NoAho *_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5noaho_5NoAho_9__getitem__(PyObject *__pyx_v_self, PyObject *__pyx_v_text); /*proto*/
-static PyObject *__pyx_pw_5noaho_5NoAho_9__getitem__(PyObject *__pyx_v_self, PyObject *__pyx_v_text) {
+static PyObject *__pyx_pw_5noaho_5NoAho_11__getitem__(PyObject *__pyx_v_self, PyObject *__pyx_v_text); /*proto*/
+static PyObject *__pyx_pw_5noaho_5NoAho_11__getitem__(PyObject *__pyx_v_self, PyObject *__pyx_v_text) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__getitem__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5noaho_5NoAho_8__getitem__(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_text));
+  __pyx_r = __pyx_pf_5noaho_5NoAho_10__getitem__(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_text));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text) {
+static PyObject *__pyx_pf_5noaho_5NoAho_10__getitem__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text) {
   PyObject *__pyx_v_ucs4_data = 0;
   int __pyx_v_num_ucs4_chars;
   void *__pyx_v_void_payload;
@@ -1513,14 +1574,14 @@ static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoA
   int __pyx_t_8;
   __Pyx_RefNannySetupContext("__getitem__", 0);
 
-  /* "noaho.pyx":90
+  /* "noaho.pyx":94
  *         cdef void* void_payload
  *         cdef long long payload_as_int
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)             # <<<<<<<<<<<<<<
  *         void_payload = self.thisptr.get_payload(ucs4_data, num_ucs4_chars)
  *         payload_as_int = <long long>void_payload
  */
-  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 90, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
     PyObject* sequence = __pyx_t_1;
@@ -1532,7 +1593,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoA
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 90, __pyx_L1_error)
+      __PYX_ERR(0, 94, __pyx_L1_error)
     }
     #if CYTHON_COMPILING_IN_CPYTHON
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -1545,15 +1606,15 @@ static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoA
     __Pyx_INCREF(__pyx_t_2);
     __Pyx_INCREF(__pyx_t_3);
     #else
-    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 94, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 90, __pyx_L1_error)
+    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 94, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 90, __pyx_L1_error)
+    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 94, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_5 = Py_TYPE(__pyx_t_4)->tp_iternext;
@@ -1561,7 +1622,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoA
     __Pyx_GOTREF(__pyx_t_2);
     index = 1; __pyx_t_3 = __pyx_t_5(__pyx_t_4); if (unlikely(!__pyx_t_3)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_3);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 90, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 94, __pyx_L1_error)
     __pyx_t_5 = NULL;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     goto __pyx_L4_unpacking_done;
@@ -1569,27 +1630,27 @@ static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoA
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_5 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 90, __pyx_L1_error)
+    __PYX_ERR(0, 94, __pyx_L1_error)
     __pyx_L4_unpacking_done:;
   }
-  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 90, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 90, __pyx_L1_error)
+  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_ucs4_data = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
   __pyx_v_num_ucs4_chars = __pyx_t_6;
 
-  /* "noaho.pyx":91
+  /* "noaho.pyx":95
  *         cdef long long payload_as_int
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
  *         void_payload = self.thisptr.get_payload(ucs4_data, num_ucs4_chars)             # <<<<<<<<<<<<<<
  *         payload_as_int = <long long>void_payload
  *         # No valid ptr has the lowest 3 bits set, thus we can smuggle
  */
-  __pyx_t_7 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 91, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 95, __pyx_L1_error)
   __pyx_v_void_payload = __pyx_v_self->thisptr->get_payload(__pyx_t_7, __pyx_v_num_ucs4_chars);
 
-  /* "noaho.pyx":92
+  /* "noaho.pyx":96
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
  *         void_payload = self.thisptr.get_payload(ucs4_data, num_ucs4_chars)
  *         payload_as_int = <long long>void_payload             # <<<<<<<<<<<<<<
@@ -1598,7 +1659,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoA
  */
   __pyx_v_payload_as_int = ((PY_LONG_LONG)__pyx_v_void_payload);
 
-  /* "noaho.pyx":96
+  /* "noaho.pyx":100
  *         # a signal in there that the key wasn't present (-1, which has
  *         # all bits set).
  *         if payload_as_int == -1:             # <<<<<<<<<<<<<<
@@ -1608,26 +1669,26 @@ static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoA
   __pyx_t_8 = ((__pyx_v_payload_as_int == -1LL) != 0);
   if (__pyx_t_8) {
 
-    /* "noaho.pyx":97
+    /* "noaho.pyx":101
  *         # all bits set).
  *         if payload_as_int == -1:
  *             raise KeyError(text)             # <<<<<<<<<<<<<<
  *         py_payload = py_from_void_payload(void_payload)
  *         return py_payload
  */
-    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 97, __pyx_L1_error)
+    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 101, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_v_text);
     __Pyx_GIVEREF(__pyx_v_text);
     PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_text);
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_KeyError, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 97, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_KeyError, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 101, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 97, __pyx_L1_error)
+    __PYX_ERR(0, 101, __pyx_L1_error)
 
-    /* "noaho.pyx":96
+    /* "noaho.pyx":100
  *         # a signal in there that the key wasn't present (-1, which has
  *         # all bits set).
  *         if payload_as_int == -1:             # <<<<<<<<<<<<<<
@@ -1636,19 +1697,19 @@ static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoA
  */
   }
 
-  /* "noaho.pyx":98
+  /* "noaho.pyx":102
  *         if payload_as_int == -1:
  *             raise KeyError(text)
  *         py_payload = py_from_void_payload(void_payload)             # <<<<<<<<<<<<<<
  *         return py_payload
  * 
  */
-  __pyx_t_3 = __pyx_f_5noaho_py_from_void_payload(__pyx_v_void_payload); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 98, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_5noaho_py_from_void_payload(__pyx_v_void_payload); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 102, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_v_py_payload = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "noaho.pyx":99
+  /* "noaho.pyx":103
  *             raise KeyError(text)
  *         py_payload = py_from_void_payload(void_payload)
  *         return py_payload             # <<<<<<<<<<<<<<
@@ -1660,7 +1721,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoA
   __pyx_r = __pyx_v_py_payload;
   goto __pyx_L0;
 
-  /* "noaho.pyx":85
+  /* "noaho.pyx":89
  *         return self.thisptr.contains(ucs4_data, num_ucs4_chars)
  * 
  *     def __getitem__(self, text):             # <<<<<<<<<<<<<<
@@ -1684,7 +1745,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoA
   return __pyx_r;
 }
 
-/* "noaho.pyx":101
+/* "noaho.pyx":105
  *         return py_payload
  * 
  *     def __setitem__(self, text, py_payload):             # <<<<<<<<<<<<<<
@@ -1693,19 +1754,19 @@ static PyObject *__pyx_pf_5noaho_5NoAho_8__getitem__(struct __pyx_obj_5noaho_NoA
  */
 
 /* Python wrapper */
-static int __pyx_pw_5noaho_5NoAho_11__setitem__(PyObject *__pyx_v_self, PyObject *__pyx_v_text, PyObject *__pyx_v_py_payload); /*proto*/
-static int __pyx_pw_5noaho_5NoAho_11__setitem__(PyObject *__pyx_v_self, PyObject *__pyx_v_text, PyObject *__pyx_v_py_payload) {
+static int __pyx_pw_5noaho_5NoAho_13__setitem__(PyObject *__pyx_v_self, PyObject *__pyx_v_text, PyObject *__pyx_v_py_payload); /*proto*/
+static int __pyx_pw_5noaho_5NoAho_13__setitem__(PyObject *__pyx_v_self, PyObject *__pyx_v_text, PyObject *__pyx_v_py_payload) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setitem__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5noaho_5NoAho_10__setitem__(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_text), ((PyObject *)__pyx_v_py_payload));
+  __pyx_r = __pyx_pf_5noaho_5NoAho_12__setitem__(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_text), ((PyObject *)__pyx_v_py_payload));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_5noaho_5NoAho_10__setitem__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text, PyObject *__pyx_v_py_payload) {
+static int __pyx_pf_5noaho_5NoAho_12__setitem__(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text, PyObject *__pyx_v_py_payload) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -1715,14 +1776,14 @@ static int __pyx_pf_5noaho_5NoAho_10__setitem__(struct __pyx_obj_5noaho_NoAho *_
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("__setitem__", 0);
 
-  /* "noaho.pyx":102
+  /* "noaho.pyx":106
  * 
  *     def __setitem__(self, text, py_payload):
  *         self.add(text, py_payload)             # <<<<<<<<<<<<<<
  * 
  * # This is harder...
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_add); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_add); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 106, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -1736,7 +1797,7 @@ static int __pyx_pf_5noaho_5NoAho_10__setitem__(struct __pyx_obj_5noaho_NoAho *_
       __pyx_t_4 = 1;
     }
   }
-  __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 106, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   if (__pyx_t_3) {
     __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __pyx_t_3 = NULL;
@@ -1747,13 +1808,13 @@ static int __pyx_pf_5noaho_5NoAho_10__setitem__(struct __pyx_obj_5noaho_NoAho *_
   __Pyx_INCREF(__pyx_v_py_payload);
   __Pyx_GIVEREF(__pyx_v_py_payload);
   PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_4, __pyx_v_py_payload);
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 106, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "noaho.pyx":101
+  /* "noaho.pyx":105
  *         return py_payload
  * 
  *     def __setitem__(self, text, py_payload):             # <<<<<<<<<<<<<<
@@ -1776,7 +1837,7 @@ static int __pyx_pf_5noaho_5NoAho_10__setitem__(struct __pyx_obj_5noaho_NoAho *_
   return __pyx_r;
 }
 
-/* "noaho.pyx":108
+/* "noaho.pyx":112
  * #        return
  * 
  *     def add(self, text, py_payload = None):             # <<<<<<<<<<<<<<
@@ -1785,8 +1846,8 @@ static int __pyx_pf_5noaho_5NoAho_10__setitem__(struct __pyx_obj_5noaho_NoAho *_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5noaho_5NoAho_13add(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_5noaho_5NoAho_13add(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_5noaho_5NoAho_15add(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_5noaho_5NoAho_15add(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_text = 0;
   PyObject *__pyx_v_py_payload = 0;
   PyObject *__pyx_r = 0;
@@ -1817,7 +1878,7 @@ static PyObject *__pyx_pw_5noaho_5NoAho_13add(PyObject *__pyx_v_self, PyObject *
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add") < 0)) __PYX_ERR(0, 108, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add") < 0)) __PYX_ERR(0, 112, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -1832,20 +1893,20 @@ static PyObject *__pyx_pw_5noaho_5NoAho_13add(PyObject *__pyx_v_self, PyObject *
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("add", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 108, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("add", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 112, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("noaho.NoAho.add", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5noaho_5NoAho_12add(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), __pyx_v_text, __pyx_v_py_payload);
+  __pyx_r = __pyx_pf_5noaho_5NoAho_14add(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), __pyx_v_text, __pyx_v_py_payload);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text, PyObject *__pyx_v_py_payload) {
+static PyObject *__pyx_pf_5noaho_5NoAho_14add(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text, PyObject *__pyx_v_py_payload) {
   PyObject *__pyx_v_ucs4_data = 0;
   int __pyx_v_num_ucs4_chars;
   void *__pyx_v_void_payload;
@@ -1863,14 +1924,14 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
   char *__pyx_t_10;
   __Pyx_RefNannySetupContext("add", 0);
 
-  /* "noaho.pyx":113
+  /* "noaho.pyx":117
  *         cdef void* void_payload
  * 
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)             # <<<<<<<<<<<<<<
  * 
  *         if num_ucs4_chars == 0:
  */
-  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 117, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
     PyObject* sequence = __pyx_t_1;
@@ -1882,7 +1943,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 113, __pyx_L1_error)
+      __PYX_ERR(0, 117, __pyx_L1_error)
     }
     #if CYTHON_COMPILING_IN_CPYTHON
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -1895,15 +1956,15 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
     __Pyx_INCREF(__pyx_t_2);
     __Pyx_INCREF(__pyx_t_3);
     #else
-    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 113, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 117, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 113, __pyx_L1_error)
+    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 117, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 113, __pyx_L1_error)
+    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 117, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_5 = Py_TYPE(__pyx_t_4)->tp_iternext;
@@ -1911,7 +1972,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
     __Pyx_GOTREF(__pyx_t_2);
     index = 1; __pyx_t_3 = __pyx_t_5(__pyx_t_4); if (unlikely(!__pyx_t_3)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_3);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 113, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 117, __pyx_L1_error)
     __pyx_t_5 = NULL;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     goto __pyx_L4_unpacking_done;
@@ -1919,17 +1980,17 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_5 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 113, __pyx_L1_error)
+    __PYX_ERR(0, 117, __pyx_L1_error)
     __pyx_L4_unpacking_done:;
   }
-  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 113, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 113, __pyx_L1_error)
+  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 117, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 117, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_ucs4_data = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
   __pyx_v_num_ucs4_chars = __pyx_t_6;
 
-  /* "noaho.pyx":115
+  /* "noaho.pyx":119
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
  * 
  *         if num_ucs4_chars == 0:             # <<<<<<<<<<<<<<
@@ -1939,20 +2000,20 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
   __pyx_t_7 = ((__pyx_v_num_ucs4_chars == 0) != 0);
   if (__pyx_t_7) {
 
-    /* "noaho.pyx":116
+    /* "noaho.pyx":120
  * 
  *         if num_ucs4_chars == 0:
  *             raise ValueError("Key cannot be empty (would cause Aho-Corasick automaton to spin)")             # <<<<<<<<<<<<<<
  * 
  *         if py_payload is None:
  */
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 116, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 120, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 116, __pyx_L1_error)
+    __PYX_ERR(0, 120, __pyx_L1_error)
 
-    /* "noaho.pyx":115
+    /* "noaho.pyx":119
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
  * 
  *         if num_ucs4_chars == 0:             # <<<<<<<<<<<<<<
@@ -1961,7 +2022,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
  */
   }
 
-  /* "noaho.pyx":118
+  /* "noaho.pyx":122
  *             raise ValueError("Key cannot be empty (would cause Aho-Corasick automaton to spin)")
  * 
  *         if py_payload is None:             # <<<<<<<<<<<<<<
@@ -1972,7 +2033,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
   __pyx_t_8 = (__pyx_t_7 != 0);
   if (__pyx_t_8) {
 
-    /* "noaho.pyx":119
+    /* "noaho.pyx":123
  * 
  *         if py_payload is None:
  *             void_payload = <void*>0             # <<<<<<<<<<<<<<
@@ -1981,7 +2042,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
  */
     __pyx_v_void_payload = ((void *)0);
 
-    /* "noaho.pyx":118
+    /* "noaho.pyx":122
  *             raise ValueError("Key cannot be empty (would cause Aho-Corasick automaton to spin)")
  * 
  *         if py_payload is None:             # <<<<<<<<<<<<<<
@@ -1991,7 +2052,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
     goto __pyx_L6;
   }
 
-  /* "noaho.pyx":121
+  /* "noaho.pyx":125
  *             void_payload = <void*>0
  *         else:
  *             Py_INCREF(py_payload)             # <<<<<<<<<<<<<<
@@ -2001,16 +2062,16 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
   /*else*/ {
     Py_INCREF(__pyx_v_py_payload);
 
-    /* "noaho.pyx":122
+    /* "noaho.pyx":126
  *         else:
  *             Py_INCREF(py_payload)
  *             self.payloads_to_decref.append(py_payload)             # <<<<<<<<<<<<<<
  *             void_payload = <void*>py_payload
  * 
  */
-    __pyx_t_9 = __Pyx_PyObject_Append(__pyx_v_self->payloads_to_decref, __pyx_v_py_payload); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyObject_Append(__pyx_v_self->payloads_to_decref, __pyx_v_py_payload); if (unlikely(__pyx_t_9 == -1)) __PYX_ERR(0, 126, __pyx_L1_error)
 
-    /* "noaho.pyx":123
+    /* "noaho.pyx":127
  *             Py_INCREF(py_payload)
  *             self.payloads_to_decref.append(py_payload)
  *             void_payload = <void*>py_payload             # <<<<<<<<<<<<<<
@@ -2021,17 +2082,17 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
   }
   __pyx_L6:;
 
-  /* "noaho.pyx":125
+  /* "noaho.pyx":129
  *             void_payload = <void*>py_payload
  * 
  *         self.thisptr.add_string(ucs4_data, num_ucs4_chars, void_payload)             # <<<<<<<<<<<<<<
  * 
  * # Nice-to-have...
  */
-  __pyx_t_10 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_10) && PyErr_Occurred())) __PYX_ERR(0, 125, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_10) && PyErr_Occurred())) __PYX_ERR(0, 129, __pyx_L1_error)
   __pyx_v_self->thisptr->add_string(__pyx_t_10, __pyx_v_num_ucs4_chars, __pyx_v_void_payload);
 
-  /* "noaho.pyx":108
+  /* "noaho.pyx":112
  * #        return
  * 
  *     def add(self, text, py_payload = None):             # <<<<<<<<<<<<<<
@@ -2056,7 +2117,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
   return __pyx_r;
 }
 
-/* "noaho.pyx":131
+/* "noaho.pyx":135
  * #        pass
  * 
  *     def compile(self):             # <<<<<<<<<<<<<<
@@ -2065,24 +2126,24 @@ static PyObject *__pyx_pf_5noaho_5NoAho_12add(struct __pyx_obj_5noaho_NoAho *__p
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5noaho_5NoAho_15compile(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_5noaho_5NoAho_15compile(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5noaho_5NoAho_17compile(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5noaho_5NoAho_17compile(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("compile (wrapper)", 0);
-  __pyx_r = __pyx_pf_5noaho_5NoAho_14compile(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5noaho_5NoAho_16compile(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5noaho_5NoAho_14compile(struct __pyx_obj_5noaho_NoAho *__pyx_v_self) {
+static PyObject *__pyx_pf_5noaho_5NoAho_16compile(struct __pyx_obj_5noaho_NoAho *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("compile", 0);
 
-  /* "noaho.pyx":132
+  /* "noaho.pyx":136
  * 
  *     def compile(self):
  *         self.thisptr.compile()             # <<<<<<<<<<<<<<
@@ -2091,7 +2152,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_14compile(struct __pyx_obj_5noaho_NoAho 
  */
   __pyx_v_self->thisptr->compile();
 
-  /* "noaho.pyx":131
+  /* "noaho.pyx":135
  * #        pass
  * 
  *     def compile(self):             # <<<<<<<<<<<<<<
@@ -2106,7 +2167,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_14compile(struct __pyx_obj_5noaho_NoAho 
   return __pyx_r;
 }
 
-/* "noaho.pyx":134
+/* "noaho.pyx":138
  *         self.thisptr.compile()
  * 
  *     def find_short(self, text):             # <<<<<<<<<<<<<<
@@ -2115,19 +2176,19 @@ static PyObject *__pyx_pf_5noaho_5NoAho_14compile(struct __pyx_obj_5noaho_NoAho 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5noaho_5NoAho_17find_short(PyObject *__pyx_v_self, PyObject *__pyx_v_text); /*proto*/
-static PyObject *__pyx_pw_5noaho_5NoAho_17find_short(PyObject *__pyx_v_self, PyObject *__pyx_v_text) {
+static PyObject *__pyx_pw_5noaho_5NoAho_19find_short(PyObject *__pyx_v_self, PyObject *__pyx_v_text); /*proto*/
+static PyObject *__pyx_pw_5noaho_5NoAho_19find_short(PyObject *__pyx_v_self, PyObject *__pyx_v_text) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("find_short (wrapper)", 0);
-  __pyx_r = __pyx_pf_5noaho_5NoAho_16find_short(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_text));
+  __pyx_r = __pyx_pf_5noaho_5NoAho_18find_short(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_text));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text) {
+static PyObject *__pyx_pf_5noaho_5NoAho_18find_short(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text) {
   int __pyx_v_start;
   int __pyx_v_end;
   PyObject *__pyx_v_ucs4_data = 0;
@@ -2146,14 +2207,14 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
   int __pyx_t_8;
   __Pyx_RefNannySetupContext("find_short", 0);
 
-  /* "noaho.pyx":140
+  /* "noaho.pyx":144
  *         cdef void* void_payload
  *         cdef object py_payload
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)             # <<<<<<<<<<<<<<
  *         start = 0
  *         end = 0
  */
-  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 140, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 144, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
     PyObject* sequence = __pyx_t_1;
@@ -2165,7 +2226,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 140, __pyx_L1_error)
+      __PYX_ERR(0, 144, __pyx_L1_error)
     }
     #if CYTHON_COMPILING_IN_CPYTHON
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -2178,15 +2239,15 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
     __Pyx_INCREF(__pyx_t_2);
     __Pyx_INCREF(__pyx_t_3);
     #else
-    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 140, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 144, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 140, __pyx_L1_error)
+    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 144, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 140, __pyx_L1_error)
+    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 144, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_5 = Py_TYPE(__pyx_t_4)->tp_iternext;
@@ -2194,7 +2255,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
     __Pyx_GOTREF(__pyx_t_2);
     index = 1; __pyx_t_3 = __pyx_t_5(__pyx_t_4); if (unlikely(!__pyx_t_3)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_3);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 140, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 144, __pyx_L1_error)
     __pyx_t_5 = NULL;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     goto __pyx_L4_unpacking_done;
@@ -2202,17 +2263,17 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_5 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 140, __pyx_L1_error)
+    __PYX_ERR(0, 144, __pyx_L1_error)
     __pyx_L4_unpacking_done:;
   }
-  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 140, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 140, __pyx_L1_error)
+  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 144, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 144, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_ucs4_data = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
   __pyx_v_num_ucs4_chars = __pyx_t_6;
 
-  /* "noaho.pyx":141
+  /* "noaho.pyx":145
  *         cdef object py_payload
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
  *         start = 0             # <<<<<<<<<<<<<<
@@ -2221,7 +2282,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
  */
   __pyx_v_start = 0;
 
-  /* "noaho.pyx":142
+  /* "noaho.pyx":146
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
  *         start = 0
  *         end = 0             # <<<<<<<<<<<<<<
@@ -2230,16 +2291,16 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
  */
   __pyx_v_end = 0;
 
-  /* "noaho.pyx":143
+  /* "noaho.pyx":147
  *         start = 0
  *         end = 0
  *         void_payload = self.thisptr.find_short(ucs4_data, num_ucs4_chars,             # <<<<<<<<<<<<<<
  *                                                &start, &end)
  *         py_payload = py_from_void_payload(void_payload)
  */
-  __pyx_t_7 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 147, __pyx_L1_error)
 
-  /* "noaho.pyx":144
+  /* "noaho.pyx":148
  *         end = 0
  *         void_payload = self.thisptr.find_short(ucs4_data, num_ucs4_chars,
  *                                                &start, &end)             # <<<<<<<<<<<<<<
@@ -2248,19 +2309,19 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
  */
   __pyx_v_void_payload = __pyx_v_self->thisptr->find_short(__pyx_t_7, __pyx_v_num_ucs4_chars, (&__pyx_v_start), (&__pyx_v_end));
 
-  /* "noaho.pyx":145
+  /* "noaho.pyx":149
  *         void_payload = self.thisptr.find_short(ucs4_data, num_ucs4_chars,
  *                                                &start, &end)
  *         py_payload = py_from_void_payload(void_payload)             # <<<<<<<<<<<<<<
  *         if start == end:
  *             return None, None, None
  */
-  __pyx_t_1 = __pyx_f_5noaho_py_from_void_payload(__pyx_v_void_payload); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 145, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5noaho_py_from_void_payload(__pyx_v_void_payload); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 149, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_py_payload = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "noaho.pyx":146
+  /* "noaho.pyx":150
  *                                                &start, &end)
  *         py_payload = py_from_void_payload(void_payload)
  *         if start == end:             # <<<<<<<<<<<<<<
@@ -2270,7 +2331,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
   __pyx_t_8 = ((__pyx_v_start == __pyx_v_end) != 0);
   if (__pyx_t_8) {
 
-    /* "noaho.pyx":147
+    /* "noaho.pyx":151
  *         py_payload = py_from_void_payload(void_payload)
  *         if start == end:
  *             return None, None, None             # <<<<<<<<<<<<<<
@@ -2282,7 +2343,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
     __pyx_r = __pyx_tuple__4;
     goto __pyx_L0;
 
-    /* "noaho.pyx":146
+    /* "noaho.pyx":150
  *                                                &start, &end)
  *         py_payload = py_from_void_payload(void_payload)
  *         if start == end:             # <<<<<<<<<<<<<<
@@ -2291,7 +2352,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
  */
   }
 
-  /* "noaho.pyx":149
+  /* "noaho.pyx":153
  *             return None, None, None
  *         else:
  *             return start, end, py_payload             # <<<<<<<<<<<<<<
@@ -2300,11 +2361,11 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_start); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 149, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_start); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_end); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 149, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_end); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = PyTuple_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 149, __pyx_L1_error)
+    __pyx_t_2 = PyTuple_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 153, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_GIVEREF(__pyx_t_1);
     PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
@@ -2320,7 +2381,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
     goto __pyx_L0;
   }
 
-  /* "noaho.pyx":134
+  /* "noaho.pyx":138
  *         self.thisptr.compile()
  * 
  *     def find_short(self, text):             # <<<<<<<<<<<<<<
@@ -2344,7 +2405,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
   return __pyx_r;
 }
 
-/* "noaho.pyx":151
+/* "noaho.pyx":155
  *             return start, end, py_payload
  * 
  *     def find_long(self, text):             # <<<<<<<<<<<<<<
@@ -2353,19 +2414,19 @@ static PyObject *__pyx_pf_5noaho_5NoAho_16find_short(struct __pyx_obj_5noaho_NoA
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5noaho_5NoAho_19find_long(PyObject *__pyx_v_self, PyObject *__pyx_v_text); /*proto*/
-static PyObject *__pyx_pw_5noaho_5NoAho_19find_long(PyObject *__pyx_v_self, PyObject *__pyx_v_text) {
+static PyObject *__pyx_pw_5noaho_5NoAho_21find_long(PyObject *__pyx_v_self, PyObject *__pyx_v_text); /*proto*/
+static PyObject *__pyx_pw_5noaho_5NoAho_21find_long(PyObject *__pyx_v_self, PyObject *__pyx_v_text) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("find_long (wrapper)", 0);
-  __pyx_r = __pyx_pf_5noaho_5NoAho_18find_long(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_text));
+  __pyx_r = __pyx_pf_5noaho_5NoAho_20find_long(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_text));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text) {
+static PyObject *__pyx_pf_5noaho_5NoAho_20find_long(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text) {
   int __pyx_v_start;
   int __pyx_v_end;
   PyObject *__pyx_v_ucs4_data = 0;
@@ -2384,14 +2445,14 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
   int __pyx_t_8;
   __Pyx_RefNannySetupContext("find_long", 0);
 
-  /* "noaho.pyx":157
+  /* "noaho.pyx":161
  *         cdef void* void_payload
  *         cdef object py_payload
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)             # <<<<<<<<<<<<<<
  *         start = 0
  *         end = 0
  */
-  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 157, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 161, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
     PyObject* sequence = __pyx_t_1;
@@ -2403,7 +2464,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 157, __pyx_L1_error)
+      __PYX_ERR(0, 161, __pyx_L1_error)
     }
     #if CYTHON_COMPILING_IN_CPYTHON
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -2416,15 +2477,15 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
     __Pyx_INCREF(__pyx_t_2);
     __Pyx_INCREF(__pyx_t_3);
     #else
-    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 157, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 161, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 157, __pyx_L1_error)
+    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 161, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 157, __pyx_L1_error)
+    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 161, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_5 = Py_TYPE(__pyx_t_4)->tp_iternext;
@@ -2432,7 +2493,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
     __Pyx_GOTREF(__pyx_t_2);
     index = 1; __pyx_t_3 = __pyx_t_5(__pyx_t_4); if (unlikely(!__pyx_t_3)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_3);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 157, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 161, __pyx_L1_error)
     __pyx_t_5 = NULL;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     goto __pyx_L4_unpacking_done;
@@ -2440,17 +2501,17 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_5 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 157, __pyx_L1_error)
+    __PYX_ERR(0, 161, __pyx_L1_error)
     __pyx_L4_unpacking_done:;
   }
-  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 157, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 157, __pyx_L1_error)
+  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 161, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 161, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_ucs4_data = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
   __pyx_v_num_ucs4_chars = __pyx_t_6;
 
-  /* "noaho.pyx":158
+  /* "noaho.pyx":162
  *         cdef object py_payload
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
  *         start = 0             # <<<<<<<<<<<<<<
@@ -2459,7 +2520,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
  */
   __pyx_v_start = 0;
 
-  /* "noaho.pyx":159
+  /* "noaho.pyx":163
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
  *         start = 0
  *         end = 0             # <<<<<<<<<<<<<<
@@ -2468,16 +2529,16 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
  */
   __pyx_v_end = 0;
 
-  /* "noaho.pyx":160
+  /* "noaho.pyx":164
  *         start = 0
  *         end = 0
  *         void_payload = self.thisptr.find_longest(ucs4_data, num_ucs4_chars,             # <<<<<<<<<<<<<<
  *                                                  &start, &end)
  *         py_payload = py_from_void_payload(void_payload)
  */
-  __pyx_t_7 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 160, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 164, __pyx_L1_error)
 
-  /* "noaho.pyx":161
+  /* "noaho.pyx":165
  *         end = 0
  *         void_payload = self.thisptr.find_longest(ucs4_data, num_ucs4_chars,
  *                                                  &start, &end)             # <<<<<<<<<<<<<<
@@ -2486,19 +2547,19 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
  */
   __pyx_v_void_payload = __pyx_v_self->thisptr->find_longest(__pyx_t_7, __pyx_v_num_ucs4_chars, (&__pyx_v_start), (&__pyx_v_end));
 
-  /* "noaho.pyx":162
+  /* "noaho.pyx":166
  *         void_payload = self.thisptr.find_longest(ucs4_data, num_ucs4_chars,
  *                                                  &start, &end)
  *         py_payload = py_from_void_payload(void_payload)             # <<<<<<<<<<<<<<
  *         if start == end:
  *             return None, None, None
  */
-  __pyx_t_1 = __pyx_f_5noaho_py_from_void_payload(__pyx_v_void_payload); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 162, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5noaho_py_from_void_payload(__pyx_v_void_payload); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 166, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_py_payload = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "noaho.pyx":163
+  /* "noaho.pyx":167
  *                                                  &start, &end)
  *         py_payload = py_from_void_payload(void_payload)
  *         if start == end:             # <<<<<<<<<<<<<<
@@ -2508,7 +2569,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
   __pyx_t_8 = ((__pyx_v_start == __pyx_v_end) != 0);
   if (__pyx_t_8) {
 
-    /* "noaho.pyx":164
+    /* "noaho.pyx":168
  *         py_payload = py_from_void_payload(void_payload)
  *         if start == end:
  *             return None, None, None             # <<<<<<<<<<<<<<
@@ -2520,7 +2581,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
     __pyx_r = __pyx_tuple__5;
     goto __pyx_L0;
 
-    /* "noaho.pyx":163
+    /* "noaho.pyx":167
  *                                                  &start, &end)
  *         py_payload = py_from_void_payload(void_payload)
  *         if start == end:             # <<<<<<<<<<<<<<
@@ -2529,7 +2590,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
  */
   }
 
-  /* "noaho.pyx":166
+  /* "noaho.pyx":170
  *             return None, None, None
  *         else:
  *             return start, end, py_payload             # <<<<<<<<<<<<<<
@@ -2538,11 +2599,11 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_start); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_start); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 170, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_end); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_end); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 170, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = PyTuple_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_2 = PyTuple_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 170, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_GIVEREF(__pyx_t_1);
     PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
@@ -2558,7 +2619,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
     goto __pyx_L0;
   }
 
-  /* "noaho.pyx":151
+  /* "noaho.pyx":155
  *             return start, end, py_payload
  * 
  *     def find_long(self, text):             # <<<<<<<<<<<<<<
@@ -2582,7 +2643,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
   return __pyx_r;
 }
 
-/* "noaho.pyx":169
+/* "noaho.pyx":173
  * 
  * # http://thread.gmane.org/gmane.comp.python.cython.user/1920/focus=1921
  *     def findall_short(self, text):             # <<<<<<<<<<<<<<
@@ -2591,19 +2652,19 @@ static PyObject *__pyx_pf_5noaho_5NoAho_18find_long(struct __pyx_obj_5noaho_NoAh
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5noaho_5NoAho_21findall_short(PyObject *__pyx_v_self, PyObject *__pyx_v_text); /*proto*/
-static PyObject *__pyx_pw_5noaho_5NoAho_21findall_short(PyObject *__pyx_v_self, PyObject *__pyx_v_text) {
+static PyObject *__pyx_pw_5noaho_5NoAho_23findall_short(PyObject *__pyx_v_self, PyObject *__pyx_v_text); /*proto*/
+static PyObject *__pyx_pw_5noaho_5NoAho_23findall_short(PyObject *__pyx_v_self, PyObject *__pyx_v_text) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("findall_short (wrapper)", 0);
-  __pyx_r = __pyx_pf_5noaho_5NoAho_20findall_short(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_text));
+  __pyx_r = __pyx_pf_5noaho_5NoAho_22findall_short(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_text));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5noaho_5NoAho_20findall_short(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text) {
+static PyObject *__pyx_pf_5noaho_5NoAho_22findall_short(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text) {
   PyObject *__pyx_v_ucs4_data = 0;
   int __pyx_v_num_ucs4_chars;
   PyObject *__pyx_r = NULL;
@@ -2616,14 +2677,14 @@ static PyObject *__pyx_pf_5noaho_5NoAho_20findall_short(struct __pyx_obj_5noaho_
   int __pyx_t_6;
   __Pyx_RefNannySetupContext("findall_short", 0);
 
-  /* "noaho.pyx":172
+  /* "noaho.pyx":176
  *         cdef bytes ucs4_data
  *         cdef int num_ucs4_chars
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)             # <<<<<<<<<<<<<<
  *         # 0 is flag for 'short'
  *         return AhoIterator(self, ucs4_data, num_ucs4_chars, 0)
  */
-  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 172, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 176, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
     PyObject* sequence = __pyx_t_1;
@@ -2635,7 +2696,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_20findall_short(struct __pyx_obj_5noaho_
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 172, __pyx_L1_error)
+      __PYX_ERR(0, 176, __pyx_L1_error)
     }
     #if CYTHON_COMPILING_IN_CPYTHON
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -2648,15 +2709,15 @@ static PyObject *__pyx_pf_5noaho_5NoAho_20findall_short(struct __pyx_obj_5noaho_
     __Pyx_INCREF(__pyx_t_2);
     __Pyx_INCREF(__pyx_t_3);
     #else
-    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 172, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 176, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
+    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 176, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 172, __pyx_L1_error)
+    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 176, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_5 = Py_TYPE(__pyx_t_4)->tp_iternext;
@@ -2664,7 +2725,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_20findall_short(struct __pyx_obj_5noaho_
     __Pyx_GOTREF(__pyx_t_2);
     index = 1; __pyx_t_3 = __pyx_t_5(__pyx_t_4); if (unlikely(!__pyx_t_3)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_3);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 172, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 176, __pyx_L1_error)
     __pyx_t_5 = NULL;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     goto __pyx_L4_unpacking_done;
@@ -2672,17 +2733,17 @@ static PyObject *__pyx_pf_5noaho_5NoAho_20findall_short(struct __pyx_obj_5noaho_
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_5 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 172, __pyx_L1_error)
+    __PYX_ERR(0, 176, __pyx_L1_error)
     __pyx_L4_unpacking_done:;
   }
-  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 172, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 172, __pyx_L1_error)
+  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 176, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 176, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_ucs4_data = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
   __pyx_v_num_ucs4_chars = __pyx_t_6;
 
-  /* "noaho.pyx":174
+  /* "noaho.pyx":178
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
  *         # 0 is flag for 'short'
  *         return AhoIterator(self, ucs4_data, num_ucs4_chars, 0)             # <<<<<<<<<<<<<<
@@ -2690,9 +2751,9 @@ static PyObject *__pyx_pf_5noaho_5NoAho_20findall_short(struct __pyx_obj_5noaho_
  *     def findall_long(self, text):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_num_ucs4_chars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_num_ucs4_chars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 178, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 174, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 178, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(((PyObject *)__pyx_v_self));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self));
@@ -2706,14 +2767,14 @@ static PyObject *__pyx_pf_5noaho_5NoAho_20findall_short(struct __pyx_obj_5noaho_
   __Pyx_GIVEREF(__pyx_int_0);
   PyTuple_SET_ITEM(__pyx_t_3, 3, __pyx_int_0);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5noaho_AhoIterator), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5noaho_AhoIterator), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 178, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "noaho.pyx":169
+  /* "noaho.pyx":173
  * 
  * # http://thread.gmane.org/gmane.comp.python.cython.user/1920/focus=1921
  *     def findall_short(self, text):             # <<<<<<<<<<<<<<
@@ -2736,7 +2797,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_20findall_short(struct __pyx_obj_5noaho_
   return __pyx_r;
 }
 
-/* "noaho.pyx":176
+/* "noaho.pyx":180
  *         return AhoIterator(self, ucs4_data, num_ucs4_chars, 0)
  * 
  *     def findall_long(self, text):             # <<<<<<<<<<<<<<
@@ -2745,19 +2806,19 @@ static PyObject *__pyx_pf_5noaho_5NoAho_20findall_short(struct __pyx_obj_5noaho_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5noaho_5NoAho_23findall_long(PyObject *__pyx_v_self, PyObject *__pyx_v_text); /*proto*/
-static PyObject *__pyx_pw_5noaho_5NoAho_23findall_long(PyObject *__pyx_v_self, PyObject *__pyx_v_text) {
+static PyObject *__pyx_pw_5noaho_5NoAho_25findall_long(PyObject *__pyx_v_self, PyObject *__pyx_v_text); /*proto*/
+static PyObject *__pyx_pw_5noaho_5NoAho_25findall_long(PyObject *__pyx_v_self, PyObject *__pyx_v_text) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("findall_long (wrapper)", 0);
-  __pyx_r = __pyx_pf_5noaho_5NoAho_22findall_long(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_text));
+  __pyx_r = __pyx_pf_5noaho_5NoAho_24findall_long(((struct __pyx_obj_5noaho_NoAho *)__pyx_v_self), ((PyObject *)__pyx_v_text));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5noaho_5NoAho_22findall_long(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text) {
+static PyObject *__pyx_pf_5noaho_5NoAho_24findall_long(struct __pyx_obj_5noaho_NoAho *__pyx_v_self, PyObject *__pyx_v_text) {
   PyObject *__pyx_v_ucs4_data = 0;
   int __pyx_v_num_ucs4_chars;
   PyObject *__pyx_r = NULL;
@@ -2770,14 +2831,14 @@ static PyObject *__pyx_pf_5noaho_5NoAho_22findall_long(struct __pyx_obj_5noaho_N
   int __pyx_t_6;
   __Pyx_RefNannySetupContext("findall_long", 0);
 
-  /* "noaho.pyx":179
+  /* "noaho.pyx":183
  *         cdef bytes ucs4_data
  *         cdef int num_ucs4_chars
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)             # <<<<<<<<<<<<<<
  *         # 1 is flag for 'long'
  *         return AhoIterator(self, ucs4_data, num_ucs4_chars, 1)
  */
-  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 179, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5noaho_get_as_ucs4(__pyx_v_text); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 183, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
     PyObject* sequence = __pyx_t_1;
@@ -2789,7 +2850,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_22findall_long(struct __pyx_obj_5noaho_N
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 179, __pyx_L1_error)
+      __PYX_ERR(0, 183, __pyx_L1_error)
     }
     #if CYTHON_COMPILING_IN_CPYTHON
     if (likely(PyTuple_CheckExact(sequence))) {
@@ -2802,15 +2863,15 @@ static PyObject *__pyx_pf_5noaho_5NoAho_22findall_long(struct __pyx_obj_5noaho_N
     __Pyx_INCREF(__pyx_t_2);
     __Pyx_INCREF(__pyx_t_3);
     #else
-    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 179, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 183, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
+    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 183, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 179, __pyx_L1_error)
+    __pyx_t_4 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 183, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_5 = Py_TYPE(__pyx_t_4)->tp_iternext;
@@ -2818,7 +2879,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_22findall_long(struct __pyx_obj_5noaho_N
     __Pyx_GOTREF(__pyx_t_2);
     index = 1; __pyx_t_3 = __pyx_t_5(__pyx_t_4); if (unlikely(!__pyx_t_3)) goto __pyx_L3_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_3);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 179, __pyx_L1_error)
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_5(__pyx_t_4), 2) < 0) __PYX_ERR(0, 183, __pyx_L1_error)
     __pyx_t_5 = NULL;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     goto __pyx_L4_unpacking_done;
@@ -2826,17 +2887,17 @@ static PyObject *__pyx_pf_5noaho_5NoAho_22findall_long(struct __pyx_obj_5noaho_N
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_5 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    __PYX_ERR(0, 179, __pyx_L1_error)
+    __PYX_ERR(0, 183, __pyx_L1_error)
     __pyx_L4_unpacking_done:;
   }
-  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 179, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 179, __pyx_L1_error)
+  if (!(likely(PyBytes_CheckExact(__pyx_t_2))||((__pyx_t_2) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_t_2)->tp_name), 0))) __PYX_ERR(0, 183, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 183, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_ucs4_data = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
   __pyx_v_num_ucs4_chars = __pyx_t_6;
 
-  /* "noaho.pyx":181
+  /* "noaho.pyx":185
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
  *         # 1 is flag for 'long'
  *         return AhoIterator(self, ucs4_data, num_ucs4_chars, 1)             # <<<<<<<<<<<<<<
@@ -2844,9 +2905,9 @@ static PyObject *__pyx_pf_5noaho_5NoAho_22findall_long(struct __pyx_obj_5noaho_N
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_num_ucs4_chars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 181, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_num_ucs4_chars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 185, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 181, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 185, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(((PyObject *)__pyx_v_self));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self));
@@ -2860,14 +2921,14 @@ static PyObject *__pyx_pf_5noaho_5NoAho_22findall_long(struct __pyx_obj_5noaho_N
   __Pyx_GIVEREF(__pyx_int_1);
   PyTuple_SET_ITEM(__pyx_t_3, 3, __pyx_int_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5noaho_AhoIterator), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 181, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5noaho_AhoIterator), __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 185, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "noaho.pyx":176
+  /* "noaho.pyx":180
  *         return AhoIterator(self, ucs4_data, num_ucs4_chars, 0)
  * 
  *     def findall_long(self, text):             # <<<<<<<<<<<<<<
@@ -2890,7 +2951,7 @@ static PyObject *__pyx_pf_5noaho_5NoAho_22findall_long(struct __pyx_obj_5noaho_N
   return __pyx_r;
 }
 
-/* "noaho.pyx":194
+/* "noaho.pyx":198
  *     cdef int start, end, want_longest
  * 
  *     def __init__(self, aho_obj, ucs4_data, num_ucs4_chars, want_longest):             # <<<<<<<<<<<<<<
@@ -2930,21 +2991,21 @@ static int __pyx_pw_5noaho_11AhoIterator_1__init__(PyObject *__pyx_v_self, PyObj
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_ucs4_data)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, 1); __PYX_ERR(0, 194, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, 1); __PYX_ERR(0, 198, __pyx_L3_error)
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_num_ucs4_chars)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, 2); __PYX_ERR(0, 194, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, 2); __PYX_ERR(0, 198, __pyx_L3_error)
         }
         case  3:
         if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_want_longest)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, 3); __PYX_ERR(0, 194, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, 3); __PYX_ERR(0, 198, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 194, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 198, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -2961,7 +3022,7 @@ static int __pyx_pw_5noaho_11AhoIterator_1__init__(PyObject *__pyx_v_self, PyObj
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 194, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 198, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("noaho.AhoIterator.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2981,14 +3042,14 @@ static int __pyx_pf_5noaho_11AhoIterator___init__(struct __pyx_obj_5noaho_AhoIte
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "noaho.pyx":195
+  /* "noaho.pyx":199
  * 
  *     def __init__(self, aho_obj, ucs4_data, num_ucs4_chars, want_longest):
  *         self.aho_obj = aho_obj             # <<<<<<<<<<<<<<
  *         self.ucs4_data = ucs4_data
  *         self.num_ucs4_chars = num_ucs4_chars
  */
-  if (!(likely(((__pyx_v_aho_obj) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_aho_obj, __pyx_ptype_5noaho_NoAho))))) __PYX_ERR(0, 195, __pyx_L1_error)
+  if (!(likely(((__pyx_v_aho_obj) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_aho_obj, __pyx_ptype_5noaho_NoAho))))) __PYX_ERR(0, 199, __pyx_L1_error)
   __pyx_t_1 = __pyx_v_aho_obj;
   __Pyx_INCREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
@@ -2997,14 +3058,14 @@ static int __pyx_pf_5noaho_11AhoIterator___init__(struct __pyx_obj_5noaho_AhoIte
   __pyx_v_self->aho_obj = ((struct __pyx_obj_5noaho_NoAho *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "noaho.pyx":196
+  /* "noaho.pyx":200
  *     def __init__(self, aho_obj, ucs4_data, num_ucs4_chars, want_longest):
  *         self.aho_obj = aho_obj
  *         self.ucs4_data = ucs4_data             # <<<<<<<<<<<<<<
  *         self.num_ucs4_chars = num_ucs4_chars
  *         self.start = 0
  */
-  if (!(likely(PyBytes_CheckExact(__pyx_v_ucs4_data))||((__pyx_v_ucs4_data) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_v_ucs4_data)->tp_name), 0))) __PYX_ERR(0, 196, __pyx_L1_error)
+  if (!(likely(PyBytes_CheckExact(__pyx_v_ucs4_data))||((__pyx_v_ucs4_data) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "bytes", Py_TYPE(__pyx_v_ucs4_data)->tp_name), 0))) __PYX_ERR(0, 200, __pyx_L1_error)
   __pyx_t_1 = __pyx_v_ucs4_data;
   __Pyx_INCREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
@@ -3013,17 +3074,17 @@ static int __pyx_pf_5noaho_11AhoIterator___init__(struct __pyx_obj_5noaho_AhoIte
   __pyx_v_self->ucs4_data = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "noaho.pyx":197
+  /* "noaho.pyx":201
  *         self.aho_obj = aho_obj
  *         self.ucs4_data = ucs4_data
  *         self.num_ucs4_chars = num_ucs4_chars             # <<<<<<<<<<<<<<
  *         self.start = 0
  *         self.end = 0
  */
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_num_ucs4_chars); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 197, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_num_ucs4_chars); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 201, __pyx_L1_error)
   __pyx_v_self->num_ucs4_chars = __pyx_t_2;
 
-  /* "noaho.pyx":198
+  /* "noaho.pyx":202
  *         self.ucs4_data = ucs4_data
  *         self.num_ucs4_chars = num_ucs4_chars
  *         self.start = 0             # <<<<<<<<<<<<<<
@@ -3032,7 +3093,7 @@ static int __pyx_pf_5noaho_11AhoIterator___init__(struct __pyx_obj_5noaho_AhoIte
  */
   __pyx_v_self->start = 0;
 
-  /* "noaho.pyx":199
+  /* "noaho.pyx":203
  *         self.num_ucs4_chars = num_ucs4_chars
  *         self.start = 0
  *         self.end = 0             # <<<<<<<<<<<<<<
@@ -3041,17 +3102,17 @@ static int __pyx_pf_5noaho_11AhoIterator___init__(struct __pyx_obj_5noaho_AhoIte
  */
   __pyx_v_self->end = 0;
 
-  /* "noaho.pyx":200
+  /* "noaho.pyx":204
  *         self.start = 0
  *         self.end = 0
  *         self.want_longest = want_longest             # <<<<<<<<<<<<<<
  * 
  *     # I belieeeeve we don't need a __dealloc__ here, that Cython bumps
  */
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_want_longest); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 200, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_want_longest); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 204, __pyx_L1_error)
   __pyx_v_self->want_longest = __pyx_t_2;
 
-  /* "noaho.pyx":194
+  /* "noaho.pyx":198
  *     cdef int start, end, want_longest
  * 
  *     def __init__(self, aho_obj, ucs4_data, num_ucs4_chars, want_longest):             # <<<<<<<<<<<<<<
@@ -3071,7 +3132,7 @@ static int __pyx_pf_5noaho_11AhoIterator___init__(struct __pyx_obj_5noaho_AhoIte
   return __pyx_r;
 }
 
-/* "noaho.pyx":206
+/* "noaho.pyx":210
  *     # when we die.
  * 
  *     def __iter__(self):             # <<<<<<<<<<<<<<
@@ -3097,7 +3158,7 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_2__iter__(struct __pyx_obj_5noaho
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__iter__", 0);
 
-  /* "noaho.pyx":207
+  /* "noaho.pyx":211
  * 
  *     def __iter__(self):
  *         return self             # <<<<<<<<<<<<<<
@@ -3109,7 +3170,7 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_2__iter__(struct __pyx_obj_5noaho
   __pyx_r = ((PyObject *)__pyx_v_self);
   goto __pyx_L0;
 
-  /* "noaho.pyx":206
+  /* "noaho.pyx":210
  *     # when we die.
  * 
  *     def __iter__(self):             # <<<<<<<<<<<<<<
@@ -3124,7 +3185,7 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_2__iter__(struct __pyx_obj_5noaho
   return __pyx_r;
 }
 
-/* "noaho.pyx":209
+/* "noaho.pyx":213
  *         return self
  * 
  *     def __next__(self):             # <<<<<<<<<<<<<<
@@ -3160,7 +3221,7 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__next__", 0);
 
-  /* "noaho.pyx":216
+  /* "noaho.pyx":220
  *         # I figured a runtime switch was worth not having 2
  *         # iterator types.
  *         if self.want_longest:             # <<<<<<<<<<<<<<
@@ -3170,16 +3231,16 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
   __pyx_t_1 = (__pyx_v_self->want_longest != 0);
   if (__pyx_t_1) {
 
-    /* "noaho.pyx":218
+    /* "noaho.pyx":222
  *         if self.want_longest:
  *             void_payload = self.aho_obj.thisptr.find_longest(
  *                 self.ucs4_data, self.num_ucs4_chars,             # <<<<<<<<<<<<<<
  *                 &self.start, &self.end)
  *         else:
  */
-    __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_self->ucs4_data); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 218, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_self->ucs4_data); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 222, __pyx_L1_error)
 
-    /* "noaho.pyx":217
+    /* "noaho.pyx":221
  *         # iterator types.
  *         if self.want_longest:
  *             void_payload = self.aho_obj.thisptr.find_longest(             # <<<<<<<<<<<<<<
@@ -3188,7 +3249,7 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
  */
     __pyx_v_void_payload = __pyx_v_self->aho_obj->thisptr->find_longest(__pyx_t_2, __pyx_v_self->num_ucs4_chars, (&__pyx_v_self->start), (&__pyx_v_self->end));
 
-    /* "noaho.pyx":216
+    /* "noaho.pyx":220
  *         # I figured a runtime switch was worth not having 2
  *         # iterator types.
  *         if self.want_longest:             # <<<<<<<<<<<<<<
@@ -3198,7 +3259,7 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
     goto __pyx_L3;
   }
 
-  /* "noaho.pyx":221
+  /* "noaho.pyx":225
  *                 &self.start, &self.end)
  *         else:
  *             void_payload = self.aho_obj.thisptr.find_short(             # <<<<<<<<<<<<<<
@@ -3207,16 +3268,16 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
  */
   /*else*/ {
 
-    /* "noaho.pyx":222
+    /* "noaho.pyx":226
  *         else:
  *             void_payload = self.aho_obj.thisptr.find_short(
  *                 self.ucs4_data, self.num_ucs4_chars,             # <<<<<<<<<<<<<<
  *                 &self.start, &self.end)
  * 
  */
-    __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_self->ucs4_data); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 222, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_self->ucs4_data); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 226, __pyx_L1_error)
 
-    /* "noaho.pyx":221
+    /* "noaho.pyx":225
  *                 &self.start, &self.end)
  *         else:
  *             void_payload = self.aho_obj.thisptr.find_short(             # <<<<<<<<<<<<<<
@@ -3227,19 +3288,19 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
   }
   __pyx_L3:;
 
-  /* "noaho.pyx":225
+  /* "noaho.pyx":229
  *                 &self.start, &self.end)
  * 
  *         py_payload = py_from_void_payload(void_payload)             # <<<<<<<<<<<<<<
  *         if self.start < self.end:
  *             # set up for next time
  */
-  __pyx_t_3 = __pyx_f_5noaho_py_from_void_payload(__pyx_v_void_payload); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 225, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_5noaho_py_from_void_payload(__pyx_v_void_payload); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 229, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_v_py_payload = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "noaho.pyx":226
+  /* "noaho.pyx":230
  * 
  *         py_payload = py_from_void_payload(void_payload)
  *         if self.start < self.end:             # <<<<<<<<<<<<<<
@@ -3249,7 +3310,7 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
   __pyx_t_1 = ((__pyx_v_self->start < __pyx_v_self->end) != 0);
   if (__pyx_t_1) {
 
-    /* "noaho.pyx":228
+    /* "noaho.pyx":232
  *         if self.start < self.end:
  *             # set up for next time
  *             out_start = self.start             # <<<<<<<<<<<<<<
@@ -3259,7 +3320,7 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
     __pyx_t_4 = __pyx_v_self->start;
     __pyx_v_out_start = __pyx_t_4;
 
-    /* "noaho.pyx":229
+    /* "noaho.pyx":233
  *             # set up for next time
  *             out_start = self.start
  *             out_end = self.end             # <<<<<<<<<<<<<<
@@ -3269,7 +3330,7 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
     __pyx_t_4 = __pyx_v_self->end;
     __pyx_v_out_end = __pyx_t_4;
 
-    /* "noaho.pyx":230
+    /* "noaho.pyx":234
  *             out_start = self.start
  *             out_end = self.end
  *             self.start = self.end             # <<<<<<<<<<<<<<
@@ -3279,7 +3340,7 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
     __pyx_t_4 = __pyx_v_self->end;
     __pyx_v_self->start = __pyx_t_4;
 
-    /* "noaho.pyx":231
+    /* "noaho.pyx":235
  *             out_end = self.end
  *             self.start = self.end
  *             return out_start, out_end, py_payload             # <<<<<<<<<<<<<<
@@ -3287,11 +3348,11 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
  *             raise StopIteration
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_out_start); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 231, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_out_start); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_out_end); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 231, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_out_end); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = PyTuple_New(3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 231, __pyx_L1_error)
+    __pyx_t_6 = PyTuple_New(3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_3);
@@ -3306,7 +3367,7 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
     __pyx_t_6 = 0;
     goto __pyx_L0;
 
-    /* "noaho.pyx":226
+    /* "noaho.pyx":230
  * 
  *         py_payload = py_from_void_payload(void_payload)
  *         if self.start < self.end:             # <<<<<<<<<<<<<<
@@ -3315,17 +3376,17 @@ static PyObject *__pyx_pf_5noaho_11AhoIterator_4__next__(struct __pyx_obj_5noaho
  */
   }
 
-  /* "noaho.pyx":233
+  /* "noaho.pyx":237
  *             return out_start, out_end, py_payload
  *         else:
  *             raise StopIteration             # <<<<<<<<<<<<<<
  */
   /*else*/ {
     __Pyx_Raise(__pyx_builtin_StopIteration, 0, 0, 0);
-    __PYX_ERR(0, 233, __pyx_L1_error)
+    __PYX_ERR(0, 237, __pyx_L1_error)
   }
 
-  /* "noaho.pyx":209
+  /* "noaho.pyx":213
  *         return self
  * 
  *     def __next__(self):             # <<<<<<<<<<<<<<
@@ -3411,7 +3472,7 @@ static PyObject *__pyx_sq_item_5noaho_NoAho(PyObject *o, Py_ssize_t i) {
 
 static int __pyx_mp_ass_subscript_5noaho_NoAho(PyObject *o, PyObject *i, PyObject *v) {
   if (v) {
-    return __pyx_pw_5noaho_5NoAho_11__setitem__(o, i, v);
+    return __pyx_pw_5noaho_5NoAho_13__setitem__(o, i, v);
   }
   else {
     PyErr_Format(PyExc_NotImplementedError,
@@ -3421,12 +3482,13 @@ static int __pyx_mp_ass_subscript_5noaho_NoAho(PyObject *o, PyObject *i, PyObjec
 }
 
 static PyMethodDef __pyx_methods_5noaho_NoAho[] = {
-  {"add", (PyCFunction)__pyx_pw_5noaho_5NoAho_13add, METH_VARARGS|METH_KEYWORDS, 0},
-  {"compile", (PyCFunction)__pyx_pw_5noaho_5NoAho_15compile, METH_NOARGS, 0},
-  {"find_short", (PyCFunction)__pyx_pw_5noaho_5NoAho_17find_short, METH_O, 0},
-  {"find_long", (PyCFunction)__pyx_pw_5noaho_5NoAho_19find_long, METH_O, 0},
-  {"findall_short", (PyCFunction)__pyx_pw_5noaho_5NoAho_21findall_short, METH_O, 0},
-  {"findall_long", (PyCFunction)__pyx_pw_5noaho_5NoAho_23findall_long, METH_O, 0},
+  {"children_count", (PyCFunction)__pyx_pw_5noaho_5NoAho_7children_count, METH_NOARGS, 0},
+  {"add", (PyCFunction)__pyx_pw_5noaho_5NoAho_15add, METH_VARARGS|METH_KEYWORDS, 0},
+  {"compile", (PyCFunction)__pyx_pw_5noaho_5NoAho_17compile, METH_NOARGS, 0},
+  {"find_short", (PyCFunction)__pyx_pw_5noaho_5NoAho_19find_short, METH_O, 0},
+  {"find_long", (PyCFunction)__pyx_pw_5noaho_5NoAho_21find_long, METH_O, 0},
+  {"findall_short", (PyCFunction)__pyx_pw_5noaho_5NoAho_23findall_short, METH_O, 0},
+  {"findall_long", (PyCFunction)__pyx_pw_5noaho_5NoAho_25findall_long, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -3438,14 +3500,14 @@ static PySequenceMethods __pyx_tp_as_sequence_NoAho = {
   0, /*sq_slice*/
   0, /*sq_ass_item*/
   0, /*sq_ass_slice*/
-  __pyx_pw_5noaho_5NoAho_7__contains__, /*sq_contains*/
+  __pyx_pw_5noaho_5NoAho_9__contains__, /*sq_contains*/
   0, /*sq_inplace_concat*/
   0, /*sq_inplace_repeat*/
 };
 
 static PyMappingMethods __pyx_tp_as_mapping_NoAho = {
   __pyx_pw_5noaho_5NoAho_5__len__, /*mp_length*/
-  __pyx_pw_5noaho_5NoAho_9__getitem__, /*mp_subscript*/
+  __pyx_pw_5noaho_5NoAho_11__getitem__, /*mp_subscript*/
   __pyx_mp_ass_subscript_5noaho_NoAho, /*mp_ass_subscript*/
 };
 
@@ -3660,8 +3722,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
 };
 static int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 34, __pyx_L1_error)
-  __pyx_builtin_KeyError = __Pyx_GetBuiltinName(__pyx_n_s_KeyError); if (!__pyx_builtin_KeyError) __PYX_ERR(0, 97, __pyx_L1_error)
-  __pyx_builtin_StopIteration = __Pyx_GetBuiltinName(__pyx_n_s_StopIteration); if (!__pyx_builtin_StopIteration) __PYX_ERR(0, 233, __pyx_L1_error)
+  __pyx_builtin_KeyError = __Pyx_GetBuiltinName(__pyx_n_s_KeyError); if (!__pyx_builtin_KeyError) __PYX_ERR(0, 101, __pyx_L1_error)
+  __pyx_builtin_StopIteration = __Pyx_GetBuiltinName(__pyx_n_s_StopIteration); if (!__pyx_builtin_StopIteration) __PYX_ERR(0, 237, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -3685,36 +3747,36 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_slice__2);
   __Pyx_GIVEREF(__pyx_slice__2);
 
-  /* "noaho.pyx":116
+  /* "noaho.pyx":120
  * 
  *         if num_ucs4_chars == 0:
  *             raise ValueError("Key cannot be empty (would cause Aho-Corasick automaton to spin)")             # <<<<<<<<<<<<<<
  * 
  *         if py_payload is None:
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_Key_cannot_be_empty_would_cause); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_Key_cannot_be_empty_would_cause); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 120, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "noaho.pyx":147
+  /* "noaho.pyx":151
  *         py_payload = py_from_void_payload(void_payload)
  *         if start == end:
  *             return None, None, None             # <<<<<<<<<<<<<<
  *         else:
  *             return start, end, py_payload
  */
-  __pyx_tuple__4 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __pyx_tuple__4 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 151, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
 
-  /* "noaho.pyx":164
+  /* "noaho.pyx":168
  *         py_payload = py_from_void_payload(void_payload)
  *         if start == end:
  *             return None, None, None             # <<<<<<<<<<<<<<
  *         else:
  *             return start, end, py_payload
  */
-  __pyx_tuple__5 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 164, __pyx_L1_error)
+  __pyx_tuple__5 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 168, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
   __Pyx_RefNannyFinishContext();
@@ -3818,13 +3880,13 @@ PyMODINIT_FUNC PyInit_noaho(void)
   /*--- Variable export code ---*/
   /*--- Function export code ---*/
   /*--- Type init code ---*/
-  if (PyType_Ready(&__pyx_type_5noaho_NoAho) < 0) __PYX_ERR(0, 64, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5noaho_NoAho) < 0) __PYX_ERR(0, 65, __pyx_L1_error)
   __pyx_type_5noaho_NoAho.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "NoAho", (PyObject *)&__pyx_type_5noaho_NoAho) < 0) __PYX_ERR(0, 64, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "NoAho", (PyObject *)&__pyx_type_5noaho_NoAho) < 0) __PYX_ERR(0, 65, __pyx_L1_error)
   __pyx_ptype_5noaho_NoAho = &__pyx_type_5noaho_NoAho;
-  if (PyType_Ready(&__pyx_type_5noaho_AhoIterator) < 0) __PYX_ERR(0, 188, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5noaho_AhoIterator) < 0) __PYX_ERR(0, 192, __pyx_L1_error)
   __pyx_type_5noaho_AhoIterator.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "AhoIterator", (PyObject *)&__pyx_type_5noaho_AhoIterator) < 0) __PYX_ERR(0, 188, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "AhoIterator", (PyObject *)&__pyx_type_5noaho_AhoIterator) < 0) __PYX_ERR(0, 192, __pyx_L1_error)
   __pyx_ptype_5noaho_AhoIterator = &__pyx_type_5noaho_AhoIterator;
   /*--- Type import code ---*/
   __pyx_ptype_7cpython_4type_type = __Pyx_ImportType(__Pyx_BUILTIN_MODULE_NAME, "type", 
@@ -4775,28 +4837,6 @@ bad:
     Py_XDECREF(py_frame);
 }
 
-/* CIntFromPyVerify */
-    #define __PYX_VERIFY_RETURN_INT(target_type, func_type, func_value)\
-    __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 0)
-#define __PYX_VERIFY_RETURN_INT_EXC(target_type, func_type, func_value)\
-    __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 1)
-#define __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, exc)\
-    {\
-        func_type value = func_value;\
-        if (sizeof(target_type) < sizeof(func_type)) {\
-            if (unlikely(value != (func_type) (target_type) value)) {\
-                func_type zero = 0;\
-                if (exc && unlikely(value == (func_type)-1 && PyErr_Occurred()))\
-                    return (target_type) -1;\
-                if (is_unsigned && unlikely(value < zero))\
-                    goto raise_neg_overflow;\
-                else\
-                    goto raise_overflow;\
-            }\
-        }\
-        return (target_type) value;\
-    }
-
 /* CIntToPy */
     static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
     const int neg_one = (int) -1, const_zero = (int) 0;
@@ -4823,6 +4863,28 @@ bad:
                                      little, !is_unsigned);
     }
 }
+
+/* CIntFromPyVerify */
+    #define __PYX_VERIFY_RETURN_INT(target_type, func_type, func_value)\
+    __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 0)
+#define __PYX_VERIFY_RETURN_INT_EXC(target_type, func_type, func_value)\
+    __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 1)
+#define __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, exc)\
+    {\
+        func_type value = func_value;\
+        if (sizeof(target_type) < sizeof(func_type)) {\
+            if (unlikely(value != (func_type) (target_type) value)) {\
+                func_type zero = 0;\
+                if (exc && unlikely(value == (func_type)-1 && PyErr_Occurred()))\
+                    return (target_type) -1;\
+                if (is_unsigned && unlikely(value < zero))\
+                    goto raise_neg_overflow;\
+                else\
+                    goto raise_overflow;\
+            }\
+        }\
+        return (target_type) value;\
+    }
 
 /* CIntFromPy */
     static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {

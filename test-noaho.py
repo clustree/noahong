@@ -49,6 +49,7 @@ class AhoCorasickTest(unittest.TestCase):
         self.tree.add("bar")
         self.assertEqual((10, 13, None),
                          self.tree.find_short("this is a foo message"))
+        self.assertEqual(self.tree.children_count(), 6)
 
 
     def test_find_longest(self):
