@@ -44,7 +44,6 @@ typedef void* PayloadT;
 class AhoCorasickTrie;
 
 struct Node {
-   friend class AhoCorasickTrie;
    typedef int Index;
 
    Node(PayloadT payload = 0)
