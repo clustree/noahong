@@ -24,13 +24,7 @@
 // SOFTWARE.
 // (MIT 'expat' license)
 
-
-#if YOUR_COMPILER_SUPPORTS_UNORDERED_MAP
-#  include <unordered_map>
-#else
-#  include "HashMap.h"
-#endif
-
+#include <algorithm>
 #include <vector>
 #include <cassert>
 #include <cstddef>
@@ -57,25 +51,29 @@ struct Node {
    : length(0)
    , ifailure_state(0)
    , payload(payload)
-   // 1 is the initial reserve; it will grow automatically.
-   , children(1)
    {}
 
-#if YOUR_COMPILER_SUPPORTS_UNORDERED_MAP
-   typedef std::unordered_map<AC_CHAR_TYPE, Index> Children;
-#else
-   typedef PocoJgd::HashMap<AC_CHAR_TYPE, Index> Children;
-#endif
+   typedef std::pair<AC_CHAR_TYPE, Index> Child;
+   typedef std::vector<Child> Children;
 
    Index child_at(AC_CHAR_TYPE c) const {
-      Children::const_iterator child = children.find(c);
-      // since these are indices, 0 is valid, so invalid is < 0
-      return child == children.end() ? -1 : child->second;
+      Children::const_iterator child = std::lower_bound(
+              children.begin(), children.end(), Child(c, -1));
+      if (child == children.end() || child->first != c)
+          // since these are indices, 0 is valid, so invalid is < 0
+          return -1;
+      return child->second;
    }
 
    void set_child(AC_CHAR_TYPE c, Index idx) {
       assert(idx);
-      children[c] = idx;
+      Children::iterator child = std::lower_bound(
+              children.begin(), children.end(), Child(c, -1));
+      if (child != children.end() && child->first == c) {
+          child->second = idx;
+          return;
+      }
+      children.insert(child, Child(c, idx));
    }
 
    const Children& get_children() const {
