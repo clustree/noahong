@@ -2,30 +2,27 @@ from distutils.core import setup
 from distutils.extension import Extension
 
 noaho_module = Extension(
-    'noaho',
+    'noahong',
     sources=[
       # Cython generated
-      'src/noaho.cpp',
+      'src/noahong.cpp',
       # original
       'src/array-aho.cpp'],
     depends=[
         'src/array-aho.h',
-        'src/HashMap.h',
-        'src/LinearHashTable.h',
-        'src/noaho.pyx']
+        'src/noahong.pyx']
 )
 
 version = '0.9.6.2'
 
 setup(
-    name='NoAho',
+    name='noahong',
     version=version,
     author='Jeff Donner',
     author_email='jeffrey.donner@gmail.com',
     maintainer='Jeff Donner',
     maintainer_email='jeffrey.donner@gmail.com',
     url='https://github.com/JDonner/NoAho',
-    download_url='http://pypi.python.org/packages/source/N/NoAho/NoAho-%s.tar.gz' % version,
     description='Fast, non-overlapping simultaneous multiple keyword search',
     long_description=open('README.txt').read(),
     ext_modules=[noaho_module],
@@ -44,6 +41,7 @@ setup(
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Operating System :: OS Independent',
         'Environment :: Console',
         'Topic :: Text Processing',
