@@ -60,3 +60,7 @@ clean:
 #http://www.cs.duke.edu/~ola/courses/programming/libraries.html
 # libs: g++ $(LDFLAGS) -o $(TARGET) $(OBJS) $(LIBS)
 # g++ -shared -Wl,-soname, $(TARGET).so $(OBJS) $(LIBS)
+
+test:
+	python setup.py build_ext --inplace
+	python test-noaho.py
