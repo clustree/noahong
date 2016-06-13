@@ -9,7 +9,7 @@ Jeff Donner, jeffrey.donner@gmail.com
 """
 
 import sys
-from noaho import NoAho
+from noahong import NoAho
 import unittest
 
 
