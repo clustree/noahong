@@ -15,7 +15,7 @@ noaho_module = Extension(
         'src/noaho.pyx']
 )
 
-version = '0.9.6.1'
+version = '0.9.6.2'
 
 setup(
     name='NoAho',
