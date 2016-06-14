@@ -13,7 +13,7 @@ noaho_module = Extension(
         'src/noahong.pyx']
 )
 
-version = '0.9.6.2'
+version = '0.9.7'
 
 setup(
     name='noahong',
