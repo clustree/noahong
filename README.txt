@@ -1,3 +1,24 @@
+noahong is a fork https://github.com/JDonner/NoAho
+
+The initial objective was to reduce its memory consumption. When possible we
+try to preserve the existing interface. But specialization offers new
+optimization opportunities and we make no promise we will not break it at some
+point, or partially repurpose the library. You might still find it useful.
+
+Regardless, many thanks to JDonner and the other people having worked on this
+project.
+
+
+How does it differ from the original project:
+
+- Trie compilation is required before use. Once compiled it cannot be modified
+  anymore. It makes it easier to catch issues related to thread-safety.
+- Reduce memory consumption by 50% on our dataset without affecting match
+  performances.
+
+
+# ORIGINAL README
+
 Non-Overlapping Aho-Corasick Trie
 
 Features:
