@@ -28,8 +28,10 @@
 #include <vector>
 #include <cassert>
 #include <cstddef>
+#include <cstdint>
 #include <iosfwd>
 #include <deque>
+#include <memory>
 
 // We could include Python.h like this and return PyObject*s directly
 // but, the author just prefers the cleanliness of not having Python
@@ -90,6 +92,9 @@ private:
 
 std::ostream& operator<<(std::ostream& os, Node const& node);
 
+class FrozenTrie;
+typedef std::deque<Node> Nodes;
+
 class AhoCorasickTrie {
 public:
    typedef Node::Index Index;
@@ -98,6 +103,7 @@ public:
 
 public:
    AhoCorasickTrie();
+   ~AhoCorasickTrie();
 
    void add_string(char const* s, size_t n, PayloadT payload = 0);
 
@@ -147,9 +153,9 @@ private:
    // pointers (esp. on 64 bit machines) and enhances continuity (ie
    // prefetchability of cache)). At least, that's the author's
    // untested reason for doing it this way.
-   typedef std::deque<Node> Nodes;
    Nodes nodes;
-   bool is_compiled;
+
+   std::unique_ptr<FrozenTrie> frozen;
 };
 
 // for debugging

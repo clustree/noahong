@@ -64,18 +64,256 @@ std::ostream& operator<<(std::ostream& os, AhoCorasickTrie::Strings const& texts
    return os;
 }
 
+typedef std::deque<Node::Child> FrozenChildren;
 
-AhoCorasickTrie::AhoCorasickTrie()
-    : is_compiled(false) {
+struct FrozenNode {
+   typedef int Index;
+
+   FrozenNode()
+   : length(0)
+   , ifailure_state(0)
+   , payload()
+   , children_offset(0)
+   , children_count(0)
+   {}
+
+   Index child_at(const FrozenChildren& children, AC_CHAR_TYPE c) const {
+      const FrozenChildren::const_iterator begin = children.begin() + children_offset;
+      const FrozenChildren::const_iterator end = begin + children_count;
+      const FrozenChildren::const_iterator child = std::lower_bound(
+              begin, end, Node::Child(c, -1));
+      if (child == end || child->first != c)
+          // since these are indices, 0 is valid, so invalid is < 0
+          return -1;
+      return child->second;
+   }
+
+   unsigned short length;
+   Index ifailure_state;
+   PayloadT payload;
+   int32_t children_offset;
+   int32_t children_count;
+};
+
+
+class FrozenTrie {
+public:
+   typedef Node::Index Index;
+
+   FrozenTrie(Nodes&);
+
+   PayloadT find_short(char const* s, size_t n,
+                       int* inout_start,
+                       int* out_end) const;
+
+   PayloadT find_longest(char const* s, size_t n,
+                         int* inout_start,
+                         int* out_end) const;
+
+   int contains(char const*, size_t n) const;
+
+   int num_keys() const;
+
+   int num_total_children() const;
+
+   /// Returns either a valid ptr (including 0) or, -1 cast as a ptr.
+   PayloadT get_payload(char const* s, size_t n) const;
+
+
+private:
+   Index child_at(Index i, AC_CHAR_TYPE a) const;
+
+   // root is at 0 of course.
+   typedef std::deque<FrozenNode> FrozenNodes;
+   FrozenNodes nodes;
+   FrozenChildren children;
+};
+
+
+FrozenTrie::FrozenTrie(Nodes& source_nodes) {
+   while (!source_nodes.empty()) {
+      const Node& n = source_nodes.front();
+      const Node::Children& n_children = n.get_children();
+      FrozenNode f;
+      f.length = n.length;
+      f.ifailure_state = n.ifailure_state;
+      f.payload = n.payload;
+      f.children_offset = children.size();
+      f.children_count = n_children.size();
+      nodes.push_back(f);
+
+      Node::Children::const_iterator it;
+      for (it = n_children.begin(); it != n_children.end(); ++it)
+          children.push_back(*it);
+
+      source_nodes.pop_front();
+   }
+}
+
+
+Node::Index FrozenTrie::child_at(Index i, AC_CHAR_TYPE a) const {
+    Index ichild = nodes[i].child_at(children, a);
+    // The root is a special case - every char that's not an actual
+    // child of the root, points back to the root.
+    if (ichild < 0 && i == 0)
+        ichild = 0;
+    return ichild;
+}
+
+
+PayloadT FrozenTrie::find_short(char const* char_s, size_t n,
+                                int* inout_istart,
+                                int* out_iend) const {
+   Index istate = 0;
+   PayloadT last_payload = 0;
+   AC_CHAR_TYPE const* original_start = reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
+   AC_CHAR_TYPE const* start = original_start + *inout_istart;
+   AC_CHAR_TYPE const* end = original_start + n;
+
+   for (AC_CHAR_TYPE const* c = start; c < end; ++c) {
+      Index ichild = this->child_at(istate, *c);
+      while (ichild < 0) {
+         istate = nodes[istate].ifailure_state;
+         ichild = this->child_at(istate, *c);
+      }
+
+      istate = ichild;
+      if (nodes[istate].length and nodes[istate].length <= c + 1 - start) {
+         *out_iend = c - original_start + 1;
+         *inout_istart = *out_iend - nodes[istate].length;
+         return nodes[istate].payload;
+      }
+   }
+   return last_payload;
+}
+
+
+/*
+ * <char_s> is the original material,
+ * <n> its length.
+ * <inout_istart> is offset from char_s, part of the caller's traversal
+ *   state, to let zer get multiple matches from the same text.
+ * <out_iend> one-past-the-last offset from <char_s> of /this/ match, the
+ *   mate to <inout_istart>.
+ *
+ * Does not itself assure that the match bounds point to nothing (ie end ==
+ * start) when nothing is found. The caller must do that (and the Python
+ * interface, and the gtests do that.
+ *
+ * When there are multiple contiguous terminal nodes (keywords that end at some
+ * spot) multiple calls of this will be O(n^2) in that contiguous length - it
+ * looks through all contiguous matches to find the longest one before returning
+ * anything.
+ */
+PayloadT FrozenTrie::find_longest(char const* char_s, size_t n,
+                                  int* inout_istart,
+                                  int* out_iend) const {
+   // longest terminal length, among a contiguous bunch of terminals.
+   int length_longest = -1;
+   int end_longest = -1;
+   Index istate = 0;
+   bool have_match = false;
+
+   PayloadT payload = 0;
+   AC_CHAR_TYPE const* original_start =
+      reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
+   AC_CHAR_TYPE const* start = original_start + *inout_istart;
+   AC_CHAR_TYPE const* end = original_start + n;
+
+   for (AC_CHAR_TYPE const* c = start; c < end; ++c) {
+      Index ichild = this->child_at(istate, *c);
+      while (ichild < 0) {
+         if (have_match) {
+            goto success;
+         }
+         istate = nodes[istate].ifailure_state;
+         ichild = this->child_at(istate, *c);
+      }
+
+      istate = ichild;
+      int keylen = nodes[istate].length;
+      if (keylen &&
+          // not sure this 2nd condition is necessary
+          keylen <= c + 1 - start &&
+          length_longest < keylen) {
+         have_match = true;
+
+         length_longest = keylen;
+         end_longest = c + 1 - original_start;
+         payload = nodes[istate].payload;
+      }
+   }
+   if (have_match) {
+success:
+      *out_iend = end_longest;
+      *inout_istart = *out_iend - length_longest;
+   }
+   return payload;
+}
+
+
+int FrozenTrie::contains(char const* char_s, size_t n) const {
+   AC_CHAR_TYPE const* c = reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
+   Index inode = 0;
+   for (size_t i = 0; i < n; ++i, ++c) {
+      inode = nodes[inode].child_at(children, *c);
+      if (inode < 0) {
+         return 0;
+      }
+   }
+
+   return nodes[inode].length ? 1 : 0;
+}
+
+
+int FrozenTrie::num_keys() const {
+   int num = 0;
+   for (FrozenNodes::const_iterator it = nodes.begin(), end = nodes.end();
+        it != end; ++it) {
+      if (it->length)
+         ++num;
+   }
+
+   return num;
+}
+
+
+int FrozenTrie::num_total_children() const {
+   return children.size();
+}
+
+
+PayloadT FrozenTrie::get_payload(char const* s, size_t n) const {
+   AC_CHAR_TYPE const* ucs4 = (AC_CHAR_TYPE const*)s;
+   AC_CHAR_TYPE const* u = ucs4;
+
+   Node::Index inode = 0;
+   for (u = ucs4; u < ucs4 + n; ++u) {
+      inode = nodes[inode].child_at(children, *u);
+      if (inode < 0)
+         return (PayloadT)-1;
+   }
+   if (nodes[inode].length)
+      return nodes[inode].payload;
+   else
+      return (PayloadT)-1;
+}
+
+
+AhoCorasickTrie::AhoCorasickTrie() {
     // born with root node
     nodes.push_back(Node());
+}
+
+
+AhoCorasickTrie::~AhoCorasickTrie() {
 }
 
 
 void AhoCorasickTrie::add_string(char const* char_s, size_t n,
                                  PayloadT payload) {
 
-   if(is_compiled)
+   if(frozen)
       throw std::runtime_error("cannot add entry to compiled trie");
 
    AC_CHAR_TYPE const* c = reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
@@ -99,20 +337,14 @@ void AhoCorasickTrie::add_string(char const* char_s, size_t n,
 
 
 int AhoCorasickTrie::contains(char const* char_s, size_t n) const {
-   AC_CHAR_TYPE const* c = reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
-   Index inode = 0;
-   for (size_t i = 0; i < n; ++i, ++c) {
-      inode = nodes[inode].child_at(*c);
-      if (inode < 0) {
-         return 0;
-      }
-   }
-
-   return nodes[inode].length ? 1 : 0;
+   assert_compiled();
+   return frozen->contains(char_s, n);
 }
 
 
 int AhoCorasickTrie::num_keys() const {
+   if (frozen)
+       return frozen->num_keys();
    int num = 0;
    for (Nodes::const_iterator it = nodes.begin(), end = nodes.end();
         it != end; ++it) {
@@ -125,6 +357,8 @@ int AhoCorasickTrie::num_keys() const {
 
 
 int AhoCorasickTrie::num_total_children() const {
+   if (frozen)
+       return frozen->num_total_children();
    int num = 0;
    for (Nodes::const_iterator it = nodes.begin(), end = nodes.end();
         it != end; ++it) {
@@ -136,27 +370,16 @@ int AhoCorasickTrie::num_total_children() const {
 
 
 void AhoCorasickTrie::compile() {
-   if (is_compiled)
+   if (frozen)
       return;
    make_failure_links();
-   is_compiled = true;
+   frozen.reset(new FrozenTrie(nodes));
 }
 
 
 PayloadT AhoCorasickTrie::get_payload(char const* s, size_t n) const {
-   AC_CHAR_TYPE const* ucs4 = (AC_CHAR_TYPE const*)s;
-   AC_CHAR_TYPE const* u = ucs4;
-
-   Node::Index inode = 0;
-   for (u = ucs4; u < ucs4 + n; ++u) {
-      inode = nodes[inode].child_at(*u);
-      if (inode < 0)
-         return (PayloadT)-1;
-   }
-   if (nodes[inode].length)
-      return nodes[inode].payload;
-   else
-      return (PayloadT)-1;
+   assert_compiled();
+   return frozen->get_payload(s, n);
 }
 
 
@@ -203,7 +426,7 @@ bool AhoCorasickTrie::is_valid(Index ichild) {
 
 
 void AhoCorasickTrie::assert_compiled() const {
-   if (not is_compiled)
+   if (!frozen)
        throw std::runtime_error("trie must be compiled before use");
 }
 
@@ -212,7 +435,7 @@ Node::Index AhoCorasickTrie::child_at(Index i, AC_CHAR_TYPE a) const {
     Index ichild = nodes[i].child_at(a);
     // The root is a special case - every char that's not an actual
     // child of the root, points back to the root.
-    if (not is_valid(ichild) and i == 0)
+    if (ichild < 0 && i == 0)
         ichild = 0;
     return ichild;
 }
@@ -228,27 +451,7 @@ PayloadT AhoCorasickTrie::find_short(char const* char_s, size_t n,
                                      int* inout_istart,
                                      int* out_iend) const {
    assert_compiled();
-   Index istate = 0;
-   PayloadT last_payload = 0;
-   AC_CHAR_TYPE const* original_start = reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
-   AC_CHAR_TYPE const* start = original_start + *inout_istart;
-   AC_CHAR_TYPE const* end = original_start + n;
-
-   for (AC_CHAR_TYPE const* c = start; c < end; ++c) {
-      Index ichild = this->child_at(istate, *c);
-      while (not is_valid(ichild)) {
-         istate = nodes[istate].ifailure_state;
-         ichild = this->child_at(istate, *c);
-      }
-
-      istate = ichild;
-      if (nodes[istate].length and nodes[istate].length <= c + 1 - start) {
-         *out_iend = c - original_start + 1;
-         *inout_istart = *out_iend - nodes[istate].length;
-         return nodes[istate].payload;
-      }
-   }
-   return last_payload;
+   return frozen->find_short(char_s, n, inout_istart, out_iend);
 }
 
 /*
@@ -271,49 +474,8 @@ PayloadT AhoCorasickTrie::find_short(char const* char_s, size_t n,
 PayloadT AhoCorasickTrie::find_longest(char const* char_s, size_t n,
                                        int* inout_istart,
                                        int* out_iend) const {
-   // longest terminal length, among a contiguous bunch of terminals.
-   int length_longest = -1;
-   int end_longest = -1;
-
    assert_compiled();
-   Index istate = 0;
-   bool have_match = false;
-
-   PayloadT payload = 0;
-   AC_CHAR_TYPE const* original_start =
-      reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
-   AC_CHAR_TYPE const* start = original_start + *inout_istart;
-   AC_CHAR_TYPE const* end = original_start + n;
-
-   for (AC_CHAR_TYPE const* c = start; c < end; ++c) {
-      Index ichild = this->child_at(istate, *c);
-      while (not is_valid(ichild)) {
-         if (have_match) {
-            goto success;
-         }
-         istate = nodes[istate].ifailure_state;
-         ichild = this->child_at(istate, *c);
-      }
-
-      istate = ichild;
-      int keylen = nodes[istate].length;
-      if (keylen &&
-          // not sure this 2nd condition is necessary
-          keylen <= c + 1 - start &&
-          length_longest < keylen) {
-         have_match = true;
-
-         length_longest = keylen;
-         end_longest = c + 1 - original_start;
-         payload = nodes[istate].payload;
-      }
-   }
-   if (have_match) {
-success:
-      *out_iend = end_longest;
-      *inout_istart = *out_iend - length_longest;
-   }
-   return payload;
+   return frozen->find_longest(char_s, n, inout_istart, out_iend);
 }
 
 

@@ -182,6 +182,7 @@ class AhoCorasickTest(unittest.TestCase):
 
     def test_dict_style_get_and_set(self):
         self.tree['foo'] = 5
+        self.tree.compile()
         self.assertEqual(5, self.tree['foo'])
 
     def test_dict_style_set_empty_key(self):
@@ -198,11 +199,13 @@ class AhoCorasickTest(unittest.TestCase):
 
     def test_dict_style_get_unseen_key(self):
         # __getitem__ implements this part of the [] protocol
+        self.tree.compile()
         self.assertRaises(KeyError, self.tree.__getitem__, 'unseen')
         self.assertRaises(KeyError, self.tree.__getitem__, '')
 
     def test_dict_style_containment(self):
         self.tree['foo'] = 5
+        self.tree.compile()
         self.assertEqual(True, 'foo' in self.tree)
         self.assertEqual(False, '' in self.tree)
         self.assertEqual(False, 'fo' in self.tree)
@@ -214,6 +217,7 @@ class AhoCorasickTest(unittest.TestCase):
         self.tree['a'] = None
         self.tree['b'] = [1, 2]
         self.tree['c'] = 12
+        self.tree.compile()
         self.assertEqual(3, len(self.tree))
 
     # reminder that we need to figure out which version we're in, and

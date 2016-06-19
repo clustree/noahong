@@ -1517,7 +1517,13 @@ static int __pyx_pf_7noahong_5NoAho_8__contains__(struct __pyx_obj_7noahong_NoAh
  *     def __getitem__(self, text):
  */
   __pyx_t_7 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 87, __pyx_L1_error)
-  __pyx_r = __pyx_v_self->thisptr->contains(__pyx_t_7, __pyx_v_num_ucs4_chars);
+  try {
+    __pyx_t_6 = __pyx_v_self->thisptr->contains(__pyx_t_7, __pyx_v_num_ucs4_chars);
+  } catch(...) {
+    try { throw; } catch(const std::exception& exn) { PyErr_SetString(__pyx_builtin_AssertionError, exn.what()); } catch(...) { PyErr_SetNone(__pyx_builtin_AssertionError); }
+    __PYX_ERR(0, 87, __pyx_L1_error)
+  }
+  __pyx_r = __pyx_t_6;
   goto __pyx_L0;
 
   /* "noahong.pyx":83
@@ -1578,7 +1584,8 @@ static PyObject *__pyx_pf_7noahong_5NoAho_10__getitem__(struct __pyx_obj_7noahon
   PyObject *(*__pyx_t_5)(PyObject *);
   int __pyx_t_6;
   char *__pyx_t_7;
-  int __pyx_t_8;
+  void *__pyx_t_8;
+  int __pyx_t_9;
   __Pyx_RefNannySetupContext("__getitem__", 0);
 
   /* "noahong.pyx":94
@@ -1655,7 +1662,13 @@ static PyObject *__pyx_pf_7noahong_5NoAho_10__getitem__(struct __pyx_obj_7noahon
  *         # No valid ptr has the lowest 3 bits set, thus we can smuggle
  */
   __pyx_t_7 = __Pyx_PyObject_AsString(__pyx_v_ucs4_data); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 95, __pyx_L1_error)
-  __pyx_v_void_payload = __pyx_v_self->thisptr->get_payload(__pyx_t_7, __pyx_v_num_ucs4_chars);
+  try {
+    __pyx_t_8 = __pyx_v_self->thisptr->get_payload(__pyx_t_7, __pyx_v_num_ucs4_chars);
+  } catch(...) {
+    try { throw; } catch(const std::exception& exn) { PyErr_SetString(__pyx_builtin_AssertionError, exn.what()); } catch(...) { PyErr_SetNone(__pyx_builtin_AssertionError); }
+    __PYX_ERR(0, 95, __pyx_L1_error)
+  }
+  __pyx_v_void_payload = __pyx_t_8;
 
   /* "noahong.pyx":96
  *         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
@@ -1673,8 +1686,8 @@ static PyObject *__pyx_pf_7noahong_5NoAho_10__getitem__(struct __pyx_obj_7noahon
  *             raise KeyError(text)
  *         py_payload = py_from_void_payload(void_payload)
  */
-  __pyx_t_8 = ((__pyx_v_payload_as_int == -1LL) != 0);
-  if (__pyx_t_8) {
+  __pyx_t_9 = ((__pyx_v_payload_as_int == -1LL) != 0);
+  if (__pyx_t_9) {
 
     /* "noahong.pyx":101
  *         # all bits set).

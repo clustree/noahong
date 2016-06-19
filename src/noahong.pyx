@@ -58,8 +58,8 @@ cdef extern from "array-aho.h":
                            int* out_start, int* out_end) except +AssertionError
         int num_keys()
         int num_total_children()
-        void* get_payload(char* text, int len)
-        int contains(char* text, int len)
+        void* get_payload(char* text, int len) except +AssertionError
+        int contains(char* text, int len) except +AssertionError
 
 
 cdef class NoAho:
