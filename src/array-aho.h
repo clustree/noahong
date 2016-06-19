@@ -126,6 +126,8 @@ public:
 
    int num_keys() const;
 
+   int num_nodes() const;
+
    int num_total_children() const;
 
    /// Returns either a valid ptr (including 0) or, -1 cast as a ptr.

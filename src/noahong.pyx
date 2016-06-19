@@ -57,6 +57,7 @@ cdef extern from "array-aho.h":
         void* find_longest(char* text, int len,
                            int* out_start, int* out_end) except +AssertionError
         int num_keys()
+        int num_nodes()
         int num_total_children()
         void* get_payload(char* text, int len) except +AssertionError
         int contains(char* text, int len) except +AssertionError
@@ -76,6 +77,9 @@ cdef class NoAho:
 
     def __len__(self):
         return self.thisptr.num_keys()
+
+    def nodes_count(self):
+        return self.thisptr.num_nodes()
 
     def children_count(self):
         return self.thisptr.num_total_children()

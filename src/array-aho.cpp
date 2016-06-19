@@ -114,6 +114,8 @@ public:
 
    int num_keys() const;
 
+   int num_nodes() const;
+
    int num_total_children() const;
 
    /// Returns either a valid ptr (including 0) or, -1 cast as a ptr.
@@ -283,6 +285,11 @@ int FrozenTrie::num_total_children() const {
 }
 
 
+int FrozenTrie::num_nodes() const {
+   return nodes.size();
+}
+
+
 PayloadT FrozenTrie::get_payload(char const* s, size_t n) const {
    AC_CHAR_TYPE const* ucs4 = (AC_CHAR_TYPE const*)s;
    AC_CHAR_TYPE const* u = ucs4;
@@ -366,6 +373,13 @@ int AhoCorasickTrie::num_total_children() const {
    }
 
    return num;
+}
+
+
+int AhoCorasickTrie::num_nodes() const {
+   if (frozen)
+       return frozen->num_nodes();
+   return nodes.size();
 }
 
 

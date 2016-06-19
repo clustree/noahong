@@ -59,6 +59,27 @@ class AhoCorasickTest(unittest.TestCase):
                          self.tree.find_short("this is a foo message"))
         self.assertEqual(self.tree.children_count(), 6)
 
+    def test_counts(self):
+        self.tree = NoAho()
+        self.tree.add("foo")
+        self.tree.compile()
+        self.assertEqual(self.tree.nodes_count(), 4)
+        self.assertEqual(self.tree.children_count(), 3)
+
+        self.tree = NoAho()
+        self.tree.add("foo")
+        self.tree.add("bar")
+        self.tree.compile()
+        self.assertEqual(self.tree.nodes_count(), 7)
+        self.assertEqual(self.tree.children_count(), 6)
+
+        self.tree = NoAho()
+        self.tree.add("fo")
+        self.tree.add("foo")
+        self.tree.compile()
+        self.assertEqual(self.tree.nodes_count(), 4)
+        self.assertEqual(self.tree.children_count(), 3)
+
     def test_find_longest(self):
         self.tree.add("a")
         self.tree.add("alphabet")
