@@ -145,10 +145,6 @@ private:
 
    Node::Index add_node();
 
-   Strings follow_failure_chain(Node::Index inode,
-                                Chars chars, int istart,
-                                int ifound_at) const;
-
    // root is at 0 of course.
    // <Node>s are stored by value so, it's expensive when you're
    // building the tree (but still O(n)), but, it saves some bytes in

@@ -493,32 +493,6 @@ PayloadT AhoCorasickTrie::find_longest(char const* char_s, size_t n,
 }
 
 
-// Debugging
-AhoCorasickTrie::Strings
-AhoCorasickTrie::follow_failure_chain(Node::Index inode,
-                                      AhoCorasickTrie::Chars chars, int istart,
-                                      int ifound_at) const {
-   typedef vector<AC_CHAR_TYPE> Chars;
-   Strings strings;
-
-   do {
-cout << "inode:(" << inode << ")" << flush;
-      int len = nodes[inode].length;
-      if (len) {
-cout << "istart:" << istart << "; ifound:" << ifound_at << "; len: " << len << endl;
-         int lo = ifound_at - len,
-            hi = ifound_at ;
-cout << lo << ".." << hi << endl;
-         Chars s(chars.begin() + lo, chars.begin() + hi);
-         cout << s << endl;
-         strings.push_back(s);
-      }
-      inode = nodes[inode].ifailure_state;
-   } while (inode != 0);
-   return strings;
-}
-
-
 // For debugging.
 void AhoCorasickTrie::print() const {
    typedef pair<AC_CHAR_TYPE, Index> Pair;
