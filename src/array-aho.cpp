@@ -136,7 +136,10 @@ int AhoCorasickTrie::num_total_children() const {
 
 
 void AhoCorasickTrie::compile() {
-    make_failure_links();
+   if (is_compiled)
+      return;
+   make_failure_links();
+   is_compiled = true;
 }
 
 
@@ -191,8 +194,6 @@ void AhoCorasickTrie::make_failure_links() {
          s->ifailure_state = ifail_child;
       }
    }
-
-   is_compiled = true;
 }
 
 
