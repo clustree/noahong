@@ -88,8 +88,8 @@ typedef std::deque<Node> Nodes;
 class AhoCorasickTrie {
 public:
    typedef Node::Index Index;
-   typedef std::vector<AC_CHAR_TYPE> Chars;
-   typedef std::vector<Chars> Strings;
+   typedef std::deque<AC_CHAR_TYPE> Chars;
+   typedef std::deque<Chars> Strings;
 
 public:
    AhoCorasickTrie();

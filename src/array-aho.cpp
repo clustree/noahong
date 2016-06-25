@@ -63,32 +63,33 @@ std::ostream& operator<<(std::ostream& os, AhoCorasickTrie::Strings const& texts
    return os;
 }
 
-typedef std::deque<Node::Child> FrozenChildren;
+typedef std::deque<Node::Index> FrozenIndices;
+typedef std::deque<AC_CHAR_TYPE> FrozenChars;
 
 struct FrozenNode {
-   typedef int Index;
+   typedef Node::Index Index;
 
    FrozenNode()
-   : children_offset(0)
-   , children_count(0)
+   : chars_offset(0)
+   , chars_count(0)
    , payload(-1)
    , ifailure_state(0)
    , length(0)
    {}
 
-   Index child_at(const FrozenChildren& children, AC_CHAR_TYPE c) const {
-      const FrozenChildren::const_iterator begin = children.begin() + children_offset;
-      const FrozenChildren::const_iterator end = begin + children_count;
-      const FrozenChildren::const_iterator child = std::lower_bound(
-              begin, end, Node::Child(c, -1));
-      if (child == end || child->first != c)
+   Index child_at(const FrozenChars& chars, const FrozenIndices& indices,
+           AC_CHAR_TYPE c) const {
+      const FrozenChars::const_iterator begin = chars.begin() + chars_offset;
+      const FrozenChars::const_iterator end = begin + chars_count;
+      const FrozenChars::const_iterator child = std::lower_bound(begin, end, c);
+      if (child == end || *child != c)
           // since these are indices, 0 is valid, so invalid is < 0
           return -1;
-      return child->second;
+      return indices[child - chars.begin()];
    }
 
-   int32_t children_offset;
-   int32_t children_count;
+   int32_t chars_offset;
+   int32_t chars_count;
    PayloadT payload;
    Index ifailure_state;
    unsigned short length;
@@ -127,7 +128,8 @@ private:
    // root is at 0 of course.
    typedef std::deque<FrozenNode> FrozenNodes;
    FrozenNodes nodes;
-   FrozenChildren children;
+   FrozenChars chars;
+   FrozenIndices indices;
 };
 
 
@@ -140,13 +142,15 @@ FrozenTrie::FrozenTrie(Nodes& source_nodes,
       f.length = source_length.front();
       f.ifailure_state = n.ifailure_state;
       f.payload = n.payload;
-      f.children_offset = children.size();
-      f.children_count = n_children.size();
+      f.chars_offset = chars.size();
+      f.chars_count = n_children.size();
       nodes.push_back(f);
 
       Node::Children::const_iterator it;
-      for (it = n_children.begin(); it != n_children.end(); ++it)
-          children.push_back(*it);
+      for (it = n_children.begin(); it != n_children.end(); ++it) {
+          chars.push_back(it->first);
+          indices.push_back(it->second);
+      }
 
       source_nodes.pop_front();
       source_length.pop_front();
@@ -155,7 +159,7 @@ FrozenTrie::FrozenTrie(Nodes& source_nodes,
 
 
 Node::Index FrozenTrie::child_at(Index i, AC_CHAR_TYPE a) const {
-    Index ichild = nodes[i].child_at(children, a);
+    Index ichild = nodes[i].child_at(chars, indices, a);
     // The root is a special case - every char that's not an actual
     // child of the root, points back to the root.
     if (ichild < 0 && i == 0)
@@ -258,7 +262,7 @@ int FrozenTrie::contains(char const* char_s, size_t n) const {
    AC_CHAR_TYPE const* c = reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
    Index inode = 0;
    for (size_t i = 0; i < n; ++i, ++c) {
-      inode = nodes[inode].child_at(children, *c);
+      inode = nodes[inode].child_at(chars, indices, *c);
       if (inode < 0) {
          return 0;
       }
@@ -281,7 +285,7 @@ int FrozenTrie::num_keys() const {
 
 
 int FrozenTrie::num_total_children() const {
-   return children.size();
+   return chars.size();
 }
 
 
@@ -296,7 +300,7 @@ PayloadT FrozenTrie::get_payload(char const* s, size_t n) const {
 
    Node::Index inode = 0;
    for (u = utf8; u < utf8 + n; ++u) {
-      inode = nodes[inode].child_at(children, *u);
+      inode = nodes[inode].child_at(chars, indices, *u);
       if (inode < 0)
          return (PayloadT)-1;
    }
