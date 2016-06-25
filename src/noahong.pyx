@@ -25,6 +25,7 @@
 from cpython.ref cimport Py_INCREF
 from cpython.ref cimport Py_DECREF
 from cpython.version cimport PY_MAJOR_VERSION
+from libc.stdint cimport int32_t
 
 cdef get_as_ucs4(object text):
     if isinstance(text, unicode) or (PY_MAJOR_VERSION < 3 and isinstance(text, str)):
@@ -37,29 +38,20 @@ cdef get_as_ucs4(object text):
     return ucs4_data, len(ucs4_data) / 4
 
 
-cdef py_from_void_payload(void* void_payload):
-    cdef object py_payload
-    if void_payload == <void*>0:
-        py_payload = None
-    else:
-        py_payload = <object>void_payload
-    return py_payload
-
-
 cdef extern from "array-aho.h":
     cdef cppclass AhoCorasickTrie:
         AhoCorasickTrie()
 # http://groups.google.com/group/cython-users/browse_thread/thread/d0c57ee21a278db7/ffb90297821483d8?lnk=gst&q=map+return+object#ffb90297821483d8
-        void add_string(char* text, int len, void* payload) except +AssertionError
+        void add_string(char* text, int len, int payload) except +AssertionError
         void compile()
-        void* find_short(char* text, int len,
+        int find_short(char* text, int len,
                          int* out_start, int* out_end) except +AssertionError
-        void* find_longest(char* text, int len,
-                           int* out_start, int* out_end) except +AssertionError
+        int find_longest(char* text, int len,
+                         int* out_start, int* out_end) except +AssertionError
         int num_keys()
         int num_nodes()
         int num_total_children()
-        void* get_payload(char* text, int len) except +AssertionError
+        int get_payload(char* text, int len) except +AssertionError
         int contains(char* text, int len) except +AssertionError
 
 
@@ -93,18 +85,12 @@ cdef class NoAho:
     def __getitem__(self, text):
         cdef bytes ucs4_data
         cdef int num_ucs4_chars
-        cdef void* void_payload
-        cdef long long payload_as_int
+        cdef int32_t payload_index
         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
-        void_payload = self.thisptr.get_payload(ucs4_data, num_ucs4_chars)
-        payload_as_int = <long long>void_payload
-        # No valid ptr has the lowest 3 bits set, thus we can smuggle
-        # a signal in there that the key wasn't present (-1, which has
-        # all bits set).
-        if payload_as_int == -1:
+        payload_index = self.thisptr.get_payload(ucs4_data, num_ucs4_chars)
+        if payload_index < 0:
             raise KeyError(text)
-        py_payload = py_from_void_payload(void_payload)
-        return py_payload
+        return self.payloads_to_decref[payload_index]
 
     def __setitem__(self, text, py_payload):
         self.add(text, py_payload)
@@ -116,21 +102,20 @@ cdef class NoAho:
     def add(self, text, py_payload = None):
         cdef bytes ucs4_data
         cdef int num_ucs4_chars
-        cdef void* void_payload
+        cdef int32_t payload_index
 
         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
 
         if num_ucs4_chars == 0:
             raise ValueError("Key cannot be empty (would cause Aho-Corasick automaton to spin)")
 
-        if py_payload is None:
-            void_payload = <void*>0
-        else:
+        payload_index = -1
+        if py_payload is not None:
             Py_INCREF(py_payload)
+            payload_index = len(self.payloads_to_decref)
             self.payloads_to_decref.append(py_payload)
-            void_payload = <void*>py_payload
 
-        self.thisptr.add_string(ucs4_data, num_ucs4_chars, void_payload)
+        self.thisptr.add_string(ucs4_data, num_ucs4_chars, payload_index)
 
 # Nice-to-have...
 #    def add_many(self):
@@ -144,30 +129,34 @@ cdef class NoAho:
         cdef bytes ucs4_data
         cdef int num_ucs4_chars
         cdef void* void_payload
+        cdef int32_t payload_index
         cdef object py_payload
         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
         start = 0
         end = 0
-        void_payload = self.thisptr.find_short(ucs4_data, num_ucs4_chars,
-                                               &start, &end)
-        py_payload = py_from_void_payload(void_payload)
+        payload_index = self.thisptr.find_short(ucs4_data, num_ucs4_chars,
+                                                &start, &end)
+        py_payload = None
+        if payload_index >= 0:
+            py_payload = self.payloads_to_decref[payload_index]
         if start == end:
             return None, None, None
-        else:
-            return start, end, py_payload
+        return start, end, py_payload
 
     def find_long(self, text):
         cdef int start, end
         cdef bytes ucs4_data
         cdef int num_ucs4_chars
-        cdef void* void_payload
+        cdef int32_t payload_index
         cdef object py_payload
         ucs4_data, num_ucs4_chars = get_as_ucs4(text)
         start = 0
         end = 0
-        void_payload = self.thisptr.find_longest(ucs4_data, num_ucs4_chars,
-                                                 &start, &end)
-        py_payload = py_from_void_payload(void_payload)
+        payload_index = self.thisptr.find_longest(ucs4_data, num_ucs4_chars,
+                                                  &start, &end)
+        py_payload = None
+        if payload_index >= 0:
+            py_payload = self.payloads_to_decref[payload_index]
         if start == end:
             return None, None, None
         else:
@@ -215,22 +204,24 @@ cdef class AhoIterator:
         return self
 
     def __next__(self):
-        cdef void* void_payload
+        cdef int32_t payload_index
         cdef object py_payload
         cdef int out_start, out_end
 
         # I figured a runtime switch was worth not having 2
         # iterator types.
         if self.want_longest:
-            void_payload = self.aho_obj.thisptr.find_longest(
+            payload_index = self.aho_obj.thisptr.find_longest(
                 self.ucs4_data, self.num_ucs4_chars,
                 &self.start, &self.end)
         else:
-            void_payload = self.aho_obj.thisptr.find_short(
+            payload_index = self.aho_obj.thisptr.find_short(
                 self.ucs4_data, self.num_ucs4_chars,
                 &self.start, &self.end)
 
-        py_payload = py_from_void_payload(void_payload)
+        py_payload = None
+        if payload_index >= 0:
+            py_payload = self.aho_obj.payloads_to_decref[payload_index]
         if self.start < self.end:
             # set up for next time
             out_start = self.start

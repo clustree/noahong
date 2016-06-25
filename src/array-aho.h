@@ -33,23 +33,15 @@
 #include <deque>
 #include <memory>
 
-// We could include Python.h like this and return PyObject*s directly
-// but, the author just prefers the cleanliness of not having Python
-// dependencies in here. It does complicate noaho.pyx though, so maybe
-// it's foolish. I seem to recall it working, at least.
-// for PyObject
-//#include "Python.h"
-// typedef PyObject* PayloadT;
-
 typedef int AC_CHAR_TYPE;
 
-typedef void* PayloadT;
+typedef int32_t PayloadT;
 class AhoCorasickTrie;
 
 struct Node {
    typedef int Index;
 
-   Node(PayloadT payload = 0)
+   Node(PayloadT payload = -1)
    : length(0)
    , ifailure_state(0)
    , payload(payload)
@@ -105,7 +97,7 @@ public:
    AhoCorasickTrie();
    ~AhoCorasickTrie();
 
-   void add_string(char const* s, size_t n, PayloadT payload = 0);
+   void add_string(char const* s, size_t n, PayloadT payload = -1);
 
    PayloadT find_short(char const* s, size_t n,
                        int* inout_start,

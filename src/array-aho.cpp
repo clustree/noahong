@@ -70,11 +70,11 @@ struct FrozenNode {
    typedef int Index;
 
    FrozenNode()
-   : length(0)
-   , ifailure_state(0)
-   , payload()
-   , children_offset(0)
+   : children_offset(0)
    , children_count(0)
+   , payload(-1)
+   , ifailure_state(0)
+   , length(0)
    {}
 
    Index child_at(const FrozenChildren& children, AC_CHAR_TYPE c) const {
@@ -88,11 +88,11 @@ struct FrozenNode {
       return child->second;
    }
 
-   unsigned short length;
-   Index ifailure_state;
-   PayloadT payload;
    int32_t children_offset;
    int32_t children_count;
+   PayloadT payload;
+   Index ifailure_state;
+   unsigned short length;
 };
 
 
@@ -167,7 +167,6 @@ PayloadT FrozenTrie::find_short(char const* char_s, size_t n,
                                 int* inout_istart,
                                 int* out_iend) const {
    Index istate = 0;
-   PayloadT last_payload = 0;
    AC_CHAR_TYPE const* original_start = reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
    AC_CHAR_TYPE const* start = original_start + *inout_istart;
    AC_CHAR_TYPE const* end = original_start + n;
@@ -186,7 +185,7 @@ PayloadT FrozenTrie::find_short(char const* char_s, size_t n,
          return nodes[istate].payload;
       }
    }
-   return last_payload;
+   return -1;
 }
 
 
@@ -216,7 +215,7 @@ PayloadT FrozenTrie::find_longest(char const* char_s, size_t n,
    Index istate = 0;
    bool have_match = false;
 
-   PayloadT payload = 0;
+   PayloadT payload = -1;
    AC_CHAR_TYPE const* original_start =
       reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
    AC_CHAR_TYPE const* start = original_start + *inout_istart;
@@ -302,8 +301,7 @@ PayloadT FrozenTrie::get_payload(char const* s, size_t n) const {
    }
    if (nodes[inode].length)
       return nodes[inode].payload;
-   else
-      return (PayloadT)-1;
+    return (PayloadT)-1;
 }
 
 
