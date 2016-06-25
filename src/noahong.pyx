@@ -27,15 +27,14 @@ from cpython.ref cimport Py_DECREF
 from cpython.version cimport PY_MAJOR_VERSION
 from libc.stdint cimport int32_t
 
-cdef get_as_ucs4(object text):
+cdef get_as_utf8(object text):
     if isinstance(text, unicode) or (PY_MAJOR_VERSION < 3 and isinstance(text, str)):
-        # [4:] to skip byte-order mark (BOM) - we're always native.
-        ucs4_data = text.encode('utf-32')[4:]
+        utf8_data = text.encode('utf-8', errors='replace')
     else:
         raise ValueError("Requires unicode or str text input, got %s" % type(text))
 
     # http://wiki.cython.org/FAQ#HowdoIpassaPythonstringparameterontoaClibrary.3F
-    return ucs4_data, len(ucs4_data) / 4
+    return utf8_data, len(utf8_data)
 
 
 cdef extern from "array-aho.h":
@@ -53,6 +52,13 @@ cdef extern from "array-aho.h":
         int num_total_children()
         int get_payload(char* text, int len) except +AssertionError
         int contains(char* text, int len) except +AssertionError
+
+
+cdef extern from "array-aho.h":
+    cdef cppclass Utf8CodePoints:
+        Utf8CodePoints()
+        void create(char* s, int n)
+        int32_t get_codepoint_index(int32_t byte_index)
 
 
 cdef class NoAho:
@@ -77,17 +83,17 @@ cdef class NoAho:
         return self.thisptr.num_total_children()
 
     def __contains__(self, key_text):
-        cdef bytes ucs4_data
-        cdef int num_ucs4_chars
-        ucs4_data, num_ucs4_chars = get_as_ucs4(key_text)
-        return self.thisptr.contains(ucs4_data, num_ucs4_chars)
+        cdef bytes utf8_data
+        cdef int num_utf8_chars
+        utf8_data, num_utf8_chars = get_as_utf8(key_text)
+        return self.thisptr.contains(utf8_data, num_utf8_chars)
 
     def __getitem__(self, text):
-        cdef bytes ucs4_data
-        cdef int num_ucs4_chars
+        cdef bytes utf8_data
+        cdef int num_utf8_chars
         cdef int32_t payload_index
-        ucs4_data, num_ucs4_chars = get_as_ucs4(text)
-        payload_index = self.thisptr.get_payload(ucs4_data, num_ucs4_chars)
+        utf8_data, num_utf8_chars = get_as_utf8(text)
+        payload_index = self.thisptr.get_payload(utf8_data, num_utf8_chars)
         if payload_index < 0:
             raise KeyError(text)
         return self.payloads_to_decref[payload_index]
@@ -100,13 +106,13 @@ cdef class NoAho:
 #        return
 
     def add(self, text, py_payload = None):
-        cdef bytes ucs4_data
-        cdef int num_ucs4_chars
+        cdef bytes utf8_data
+        cdef int num_utf8_chars
         cdef int32_t payload_index
 
-        ucs4_data, num_ucs4_chars = get_as_ucs4(text)
+        utf8_data, num_utf8_chars = get_as_utf8(text)
 
-        if num_ucs4_chars == 0:
+        if num_utf8_chars == 0:
             raise ValueError("Key cannot be empty (would cause Aho-Corasick automaton to spin)")
 
         payload_index = -1
@@ -115,7 +121,7 @@ cdef class NoAho:
             payload_index = len(self.payloads_to_decref)
             self.payloads_to_decref.append(py_payload)
 
-        self.thisptr.add_string(ucs4_data, num_ucs4_chars, payload_index)
+        self.thisptr.add_string(utf8_data, num_utf8_chars, payload_index)
 
 # Nice-to-have...
 #    def add_many(self):
@@ -126,56 +132,63 @@ cdef class NoAho:
 
     def find_short(self, text):
         cdef int start, end
-        cdef bytes ucs4_data
-        cdef int num_ucs4_chars
+        cdef bytes utf8_data
+        cdef int num_utf8_chars
         cdef void* void_payload
         cdef int32_t payload_index
         cdef object py_payload
-        ucs4_data, num_ucs4_chars = get_as_ucs4(text)
+        cdef Utf8CodePoints code_points
+        utf8_data, num_utf8_chars = get_as_utf8(text)
         start = 0
         end = 0
-        payload_index = self.thisptr.find_short(ucs4_data, num_ucs4_chars,
+        payload_index = self.thisptr.find_short(utf8_data, num_utf8_chars,
                                                 &start, &end)
         py_payload = None
         if payload_index >= 0:
             py_payload = self.payloads_to_decref[payload_index]
         if start == end:
             return None, None, None
+        code_points.create(utf8_data, num_utf8_chars)
+        start = code_points.get_codepoint_index(start)
+        end = code_points.get_codepoint_index(end)
         return start, end, py_payload
 
     def find_long(self, text):
         cdef int start, end
-        cdef bytes ucs4_data
-        cdef int num_ucs4_chars
+        cdef bytes utf8_data
+        cdef int num_utf8_chars
         cdef int32_t payload_index
         cdef object py_payload
-        ucs4_data, num_ucs4_chars = get_as_ucs4(text)
+        cdef Utf8CodePoints code_points
+        utf8_data, num_utf8_chars = get_as_utf8(text)
         start = 0
         end = 0
-        payload_index = self.thisptr.find_longest(ucs4_data, num_ucs4_chars,
+        payload_index = self.thisptr.find_longest(utf8_data, num_utf8_chars,
                                                   &start, &end)
         py_payload = None
         if payload_index >= 0:
             py_payload = self.payloads_to_decref[payload_index]
         if start == end:
             return None, None, None
-        else:
-            return start, end, py_payload
+        code_points.create(utf8_data, num_utf8_chars)
+        start = code_points.get_codepoint_index(start)
+        end = code_points.get_codepoint_index(end)
+        return start, end, py_payload
 
 # http://thread.gmane.org/gmane.comp.python.cython.user/1920/focus=1921
     def findall_short(self, text):
-        cdef bytes ucs4_data
-        cdef int num_ucs4_chars
-        ucs4_data, num_ucs4_chars = get_as_ucs4(text)
+        cdef bytes utf8_data
+        cdef int num_utf8_chars
+        utf8_data, num_utf8_chars = get_as_utf8(text)
         # 0 is flag for 'short'
-        return AhoIterator(self, ucs4_data, num_ucs4_chars, 0)
+        return AhoIterator(self, utf8_data, num_utf8_chars, 0)
 
     def findall_long(self, text):
-        cdef bytes ucs4_data
-        cdef int num_ucs4_chars
-        ucs4_data, num_ucs4_chars = get_as_ucs4(text)
+        cdef bytes utf8_data
+        cdef int num_utf8_chars
+        utf8_data, num_utf8_chars = get_as_utf8(text)
         # 1 is flag for 'long'
-        return AhoIterator(self, ucs4_data, num_ucs4_chars, 1)
+        return AhoIterator(self, utf8_data, num_utf8_chars, 1)
 
 
 # iterators (though, there was another, better one! -- try __citer__ and __cnext__)
@@ -184,14 +197,17 @@ cdef class NoAho:
 # http://groups.google.com/group/cython-users/browse_thread/thread/69b6eeb930826bcb/0b20e6e265e719a3?lnk=gst&q=iterator#0b20e6e265e719a3
 cdef class AhoIterator:
     cdef NoAho aho_obj
-    cdef bytes ucs4_data
-    cdef int num_ucs4_chars
+    cdef Utf8CodePoints code_points
+    cdef bytes utf8_data
+    cdef int num_utf8_chars
     cdef int start, end, want_longest
 
-    def __init__(self, aho_obj, ucs4_data, num_ucs4_chars, want_longest):
+    def __init__(self, aho_obj, utf8_data, num_utf8_chars, want_longest):
         self.aho_obj = aho_obj
-        self.ucs4_data = ucs4_data
-        self.num_ucs4_chars = num_ucs4_chars
+        self.code_points = Utf8CodePoints()
+        self.code_points.create(utf8_data, num_utf8_chars)
+        self.utf8_data = utf8_data
+        self.num_utf8_chars = num_utf8_chars
         self.start = 0
         self.end = 0
         self.want_longest = want_longest
@@ -212,11 +228,11 @@ cdef class AhoIterator:
         # iterator types.
         if self.want_longest:
             payload_index = self.aho_obj.thisptr.find_longest(
-                self.ucs4_data, self.num_ucs4_chars,
+                self.utf8_data, self.num_utf8_chars,
                 &self.start, &self.end)
         else:
             payload_index = self.aho_obj.thisptr.find_short(
-                self.ucs4_data, self.num_ucs4_chars,
+                self.utf8_data, self.num_utf8_chars,
                 &self.start, &self.end)
 
         py_payload = None
@@ -224,8 +240,8 @@ cdef class AhoIterator:
             py_payload = self.aho_obj.payloads_to_decref[payload_index]
         if self.start < self.end:
             # set up for next time
-            out_start = self.start
-            out_end = self.end
+            out_start = self.code_points.get_codepoint_index(self.start)
+            out_end = self.code_points.get_codepoint_index(self.end)
             self.start = self.end
             return out_start, out_end, py_payload
         else:

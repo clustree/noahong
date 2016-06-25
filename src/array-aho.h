@@ -33,7 +33,7 @@
 #include <deque>
 #include <memory>
 
-typedef int AC_CHAR_TYPE;
+typedef uint8_t AC_CHAR_TYPE;
 
 typedef int32_t PayloadT;
 class AhoCorasickTrie;
@@ -151,5 +151,18 @@ private:
 std::ostream& operator<<(std::ostream& os, AhoCorasickTrie::Chars const& text);
 
 std::ostream& operator<<(std::ostream& os, AhoCorasickTrie::Strings const& texts);
+
+// Utf8CodePoints builds a mapping from utf-8 byte index to related codepoint
+// index. Use it to convert Trie utf-8 byte offsets into caller string offsets.
+class Utf8CodePoints {
+public:
+    Utf8CodePoints();
+
+    void create(const char* s, size_t n);
+    int32_t get_codepoint_index(int byte_index) const;
+
+private:
+    std::vector<int32_t> indices;
+};
 
 #endif // AHO_CORASICK_TRIE_H

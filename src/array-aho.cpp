@@ -291,11 +291,11 @@ int FrozenTrie::num_nodes() const {
 
 
 PayloadT FrozenTrie::get_payload(char const* s, size_t n) const {
-   AC_CHAR_TYPE const* ucs4 = (AC_CHAR_TYPE const*)s;
-   AC_CHAR_TYPE const* u = ucs4;
+   AC_CHAR_TYPE const* utf8 = (AC_CHAR_TYPE const*)s;
+   AC_CHAR_TYPE const* u = utf8;
 
    Node::Index inode = 0;
-   for (u = ucs4; u < ucs4 + n; ++u) {
+   for (u = utf8; u < utf8 + n; ++u) {
       inode = nodes[inode].child_at(children, *u);
       if (inode < 0)
          return (PayloadT)-1;
@@ -518,4 +518,27 @@ void AhoCorasickTrie::print() const {
          q.push(make_pair<AC_CHAR_TYPE, Index>('$', 0));
       }
    }
+}
+
+
+Utf8CodePoints::Utf8CodePoints() {
+}
+
+
+void Utf8CodePoints::create(const char* s, size_t n) {
+    indices.reserve(n);
+    for (size_t i = 0; i < n; ++i) {
+        // Ignore byte starting by 01xxxxxx, the other ones are either ascii or
+        // utf-8 sequence leaders.
+        if ((s[i] & 0xC0) != 0x80) {
+            indices.push_back(i);
+        }
+    }
+}
+
+
+int32_t Utf8CodePoints::get_codepoint_index(int byte_index) const {
+    const auto pos = static_cast<int32_t>(byte_index);
+    const auto it = std::lower_bound(indices.begin(), indices.end(), pos);
+    return static_cast<int32_t>(it - indices.begin());
 }

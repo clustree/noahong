@@ -264,6 +264,18 @@ class AhoCorasickTest(unittest.TestCase):
         self.assertEqual([(0, 2, None), (0, 4, None)],
                          list(self.tree.findall_short("hers")))
 
+    def test_utf8(self):
+        self.tree.add("étable")
+        self.tree.add("béret")
+        self.tree.add("blé")
+        self.tree.compile()
+        matches = list(self.tree.findall_long("étable béret blé"))
+        self.assertEqual(matches, [
+            (0, 6, None),
+            (7, 12, None),
+            (13, 16, None),
+        ])
+
 
 def main(args):
     unittest.main()
