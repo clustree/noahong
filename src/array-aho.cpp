@@ -40,8 +40,7 @@ std::ostream& operator<<(std::ostream& os, Node const& node) {
         i != end; ++i) {
       os << (char)i->first << ';';
    }
-   os << ((0 < node.length) ? " (term) " : "()");
-   os << " and failure: " << node.ifailure_state;
+   os << "failure: " << node.ifailure_state;
    os << std::endl;
    return os;
 }
@@ -100,7 +99,7 @@ class FrozenTrie {
 public:
    typedef Node::Index Index;
 
-   FrozenTrie(Nodes&);
+   FrozenTrie(Nodes&, std::deque<unsigned short>& length);
 
    PayloadT find_short(char const* s, size_t n,
                        int* inout_start,
@@ -132,12 +131,13 @@ private:
 };
 
 
-FrozenTrie::FrozenTrie(Nodes& source_nodes) {
+FrozenTrie::FrozenTrie(Nodes& source_nodes,
+        std::deque<unsigned short>& source_length) {
    while (!source_nodes.empty()) {
       const Node& n = source_nodes.front();
       const Node::Children& n_children = n.get_children();
       FrozenNode f;
-      f.length = n.length;
+      f.length = source_length.front();
       f.ifailure_state = n.ifailure_state;
       f.payload = n.payload;
       f.children_offset = children.size();
@@ -149,6 +149,7 @@ FrozenTrie::FrozenTrie(Nodes& source_nodes) {
           children.push_back(*it);
 
       source_nodes.pop_front();
+      source_length.pop_front();
    }
 }
 
@@ -307,7 +308,7 @@ PayloadT FrozenTrie::get_payload(char const* s, size_t n) const {
 
 AhoCorasickTrie::AhoCorasickTrie() {
     // born with root node
-    nodes.push_back(Node());
+    add_node();
 }
 
 
@@ -337,7 +338,7 @@ void AhoCorasickTrie::add_string(char const* char_s, size_t n,
       iparent = ichild;
    }
    nodes[ichild].payload = payload;
-   nodes[ichild].length = n;
+   lengths[ichild] = n;
 }
 
 
@@ -351,12 +352,9 @@ int AhoCorasickTrie::num_keys() const {
    if (frozen)
        return frozen->num_keys();
    int num = 0;
-   for (Nodes::const_iterator it = nodes.begin(), end = nodes.end();
-        it != end; ++it) {
-      if (it->length)
+   for (size_t i = 0; i < lengths.size(); ++i)
+      if (lengths[i])
          ++num;
-   }
-
    return num;
 }
 
@@ -385,7 +383,7 @@ void AhoCorasickTrie::compile() {
    if (frozen)
       return;
    make_failure_links();
-   frozen.reset(new FrozenTrie(nodes));
+   frozen.reset(new FrozenTrie(nodes, lengths));
 }
 
 
@@ -455,6 +453,7 @@ Node::Index AhoCorasickTrie::child_at(Index i, AC_CHAR_TYPE a) const {
 
 Node::Index AhoCorasickTrie::add_node() {
     nodes.push_back(Node());
+    lengths.push_back(0);
     return nodes.size() - 1;
 }
 

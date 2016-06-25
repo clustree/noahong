@@ -42,8 +42,7 @@ struct Node {
    typedef int Index;
 
    Node(PayloadT payload = -1)
-   : length(0)
-   , ifailure_state(0)
+   : ifailure_state(0)
    , payload(payload)
    {}
 
@@ -74,7 +73,6 @@ struct Node {
       return children;
    }
 
-   unsigned short length;
    Index ifailure_state;
    PayloadT payload;
 
@@ -144,6 +142,7 @@ private:
    // prefetchability of cache)). At least, that's the author's
    // untested reason for doing it this way.
    Nodes nodes;
+   std::deque<unsigned short> lengths;
 
    std::unique_ptr<FrozenTrie> frozen;
 };
