@@ -25,6 +25,7 @@
 //   http://www.cs.uku.fi/~kilpelai/BSA05/lectures/slides04.pdf
 
 #include "array-aho.h"
+#include <limits>
 #include <queue>
 #include <iostream>
 #include <utility>
@@ -71,9 +72,9 @@ struct FrozenNode {
 
    FrozenNode()
    : chars_offset(0)
-   , chars_count(0)
    , payload(-1)
    , ifailure_state(0)
+   , chars_count(0)
    , length(0)
    {}
 
@@ -89,9 +90,9 @@ struct FrozenNode {
    }
 
    int32_t chars_offset;
-   int32_t chars_count;
    PayloadT payload;
    Index ifailure_state;
+   int16_t chars_count;
    unsigned short length;
 };
 
@@ -143,6 +144,8 @@ FrozenTrie::FrozenTrie(Nodes& source_nodes,
       f.ifailure_state = n.ifailure_state;
       f.payload = n.payload;
       f.chars_offset = chars.size();
+      if (n_children.size() > std::numeric_limits<int16_t>::max())
+         throw std::runtime_error("node children count overflow");
       f.chars_count = n_children.size();
       nodes.push_back(f);
 
