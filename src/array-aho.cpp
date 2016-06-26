@@ -64,8 +64,8 @@ std::ostream& operator<<(std::ostream& os, AhoCorasickTrie::Strings const& texts
    return os;
 }
 
-typedef std::deque<Node::Index> FrozenIndices;
-typedef std::deque<AC_CHAR_TYPE> FrozenChars;
+typedef std::vector<Node::Index> FrozenIndices;
+typedef std::vector<AC_CHAR_TYPE> FrozenChars;
 
 struct FrozenNode {
    typedef Node::Index Index;
@@ -126,7 +126,7 @@ private:
    PayloadT payload_at(Index i) const;
 
    // root is at 0 of course.
-   typedef std::deque<FrozenNode> FrozenNodes;
+   typedef std::vector<FrozenNode> FrozenNodes;
    FrozenNodes nodes;
    FrozenChars chars;
    FrozenIndices indices;
@@ -134,34 +134,50 @@ private:
    // Denormalizing payloads is a win because we often 10x more non-payload
    // nodes than payload ones, and payload entries are only 2x more expensive.
    typedef std::pair<int32_t, PayloadT> NodePayload;
-   std::deque<NodePayload> payloads;
+   std::vector<NodePayload> payloads;
 };
 
 
 FrozenTrie::FrozenTrie(Nodes& source_nodes,
         std::deque<unsigned short>& source_length) {
+   size_t payloads_count = 0;
+   size_t chars_count = 0;
+   for (size_t i = 0; i < source_nodes.size(); ++i)  {
+      const auto& n = source_nodes[i];
+      if (n.payload >= 0)
+         ++payloads_count;
+      chars_count += n.get_children().size();
+   }
+   payloads.resize(payloads_count);
+   size_t payloads_index = 0;
+   chars.resize(chars_count);
+   size_t chars_index = 0;
+   indices.resize(chars_count);
+   nodes.resize(source_nodes.size());
+   size_t nodes_index = 0;
+
    while (!source_nodes.empty()) {
       const Node& n = source_nodes.front();
       const Node::Children& n_children = n.get_children();
       FrozenNode f;
       f.length = source_length.front();
       f.ifailure_state = n.ifailure_state;
-      f.chars_offset = chars.size();
+      f.chars_offset = chars_index;
       if (n_children.size() > std::numeric_limits<int16_t>::max())
          throw std::runtime_error("node children count overflow");
       f.chars_count = n_children.size();
-      nodes.push_back(f);
+      nodes[nodes_index++] = f;
 
       if (n.payload >= 0) {
-         payloads.push_back(NodePayload(
-                     static_cast<int32_t>(nodes.size() - 1),
-                     n.payload));
+         payloads[payloads_index++] = NodePayload(
+                     static_cast<int32_t>(nodes_index - 1),
+                     n.payload);
       }
 
       Node::Children::const_iterator it;
       for (it = n_children.begin(); it != n_children.end(); ++it) {
-          chars.push_back(it->first);
-          indices.push_back(it->second);
+          chars[chars_index] = it->first;
+          indices[chars_index++] = it->second;
       }
 
       source_nodes.pop_front();
