@@ -72,7 +72,6 @@ struct FrozenNode {
 
    FrozenNode()
    : chars_offset(0)
-   , payload(-1)
    , ifailure_state(0)
    , chars_count(0)
    , length(0)
@@ -90,7 +89,6 @@ struct FrozenNode {
    }
 
    int32_t chars_offset;
-   PayloadT payload;
    Index ifailure_state;
    int16_t chars_count;
    unsigned short length;
@@ -125,12 +123,18 @@ public:
 
 private:
    Index child_at(Index i, AC_CHAR_TYPE a) const;
+   PayloadT payload_at(Index i) const;
 
    // root is at 0 of course.
    typedef std::deque<FrozenNode> FrozenNodes;
    FrozenNodes nodes;
    FrozenChars chars;
    FrozenIndices indices;
+
+   // Denormalizing payloads is a win because we often 10x more non-payload
+   // nodes than payload ones, and payload entries are only 2x more expensive.
+   typedef std::pair<int32_t, PayloadT> NodePayload;
+   std::deque<NodePayload> payloads;
 };
 
 
@@ -142,12 +146,17 @@ FrozenTrie::FrozenTrie(Nodes& source_nodes,
       FrozenNode f;
       f.length = source_length.front();
       f.ifailure_state = n.ifailure_state;
-      f.payload = n.payload;
       f.chars_offset = chars.size();
       if (n_children.size() > std::numeric_limits<int16_t>::max())
          throw std::runtime_error("node children count overflow");
       f.chars_count = n_children.size();
       nodes.push_back(f);
+
+      if (n.payload >= 0) {
+         payloads.push_back(NodePayload(
+                     static_cast<int32_t>(nodes.size() - 1),
+                     n.payload));
+      }
 
       Node::Children::const_iterator it;
       for (it = n_children.begin(); it != n_children.end(); ++it) {
@@ -171,6 +180,17 @@ Node::Index FrozenTrie::child_at(Index i, AC_CHAR_TYPE a) const {
 }
 
 
+PayloadT FrozenTrie::payload_at(Index i) const {
+    if (i <= 0)
+        return -1;
+    const auto it = std::lower_bound(payloads.begin(), payloads.end(),
+            NodePayload(i, -1));
+    if (it == payloads.end() || it->first != i)
+        return -1;
+    return it->second;
+}
+
+
 PayloadT FrozenTrie::find_short(char const* char_s, size_t n,
                                 int* inout_istart,
                                 int* out_iend) const {
@@ -190,7 +210,7 @@ PayloadT FrozenTrie::find_short(char const* char_s, size_t n,
       if (nodes[istate].length and nodes[istate].length <= c + 1 - start) {
          *out_iend = c - original_start + 1;
          *inout_istart = *out_iend - nodes[istate].length;
-         return nodes[istate].payload;
+         return payload_at(istate);
       }
    }
    return -1;
@@ -223,7 +243,7 @@ PayloadT FrozenTrie::find_longest(char const* char_s, size_t n,
    Index istate = 0;
    bool have_match = false;
 
-   PayloadT payload = -1;
+   Index inode = -1;
    AC_CHAR_TYPE const* original_start =
       reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
    AC_CHAR_TYPE const* start = original_start + *inout_istart;
@@ -249,7 +269,7 @@ PayloadT FrozenTrie::find_longest(char const* char_s, size_t n,
 
          length_longest = keylen;
          end_longest = c + 1 - original_start;
-         payload = nodes[istate].payload;
+         inode = istate;
       }
    }
    if (have_match) {
@@ -257,7 +277,7 @@ success:
       *out_iend = end_longest;
       *inout_istart = *out_iend - length_longest;
    }
-   return payload;
+   return payload_at(inode);
 }
 
 
@@ -308,8 +328,8 @@ PayloadT FrozenTrie::get_payload(char const* s, size_t n) const {
          return (PayloadT)-1;
    }
    if (nodes[inode].length)
-      return nodes[inode].payload;
-    return (PayloadT)-1;
+      return payload_at(inode);
+   return (PayloadT)-1;
 }
 
 
