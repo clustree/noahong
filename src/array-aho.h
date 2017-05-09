@@ -105,6 +105,10 @@ public:
                          int* inout_start,
                          int* out_end) const;
 
+   PayloadT find_anchored(char const* s, size_t n, char anchored,
+                          int* inout_start,
+                          int* out_end) const;
+
    // Only makes fail links but, I'm hitching on the idea from regexps.
    // You never need to use this, it's done automatically, it's just here
    // in case you want manual control.

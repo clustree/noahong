@@ -47,6 +47,8 @@ cdef extern from "array-aho.h":
                          int* out_start, int* out_end) except +AssertionError
         int find_longest(char* text, int len,
                          int* out_start, int* out_end) except +AssertionError
+        int find_anchored(char* text, int len, char anchor,
+                          int* out_start, int* out_end) except +AssertionError
         int num_keys()
         int num_nodes()
         int num_total_children()
@@ -190,6 +192,13 @@ cdef class NoAho:
         # 1 is flag for 'long'
         return AhoIterator(self, utf8_data, num_utf8_chars, 1)
 
+    def findall_anchored(self, text):
+        cdef bytes utf8_data
+        cdef int num_utf8_chars
+        utf8_data, num_utf8_chars = get_as_utf8(text)
+        # 2 is flag for 'long'
+        return AhoIterator(self, utf8_data, num_utf8_chars, 2)
+
 
 # iterators (though, there was another, better one! -- try __citer__ and __cnext__)
 # http://thread.gmane.org/gmane.comp.python.cython.user/2942/focus=2944
@@ -226,9 +235,13 @@ cdef class AhoIterator:
 
         # I figured a runtime switch was worth not having 2
         # iterator types.
-        if self.want_longest:
+        if self.want_longest == 1:
             payload_index = self.aho_obj.thisptr.find_longest(
                 self.utf8_data, self.num_utf8_chars,
+                &self.start, &self.end)
+        elif self.want_longest == 2:
+            payload_index = self.aho_obj.thisptr.find_anchored(
+                self.utf8_data, self.num_utf8_chars, 0x1F,
                 &self.start, &self.end)
         else:
             payload_index = self.aho_obj.thisptr.find_short(

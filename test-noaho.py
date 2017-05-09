@@ -276,6 +276,18 @@ class AhoCorasickTest(unittest.TestCase):
             (13, 16, None),
         ])
 
+    def test_anchored(self):
+        def anchor(s):
+            return s.replace(".", "\u001F")
+
+        self.tree.add(anchor(".a..b..c."))
+        self.tree.add(anchor(".b."))
+        self.tree.compile()
+        matches = list(self.tree.findall_anchored(anchor(".a..b..z.")))
+        self.assertEqual(matches, [
+            (3, 6, None),
+        ])
+
 
 def main(args):
     unittest.main()

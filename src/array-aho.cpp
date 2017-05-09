@@ -109,6 +109,10 @@ public:
                          int* inout_start,
                          int* out_end) const;
 
+   PayloadT find_anchored(char const* s, size_t n, char anchor,
+                          int* inout_start,
+                          int* out_end) const;
+
    int contains(char const*, size_t n) const;
 
    int num_keys() const;
@@ -294,6 +298,66 @@ success:
       *inout_istart = *out_iend - length_longest;
    }
    return payload_at(inode);
+}
+
+
+// find_anchored find the longest, immediate anchored match in
+// char_s[inout_istart:n]. Let's have anchor == ".", then char_s must be
+// tokenized like:
+//
+//   .word1..word2..word3.. ... wordN.
+//
+// and the trie must be filled with entries like:
+//
+//   .word1.
+//   .word2.
+//   .word2..word3.
+//
+// find_anchored will find all closest matching entries and return the longest
+// one. It takes advantage of FrozenTrie being a trie and ignores the suffix
+// link information.
+PayloadT FrozenTrie::find_anchored(char const* char_s, size_t n, char anchor,
+                                   int* inout_istart,
+                                   int* out_iend) const {
+   int length_longest = -1;
+   int end_longest = -1;
+   bool have_match = false;
+
+   Index inode = -1;
+   AC_CHAR_TYPE const* original_start =
+      reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
+   AC_CHAR_TYPE const* start = original_start + *inout_istart;
+   AC_CHAR_TYPE const* end = original_start + n;
+
+   for (;;) {
+      // Find next anchor
+      while (start < end && *start != anchor) {
+         ++start;
+      }
+      if (start >= end)
+         break;
+
+      Index istate = 0;
+      for (AC_CHAR_TYPE const* c = start; c < end; ++c) {
+         istate = this->child_at(istate, *c);
+         if (istate < 0)
+            break;
+         int keylen = nodes[istate].length;
+         if (keylen && length_longest < keylen) {
+            have_match = true;
+            length_longest = keylen;
+            end_longest = c + 1 - original_start;
+            inode = istate;
+         }
+      }
+      if (have_match) {
+         *out_iend = end_longest;
+         *inout_istart = *out_iend - length_longest;
+         return payload_at(inode);
+      }
+      ++start;
+   }
+   return -1;
 }
 
 
@@ -530,6 +594,14 @@ PayloadT AhoCorasickTrie::find_longest(char const* char_s, size_t n,
                                        int* out_iend) const {
    assert_compiled();
    return frozen->find_longest(char_s, n, inout_istart, out_iend);
+}
+
+
+PayloadT AhoCorasickTrie::find_anchored(char const* char_s, size_t n, char anchor,
+                                        int* inout_istart,
+                                        int* out_iend) const {
+   assert_compiled();
+   return frozen->find_anchored(char_s, n, anchor, inout_istart, out_iend);
 }
 
 
