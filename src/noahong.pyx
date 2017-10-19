@@ -54,6 +54,7 @@ cdef extern from "array-aho.h":
         int num_total_children()
         int get_payload(char* text, int len) except +AssertionError
         int contains(char* text, int len) except +AssertionError
+        void write(char* path, int len) except +AssertionError
 
 
 cdef extern from "array-aho.h":
@@ -61,6 +62,14 @@ cdef extern from "array-aho.h":
         Utf8CodePoints()
         void create(char* s, int n)
         int32_t get_codepoint_index(int32_t byte_index)
+
+
+cdef extern from "array-aho.h":
+    cdef cppclass MappedTrie:
+        MappedTrie(char* path, int n) except +AssertionError
+        int find_anchored(char* text, int len, char anchor,
+                          int* out_start, int* out_end) except +AssertionError
+        int num_nodes()
 
 
 cdef class NoAho:
@@ -83,6 +92,12 @@ cdef class NoAho:
 
     def children_count(self):
         return self.thisptr.num_total_children()
+
+    def write(self, path):
+        cdef bytes utf8_data
+        cdef int num_utf8_chars
+        utf8_data, num_utf8_chars = get_as_utf8(path)
+        self.thisptr.write(utf8_data, num_utf8_chars)
 
     def __contains__(self, key_text):
         cdef bytes utf8_data
@@ -199,6 +214,9 @@ cdef class NoAho:
         # 2 is flag for 'long'
         return AhoIterator(self, utf8_data, num_utf8_chars, 2)
 
+    def payloads(self):
+        return self.payloads_to_decref
+
 
 # iterators (though, there was another, better one! -- try __citer__ and __cnext__)
 # http://thread.gmane.org/gmane.comp.python.cython.user/2942/focus=2944
@@ -259,3 +277,63 @@ cdef class AhoIterator:
             return out_start, out_end, py_payload
         else:
             raise StopIteration
+
+
+cdef class MappedIterator:
+    cdef Mapped mapped
+    cdef Utf8CodePoints code_points
+    cdef bytes utf8_data
+    cdef int num_utf8_chars
+    cdef int start, end
+
+    def __init__(self, mapped, utf8_data, num_utf8_chars):
+        self.mapped = mapped
+        self.code_points = Utf8CodePoints()
+        self.code_points.create(utf8_data, num_utf8_chars)
+        self.utf8_data = utf8_data
+        self.num_utf8_chars = num_utf8_chars
+        self.start = 0
+        self.end = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        cdef int32_t payload_index
+        cdef object py_payload
+        cdef int out_start, out_end
+
+        payload_index = self.mapped.trie.find_anchored(
+            self.utf8_data, self.num_utf8_chars, 0x1F,
+            &self.start, &self.end)
+
+        if self.start < self.end:
+            # set up for next time
+            out_start = self.code_points.get_codepoint_index(self.start)
+            out_end = self.code_points.get_codepoint_index(self.end)
+            self.start = self.end
+            return out_start, out_end, payload_index
+        else:
+            raise StopIteration
+
+
+cdef class Mapped:
+    cdef MappedTrie *trie
+
+    def __cinit__(self, path):
+        cdef bytes utf8_data
+        cdef int num_utf8_chars
+        utf8_data, num_utf8_chars = get_as_utf8(path)
+        self.trie = new MappedTrie(utf8_data, num_utf8_chars)
+
+    def __dealloc__(self):
+        del self.trie
+
+    def findall_anchored(self, text):
+        cdef bytes utf8_data
+        cdef int num_utf8_chars
+        utf8_data, num_utf8_chars = get_as_utf8(text)
+        return MappedIterator(self, utf8_data, num_utf8_chars)
+
+    def nodes_count(self):
+        return self.trie.num_nodes()

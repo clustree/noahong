@@ -1,4 +1,3 @@
-
 # !/usr/bin/env python
 """Unit tests for Aho Corasick keyword string searching.
 Many tests copyright Danny Yoo, the rest copyright Jeff Donner.
@@ -8,9 +7,15 @@ this test code (this doesn't apply to the whole package).
 Jeff Donner, jeffrey.donner@gmail.com
 """
 
+import os
 import sys
-from noahong import NoAho
+import tempfile
+from noahong import NoAho, Mapped
 import unittest
+
+
+def anchor(s):
+    return s.replace(".", "\u001F")
 
 
 class AhoCorasickTest(unittest.TestCase):
@@ -277,9 +282,6 @@ class AhoCorasickTest(unittest.TestCase):
         ])
 
     def test_anchored(self):
-        def anchor(s):
-            return s.replace(".", "\u001F")
-
         self.tree.add(anchor(".a..b..c."))
         self.tree.add(anchor(".b."))
         self.tree.compile()
@@ -287,6 +289,58 @@ class AhoCorasickTest(unittest.TestCase):
         self.assertEqual(matches, [
             (3, 6, None),
         ])
+
+    def test_mapped_trie(self):
+        self.tree.add(anchor(".a..b..c."), 0)
+        self.tree.add(anchor(".b."), 1)
+        self.tree.add(anchor(".a..c."), 2)
+        self.tree.add(anchor(".a..b."), 3)
+        self.tree.add(anchor(".é."), 4)
+        self.tree.compile()
+        with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
+            path = os.path.join(tmpdir, "mapped")
+            self.tree.write(path)
+
+            m = Mapped(path)
+            self.assertEqual(m.nodes_count(), self.tree.nodes_count())
+            matches = list(m.findall_anchored(anchor(".a..b..c.")))
+            self.assertEqual(matches, [(0, 9, 0)])
+            matches = list(m.findall_anchored(anchor(".b.")))
+            self.assertEqual(matches, [(0, 3, 1)])
+            matches = list(m.findall_anchored(anchor(".a..c.")))
+            self.assertEqual(matches, [(0, 6, 2)])
+            matches = list(m.findall_anchored(anchor(".z.")))
+            self.assertEqual(matches, [])
+            matches = list(m.findall_anchored(anchor(".z..a..b..z.")))
+            self.assertEqual(matches, [(3, 9, 3)])
+            matches = list(m.findall_anchored(anchor(".é.")))
+            self.assertEqual(matches, [(0, 3, 4)])
+
+    def test_empty_mapped_trie(self):
+        self.tree.compile()
+        with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
+            path = os.path.join(tmpdir, "mapped")
+            self.tree.write(path)
+
+            m = Mapped(path)
+            self.assertEqual(m.nodes_count(), 1)
+            self.assertEqual(m.nodes_count(), self.tree.nodes_count())
+            matches = list(m.findall_anchored(anchor(".a..b..c.")))
+            self.assertEqual(matches, [])
+
+    def test_bad_mapped_trie(self):
+        with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
+            path = os.path.join(tmpdir, "mapped")
+
+            # Input file is too short
+            with open(path, "wb") as fp:
+                fp.write(b"1")
+            self.assertRaises(AssertionError, lambda: Mapped(path))
+
+            # Invalid BOM
+            with open(path, "wb") as fp:
+                fp.write(b"1234")
+            self.assertRaises(AssertionError, lambda: Mapped(path))
 
 
 def main(args):

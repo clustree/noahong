@@ -32,6 +32,7 @@
 #include <iosfwd>
 #include <deque>
 #include <memory>
+#include <unistd.h>
 
 typedef uint8_t AC_CHAR_TYPE;
 
@@ -127,6 +128,8 @@ public:
    /// Returns either a valid ptr (including 0) or, -1 cast as a ptr.
    PayloadT get_payload(char const* s, size_t n) const;
 
+   void write(char const* path, size_t n) const;
+
 
 private:
    static bool is_valid(Index ichild);
@@ -167,6 +170,75 @@ public:
 
 private:
     std::vector<int32_t> indices;
+};
+
+
+typedef std::vector<Node::Index> FrozenIndices;
+typedef std::vector<AC_CHAR_TYPE> FrozenChars;
+
+
+struct FrozenNode {
+   typedef Node::Index Index;
+
+   FrozenNode();
+
+   Index child_at(const FrozenChars& chars, const FrozenIndices& indices,
+           AC_CHAR_TYPE c) const;
+
+   int32_t chars_offset;
+   Index ifailure_state;
+   int16_t chars_count;
+   unsigned short length;
+};
+
+
+template<typename Type> class MappedArray;
+
+
+// Minimal interface required to implement find_anchored.
+class AbstractTrie {
+public:
+   virtual Node::Index child_at(Node::Index i, AC_CHAR_TYPE c) const = 0;
+   virtual PayloadT payload_at(Node::Index i) const = 0;
+   virtual FrozenNode get_node(Node::Index i) const = 0;
+};
+
+
+// Implemented find_anchored() on top of data structures serialized by
+// FrozenTrie.
+class MappedTrie: public AbstractTrie {
+public:
+   MappedTrie(char* const path, size_t n);
+   virtual ~MappedTrie();
+
+   PayloadT find_anchored(char const* s, size_t n, char anchored,
+                          int* inout_start,
+                          int* out_end) const;
+
+   int num_nodes() const;
+
+   virtual Node::Index child_at(Node::Index i, AC_CHAR_TYPE c) const;
+   virtual PayloadT payload_at(Node::Index i) const;
+   virtual FrozenNode get_node(Node::Index i) const;
+
+private:
+    Node::Index child_index(Node::Index i, AC_CHAR_TYPE c) const;
+
+private:
+    int fd;
+    const uint8_t* mapped;
+    off_t mapped_size;
+
+    std::unique_ptr< MappedArray<int32_t> > nodes_chars_offset;
+    std::unique_ptr< MappedArray<int32_t> > nodes_ifailure_state;
+    std::unique_ptr< MappedArray<int16_t> > nodes_chars_count;
+    std::unique_ptr< MappedArray<unsigned short> > nodes_length;
+
+    std::unique_ptr< MappedArray<AC_CHAR_TYPE> > chars;
+    std::unique_ptr< MappedArray<int32_t> > indices;
+
+    std::unique_ptr< MappedArray<int32_t> > payload_keys;
+    std::unique_ptr< MappedArray<int32_t> > payload_values;
 };
 
 #endif // AHO_CORASICK_TRIE_H
