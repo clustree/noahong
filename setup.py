@@ -1,5 +1,11 @@
+import sys
+
 from distutils.core import setup
 from distutils.extension import Extension
+
+extra_args = ["-std=c++11"]
+if sys.platform == "darwin":
+    extra_args.append("-stdlib=libc++")
 
 noaho_module = Extension(
     "noahong",
@@ -10,8 +16,8 @@ noaho_module = Extension(
         "src/array-aho.cpp",
     ],
     depends=["src/array-aho.h", "src/noahong.pyx"],
-    extra_compile_args=["-std=c++11"],
-    extra_link_args=["-std=c++11"],
+    extra_compile_args=extra_args,
+    extra_link_args=extra_args,
 )
 
 version = "0.9.7"
