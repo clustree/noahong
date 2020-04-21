@@ -27,11 +27,10 @@ setup(
     version=version,
     author="Jeff Donner",
     author_email="jeffrey.donner@gmail.com",
-    maintainer="Jeff Donner",
-    maintainer_email="jeffrey.donner@gmail.com",
-    url="https://github.com/JDonner/NoAho",
+    url="https://github.com/clustree/noahong",
     description="Fast, non-overlapping simultaneous multiple keyword search",
     long_description=open("README.txt").read(),
+    long_description_content_type="text/plain",
     ext_modules=[noaho_module],
     classifiers=[
         "Intended Audience :: Developers",
