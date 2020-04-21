@@ -1,4 +1,31 @@
-/build/
-/MANIFEST
-/dist
+*.py[codi]
+
+# C extensions
 *.so
+
+# Packages
+.eggs
+*.egg
+*.egg-info
+/dist
+/build
+
+# Unit test / coverage reports
+.cache
+.coverage
+htmlcov
+unittest.xml
+.mypy_cache
+.pytest_cache
+.nox
+
+# Finder
+.DS_Store
+
+# Editors
+*.sw[a-z]
+.idea
+.vscode
+
+# env
+.python-version
