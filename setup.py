@@ -1,7 +1,6 @@
 import sys
 
-from distutils.core import setup
-from distutils.extension import Extension
+from setuptools import setup, Extension
 
 extra_args = ["-std=c++11"]
 if sys.platform == "darwin":
