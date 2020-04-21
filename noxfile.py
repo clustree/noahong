@@ -11,6 +11,17 @@ def test(session):
 
 @nox.session
 def lint(session):
-    session.install("flake8")
+    session.install("flake8", "black")
     session.run("flake8", "--version")
+    session.run("black", "--version")
+    session.run("black", "--check", "src", "tests", "noxfile.py", "setup.py")
     session.run("flake8", "src", "tests", "noxfile.py", "setup.py")
+
+
+@nox.session
+def blacken(session):
+    """Run black code formatter."""
+    session.install("black")
+    session.run("black", "src", "tests", "noxfile.py", "setup.py")
+
+    lint(session)
