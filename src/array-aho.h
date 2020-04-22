@@ -24,6 +24,11 @@
 // SOFTWARE.
 // (MIT 'expat' license)
 
+#if _WIN32
+    #define NOMINMAX
+    #include <windows.h>
+#endif
+
 #include <algorithm>
 #include <vector>
 #include <cassert>
