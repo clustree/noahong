@@ -31,7 +31,10 @@
 #include <utility>
 #include <iso646.h>
 
-#include <sys/mman.h>
+#ifdef _WIN32
+#else
+    #include <sys/mman.h>
+#endif
 #include <fcntl.h>
 
 
@@ -829,8 +832,21 @@ MappedTrie::MappedTrie(char* const path, size_t n)
         throw std::runtime_error("failed to open file: " + p);
     }
     this->mapped_size = lseek(this->fd, 0, SEEK_END);
-    this->mapped= static_cast<const uint8_t*>(
-            mmap(0, this->mapped_size, PROT_READ, MAP_SHARED, this->fd, 0));
+
+    void *addr;
+#if _WIN32
+    this->FileMapping = CreateFileMapping(
+        (HANDLE) _get_osfhandle(this->fd),
+        NULL,
+        PAGE_READONLY,
+        int32_t(this->mapped_size>>32),
+        int32_t(this->mapped_size),
+        NULL);
+    addr = MapViewOfFile(this->FileMapping, FILE_MAP_READ, 0, 0, 0);
+#else
+    addr = mmap(0, this->mapped_size, PROT_READ, MAP_SHARED, this->fd, 0);
+#endif
+    this->mapped = static_cast<const uint8_t*>(addr);
 
     if (static_cast<size_t>(this->mapped_size) < sizeof(BOM)) {
         throw std::runtime_error("BOM is missing");
@@ -861,12 +877,24 @@ MappedTrie::MappedTrie(char* const path, size_t n)
 
 
 MappedTrie::~MappedTrie() {
-    if (this->fd > 0) {
-        close(this->fd);
+#ifdef _WIN32
+    if (this->mapped) {
+        UnmapViewOfFile(this->mapped);
     }
+    if (this->FileMapping) {
+        CloseHandle(this->FileMapping);
+    }
+    if (this->fd > 0) {
+        _close(this->fd);
+    }
+#else
     if (this->mapped) {
         munmap((void*)this->mapped, this->mapped_size);
     }
+    if (this->fd > 0) {
+        close(this->fd);
+    }
+#endif
 }
 
 

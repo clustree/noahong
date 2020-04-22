@@ -236,6 +236,10 @@ private:
 private:
     int fd;
     const uint8_t* mapped;
+#ifdef _WIN32
+    HANDLE FileMapping;
+#endif
+
     off_t mapped_size;
 
     std::unique_ptr< MappedArray<int32_t> > nodes_chars_offset;
