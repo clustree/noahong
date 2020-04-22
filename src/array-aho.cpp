@@ -29,6 +29,7 @@
 #include <queue>
 #include <iostream>
 #include <utility>
+#include <iso646.h>
 
 #include <sys/mman.h>
 #include <fcntl.h>
