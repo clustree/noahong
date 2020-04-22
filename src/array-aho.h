@@ -37,7 +37,11 @@
 #include <iosfwd>
 #include <deque>
 #include <memory>
-#include <unistd.h>
+#ifdef _WIN32
+    #include <io.h>
+#else
+    #include <unistd.h>
+#endif
 
 typedef uint8_t AC_CHAR_TYPE;
 
