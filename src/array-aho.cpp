@@ -816,7 +816,14 @@ MappedTrie::MappedTrie(char* const path, size_t n)
     , mapped_size(0) {
 
     std::string p(path, n);
+#ifdef _WIN32
+    int len = MultiByteToWideChar(CP_UTF8, 0, path, n, NULL, 0);
+    std::wstring wp(len, 0);
+    MultiByteToWideChar(CP_UTF8, 0, path, n, &wp[0], len);
+    this->fd = _wopen(wp.c_str(), _O_RDONLY, _S_IREAD);
+#else
     this->fd = open(p.c_str(), O_RDONLY, static_cast<mode_t>(0400));
+#endif
     if (this->fd < 0) {
         throw std::runtime_error("failed to open file: " + p);
     }
