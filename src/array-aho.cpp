@@ -212,7 +212,7 @@ namespace {
 class Writer {
 public:
     Writer(std::string path) {
-        this->fp = fopen(path.c_str(), "w");
+        this->fp = fopen(path.c_str(), "wb");
         if (!this->fp) {
             throw std::runtime_error("failed to open file: " + std::string(path));
         }
