@@ -191,6 +191,7 @@ public:
    virtual Index child_at(Index i, AC_CHAR_TYPE a) const;
    virtual PayloadT payload_at(Index i) const;
    virtual FrozenNode get_node(Node::Index i) const;
+   virtual ~FrozenTrie() {}
 
 private:
    // root is at 0 of course.
