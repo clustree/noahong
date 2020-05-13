@@ -232,6 +232,7 @@ public:
 
 private:
     Node::Index child_index(Node::Index i, AC_CHAR_TYPE c) const;
+    void cleanup();
 
 private:
     int fd;

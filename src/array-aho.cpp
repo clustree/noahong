@@ -821,6 +821,8 @@ MappedTrie::MappedTrie(char* const path, size_t n)
 
     std::string p(path, n);
 #ifdef _WIN32
+    this->FileMapping = NULL;
+
     int len = MultiByteToWideChar(CP_UTF8, 0, path, n, NULL, 0);
     std::wstring wp(len, 0);
     MultiByteToWideChar(CP_UTF8, 0, path, n, &wp[0], len);
@@ -849,10 +851,12 @@ MappedTrie::MappedTrie(char* const path, size_t n)
     this->mapped = static_cast<const uint8_t*>(addr);
 
     if (static_cast<size_t>(this->mapped_size) < sizeof(BOM)) {
+        cleanup();
         throw std::runtime_error("BOM is missing");
     }
     const bom_t bom = *reinterpret_cast<const bom_t*>(this->mapped);
     if (bom != BOM) {
+        cleanup();
         throw std::runtime_error("BOM does not match");
     }
     const auto mapped = this->mapped + sizeof(bom);
@@ -871,12 +875,13 @@ MappedTrie::MappedTrie(char* const path, size_t n)
 
     const size_t read = this->payload_values->end_bytes() - this->mapped;
     if (read != static_cast<size_t>(this->mapped_size)) {
+        cleanup();
         throw std::runtime_error("mmapped size does not match read bytes count");
     }
 }
 
 
-MappedTrie::~MappedTrie() {
+void MappedTrie::cleanup() {
 #ifdef _WIN32
     if (this->mapped) {
         UnmapViewOfFile(this->mapped);
@@ -895,6 +900,11 @@ MappedTrie::~MappedTrie() {
         close(this->fd);
     }
 #endif
+}
+
+
+MappedTrie::~MappedTrie() {
+    cleanup();
 }
 
 
