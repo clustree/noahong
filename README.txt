@@ -15,6 +15,7 @@ How does it differ from the original project:
   anymore. It makes it easier to catch issues related to thread-safety.
 - Reduce memory consumption by 50% on our dataset without affecting match
   performances.
+- We support Windows.
 
 
 # ORIGINAL README
