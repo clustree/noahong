@@ -28,6 +28,7 @@ from cpython.ref cimport Py_INCREF
 from cpython.ref cimport Py_DECREF
 from cpython.version cimport PY_MAJOR_VERSION
 from libc.stdint cimport int32_t
+from libcpp cimport bool as bool_t
 
 cdef get_as_utf8(object text):
     if isinstance(text, unicode) or (PY_MAJOR_VERSION < 3 and isinstance(text, str)):
@@ -321,6 +322,7 @@ cdef class MappedIterator:
 
 cdef class Mapped:
     cdef MappedTrie *trie
+    cdef bool_t closed
 
     def __cinit__(self, path):
         cdef bytes encoded_path
@@ -328,9 +330,15 @@ cdef class Mapped:
         encoded_path = os.fsencode(path)
         num_chars = len(encoded_path)
         self.trie = new MappedTrie(encoded_path, num_chars)
+        self.closed = False
 
     def __dealloc__(self):
+        if not self.closed:
+            del self.trie
+
+    def close(self):
         del self.trie
+        self.closed = True
 
     def findall_anchored(self, text):
         cdef bytes utf8_data

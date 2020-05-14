@@ -7,6 +7,7 @@ this test code (this doesn't apply to the whole package).
 Jeff Donner, jeffrey.donner@gmail.com
 """
 
+import contextlib
 import os
 import sys
 import tempfile
@@ -299,21 +300,20 @@ class AhoCorasickTest(unittest.TestCase):
             path = os.path.join(tmpdir, "mapped")
             self.tree.write(path)
 
-            m = Mapped(path)
-            self.assertEqual(m.nodes_count(), self.tree.nodes_count())
-            matches = list(m.findall_anchored(anchor(".a..b..c.")))
-            self.assertEqual(matches, [(0, 9, 0)])
-            matches = list(m.findall_anchored(anchor(".b.")))
-            self.assertEqual(matches, [(0, 3, 1)])
-            matches = list(m.findall_anchored(anchor(".a..c.")))
-            self.assertEqual(matches, [(0, 6, 2)])
-            matches = list(m.findall_anchored(anchor(".z.")))
-            self.assertEqual(matches, [])
-            matches = list(m.findall_anchored(anchor(".z..a..b..z.")))
-            self.assertEqual(matches, [(3, 9, 3)])
-            matches = list(m.findall_anchored(anchor(".é.")))
-            self.assertEqual(matches, [(0, 3, 4)])
-            del m
+            with contextlib.closing(Mapped(path)) as m:
+                self.assertEqual(m.nodes_count(), self.tree.nodes_count())
+                matches = list(m.findall_anchored(anchor(".a..b..c.")))
+                self.assertEqual(matches, [(0, 9, 0)])
+                matches = list(m.findall_anchored(anchor(".b.")))
+                self.assertEqual(matches, [(0, 3, 1)])
+                matches = list(m.findall_anchored(anchor(".a..c.")))
+                self.assertEqual(matches, [(0, 6, 2)])
+                matches = list(m.findall_anchored(anchor(".z.")))
+                self.assertEqual(matches, [])
+                matches = list(m.findall_anchored(anchor(".z..a..b..z.")))
+                self.assertEqual(matches, [(3, 9, 3)])
+                matches = list(m.findall_anchored(anchor(".é.")))
+                self.assertEqual(matches, [(0, 3, 4)])
 
     def test_empty_mapped_trie(self):
         self.tree.compile()
@@ -321,12 +321,11 @@ class AhoCorasickTest(unittest.TestCase):
             path = os.path.join(tmpdir, "mapped")
             self.tree.write(path)
 
-            m = Mapped(path)
-            self.assertEqual(m.nodes_count(), 1)
-            self.assertEqual(m.nodes_count(), self.tree.nodes_count())
-            matches = list(m.findall_anchored(anchor(".a..b..c.")))
-            self.assertEqual(matches, [])
-            del m
+            with contextlib.closing(Mapped(path)) as m:
+                self.assertEqual(m.nodes_count(), 1)
+                self.assertEqual(m.nodes_count(), self.tree.nodes_count())
+                matches = list(m.findall_anchored(anchor(".a..b..c.")))
+                self.assertEqual(matches, [])
 
     def test_bad_mapped_trie(self):
         with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
