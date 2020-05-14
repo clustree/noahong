@@ -29,8 +29,12 @@
 #include <queue>
 #include <iostream>
 #include <utility>
+#include <iso646.h>
 
-#include <sys/mman.h>
+#ifdef _WIN32
+#else
+    #include <sys/mman.h>
+#endif
 #include <fcntl.h>
 
 
@@ -190,6 +194,7 @@ public:
    virtual Index child_at(Index i, AC_CHAR_TYPE a) const;
    virtual PayloadT payload_at(Index i) const;
    virtual FrozenNode get_node(Node::Index i) const;
+   virtual ~FrozenTrie() {}
 
 private:
    // root is at 0 of course.
@@ -211,7 +216,7 @@ namespace {
 class Writer {
 public:
     Writer(std::string path) {
-        this->fp = fopen(path.c_str(), "w");
+        this->fp = fopen(path.c_str(), "wb");
         if (!this->fp) {
             throw std::runtime_error("failed to open file: " + std::string(path));
         }
@@ -815,19 +820,43 @@ MappedTrie::MappedTrie(char* const path, size_t n)
     , mapped_size(0) {
 
     std::string p(path, n);
+#ifdef _WIN32
+    this->FileMapping = NULL;
+
+    int len = MultiByteToWideChar(CP_UTF8, 0, path, n, NULL, 0);
+    std::wstring wp(len, 0);
+    MultiByteToWideChar(CP_UTF8, 0, path, n, &wp[0], len);
+    this->fd = _wopen(wp.c_str(), _O_RDONLY, _S_IREAD);
+#else
     this->fd = open(p.c_str(), O_RDONLY, static_cast<mode_t>(0400));
+#endif
     if (this->fd < 0) {
         throw std::runtime_error("failed to open file: " + p);
     }
     this->mapped_size = lseek(this->fd, 0, SEEK_END);
-    this->mapped= static_cast<const uint8_t*>(
-            mmap(0, this->mapped_size, PROT_READ, MAP_SHARED, this->fd, 0));
+
+    void *addr;
+#if _WIN32
+    this->FileMapping = CreateFileMapping(
+        (HANDLE) _get_osfhandle(this->fd),
+        NULL,
+        PAGE_READONLY,
+        int32_t(this->mapped_size>>32),
+        int32_t(this->mapped_size),
+        NULL);
+    addr = MapViewOfFile(this->FileMapping, FILE_MAP_READ, 0, 0, 0);
+#else
+    addr = mmap(0, this->mapped_size, PROT_READ, MAP_SHARED, this->fd, 0);
+#endif
+    this->mapped = static_cast<const uint8_t*>(addr);
 
     if (static_cast<size_t>(this->mapped_size) < sizeof(BOM)) {
+        cleanup();
         throw std::runtime_error("BOM is missing");
     }
     const bom_t bom = *reinterpret_cast<const bom_t*>(this->mapped);
     if (bom != BOM) {
+        cleanup();
         throw std::runtime_error("BOM does not match");
     }
     const auto mapped = this->mapped + sizeof(bom);
@@ -846,18 +875,36 @@ MappedTrie::MappedTrie(char* const path, size_t n)
 
     const size_t read = this->payload_values->end_bytes() - this->mapped;
     if (read != static_cast<size_t>(this->mapped_size)) {
+        cleanup();
         throw std::runtime_error("mmapped size does not match read bytes count");
     }
 }
 
 
-MappedTrie::~MappedTrie() {
-    if (this->fd > 0) {
-        close(this->fd);
+void MappedTrie::cleanup() {
+#ifdef _WIN32
+    if (this->mapped) {
+        UnmapViewOfFile(this->mapped);
     }
+    if (this->FileMapping) {
+        CloseHandle(this->FileMapping);
+    }
+    if (this->fd > 0) {
+        _close(this->fd);
+    }
+#else
     if (this->mapped) {
         munmap((void*)this->mapped, this->mapped_size);
     }
+    if (this->fd > 0) {
+        close(this->fd);
+    }
+#endif
+}
+
+
+MappedTrie::~MappedTrie() {
+    cleanup();
 }
 
 

@@ -22,6 +22,8 @@
 
 # rm -f noaho.cpp && rm -rf build && rm -rf .objs && rm -f *.so && python3 cython_deep_build_setup.py build_ext --inplace
 
+import os
+
 from cpython.ref cimport Py_INCREF
 from cpython.ref cimport Py_DECREF
 from cpython.version cimport PY_MAJOR_VERSION
@@ -321,10 +323,11 @@ cdef class Mapped:
     cdef MappedTrie *trie
 
     def __cinit__(self, path):
-        cdef bytes utf8_data
-        cdef int num_utf8_chars
-        utf8_data, num_utf8_chars = get_as_utf8(path)
-        self.trie = new MappedTrie(utf8_data, num_utf8_chars)
+        cdef bytes encoded_path
+        cdef int num_chars
+        encoded_path = os.fsencode(path)
+        num_chars = len(encoded_path)
+        self.trie = new MappedTrie(encoded_path, num_chars)
 
     def __dealloc__(self):
         del self.trie

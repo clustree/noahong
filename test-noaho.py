@@ -313,6 +313,7 @@ class AhoCorasickTest(unittest.TestCase):
             self.assertEqual(matches, [(3, 9, 3)])
             matches = list(m.findall_anchored(anchor(".é.")))
             self.assertEqual(matches, [(0, 3, 4)])
+            del m
 
     def test_empty_mapped_trie(self):
         self.tree.compile()
@@ -325,6 +326,7 @@ class AhoCorasickTest(unittest.TestCase):
             self.assertEqual(m.nodes_count(), self.tree.nodes_count())
             matches = list(m.findall_anchored(anchor(".a..b..c.")))
             self.assertEqual(matches, [])
+            del m
 
     def test_bad_mapped_trie(self):
         with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:

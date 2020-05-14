@@ -24,6 +24,11 @@
 // SOFTWARE.
 // (MIT 'expat' license)
 
+#if _WIN32
+    #define NOMINMAX
+    #include <windows.h>
+#endif
+
 #include <algorithm>
 #include <vector>
 #include <cassert>
@@ -32,7 +37,11 @@
 #include <iosfwd>
 #include <deque>
 #include <memory>
-#include <unistd.h>
+#ifdef _WIN32
+    #include <io.h>
+#else
+    #include <unistd.h>
+#endif
 
 typedef uint8_t AC_CHAR_TYPE;
 
@@ -223,10 +232,15 @@ public:
 
 private:
     Node::Index child_index(Node::Index i, AC_CHAR_TYPE c) const;
+    void cleanup();
 
 private:
     int fd;
     const uint8_t* mapped;
+#ifdef _WIN32
+    HANDLE FileMapping;
+#endif
+
     off_t mapped_size;
 
     std::unique_ptr< MappedArray<int32_t> > nodes_chars_offset;
