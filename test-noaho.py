@@ -9,342 +9,396 @@ Jeff Donner, jeffrey.donner@gmail.com
 
 import contextlib
 import os
-import sys
 import tempfile
-from noahong import NoAho, Mapped
-import unittest
+
+import pytest
+
+from noahong import Mapped, NoAho
+
+
+def test_compile_before_use():
+    tree = NoAho()
+    tree.add("bar")
+    # Cannot be used before compilation
+    with pytest.raises(AssertionError):
+        tree.find_short("xxxbaryyy")
+    tree.compile()
+    tree.find_short("xxxbaryyy")
+    # Cannot add after compilation
+    with pytest.raises(AssertionError):
+        tree.add("foo")
+
+
+def test_keyword_as_prefix_of_another():
+    """According to John, there's a problem with the matcher.
+    this test case should expose the bug."""
+    tree = NoAho()
+    tree.add("foobar")
+    tree.add("foo")
+    tree.add("bar")
+    tree.compile()
+    assert (3, 6, None) == tree.find_short("xxxfooyyy")
+    assert (0, 3, None) == tree.find_short("foo")
+    assert (3, 6, None) == tree.find_short("xxxbaryyy")
+
+
+def test_another_find():
+    """Just to triangulate the search code.  We want to make sure
+    that the implementation can do more than one search, at
+    least."""
+    tree = NoAho()
+    tree.add("Python")
+    tree.add("PLT Scheme")
+    tree.compile()
+    assert (19, 25, None) == tree.find_short(
+        "I am learning both Python and PLT Scheme"
+    )  # NOQA
+    assert (0, 10, None) == tree.find_short(
+        "PLT Scheme is an interesting language."
+    )  # NOQA
+
+
+def test_simple_construction():
+    tree = NoAho()
+    tree.add("foo")
+    tree.add("bar")
+    tree.compile()
+    (10, 13, None) == tree.find_short("this is a foo message")
+    tree.children_count() == 6
+
+
+def test_counts():
+    tree = NoAho()
+    tree.add("foo")
+    tree.compile()
+    assert tree.nodes_count() == 4
+    assert tree.children_count() == 3
+
+    tree = NoAho()
+    tree.add("foo")
+    tree.add("bar")
+    tree.compile()
+    assert tree.nodes_count() == 7
+    assert tree.children_count() == 6
+
+    tree = NoAho()
+    tree.add("fo")
+    tree.add("foo")
+    tree.compile()
+    assert tree.nodes_count() == 4
+    assert tree.children_count() == 3
+
+
+def test_find_longest():
+    tree = NoAho()
+    tree.add("a")
+    tree.add("alphabet")
+    tree.compile()
+    assert (0, 1, None) == tree.find_short("alphabet soup")
+    assert (0, 8, None) == tree.find_long("alphabet soup")
+    assert (13, 14, None) == tree.find_long(
+        "yummy, I see an alphabet soup bowl"
+    )  # NOQA
+
+
+def test_find_with_whole_match():
+    """Make sure that longest search will match the whole string."""
+    tree = NoAho()
+    longString = "supercalifragilisticexpialidocious"
+    tree.add(longString)
+    tree.compile()
+    assert (0, len(longString), None) == tree.find_short(longString)
+
+
+def test_find_longest_with_whole_match():
+    """Make sure that longest search will match the whole string."""
+    tree = NoAho()
+    longString = "supercalifragilisticexpialidocious"
+    tree.add(longString)
+    tree.compile()
+    assert (0, len(longString), None) == tree.find_long(longString)
+
+
+def test_find_longest_with_no_match():
+    tree = NoAho()
+    tree.add("foobar")
+    tree.compile()
+    assert (None, None, None) == tree.find_long("fooba")
+
+
+def test_with_expected_non_match():
+    """Check to see that we don't always get a successful match."""
+    tree = NoAho()
+    tree.add("wise man")
+    tree.compile()
+    assert (None, None, None) == tree.find_short(
+        "where fools and wise men fear to tread"
+    )
+
+
+def test_reject_empty_key():
+    tree = NoAho()
+    with pytest.raises(ValueError):
+        tree.add("")
+
+
+def test_empty_construction():
+    """Make sure that we can safely construct and dealloc a tree
+    with no initial keywords.  Important because the C
+    implementation assumes keywords exist on its dealloc, so we
+    have to do some work on the back end to avoid silly segmentation
+    errors."""
+    tree = NoAho()
+    del tree
+
+
+def test_embedded_nulls():
+    """Check to see if we can accept embedded nulls"""
+    tree = NoAho()
+    tree.add("hell\0 world")
+    tree.compile()
+    assert (None, None, None) == tree.find_short("ello\0 world")
+    assert (0, 11, None) == tree.find_short("hell\0 world")
+
+
+def test_embedded_nulls_again():
+    tree = NoAho()
+    tree.add("\0\0\0")
+    tree.compile()
+    assert (0, 3, None) == tree.find_short("\0\0\0\0\0\0\0\0")
+
+
+def test_findall_and_findall_longest():
+    tree = NoAho()
+    tree.add("python")
+    tree.add("perl")
+    tree.add("scheme")
+    tree.add("java")
+    tree.add("pythonperl")
+    tree.compile()
+    assert [
+        (0, 6, None),
+        (6, 10, None),
+        (10, 16, None),
+        (16, 20, None),
+    ] == list(  # NOQA
+        tree.findall_short("pythonperlschemejava")
+    )
+    assert [(0, 10, None), (10, 16, None), (16, 20, None)] == list(
+        tree.findall_long("pythonperlschemejava")
+    )
+    assert [] == list(tree.findall_short("no pascal here"))
+    assert [] == list(tree.findall_long("no pascal here"))
+
+
+def test_bug2_competing_longests():
+    """Previously we'd return the /last/ key found, now we look forward
+    while there are contiguous candidate keys, and actually return the
+    longest.
+    """
+    tree = NoAho()
+    tree.add("cisco", "cisco")
+    tree.add("em", "em")
+    tree.add("cisco systems australia", "cisco systems")
+    tree.compile()
+    assert [(0, 5, "cisco"), (10, 12, "em")] == list(
+        tree.findall_long("cisco systems")
+    )  # NOQA
+
+
+def test_bug3_false_terminal_nodes():
+    tree = NoAho()
+    tree.add("an", None)
+    tree.add("canal", None)
+    tree.add("e can oilfield", None)
+    tree.compile()
+    assert [(4, 4 + 5, None)], list(tree.findall_long("one canal"))
+
+
+def test_payload():
+    tree = NoAho()
+
+    class RandomClass(object):
+        def __init__(self):
+            pass
+
+    obj = RandomClass()
+    tree.add("python", "yes-python")
+    tree.add("perl", "")
+    tree.add("scheme", None)
+    tree.add("lisp", [1, 2, 3])
+    # no payload, comes out None
+    tree.add("C++")
+    tree.add("dylan", obj)
+    tree.compile()
+
+    assert (0, 6, "yes-python") == tree.find_short("python")
+    assert (0, 4, "") == tree.find_short("perl")
+    assert (0, 6, None) == tree.find_short("scheme")
+    assert (0, 4, [1, 2, 3]) == tree.find_short("lisp")
+    assert (0, 3, None) == tree.find_short("C++")
+    assert (0, 5, obj) == tree.find_short("dylan")
+
+
+def test_dict_style_get_and_set():
+    tree = NoAho()
+    tree["foo"] = 5
+    tree.compile()
+    assert 5 == tree["foo"]
+
+
+def test_dict_style_set_empty_key():
+    tree = NoAho()
+    with pytest.raises(ValueError):
+        tree[""] = None
+
+
+def test_dict_style_set_nonstring_key():
+    tree = NoAho()
+    with pytest.raises(ValueError):
+        tree[6] = None
+
+    with pytest.raises(ValueError):
+        tree[None] = None
+
+    with pytest.raises(ValueError):
+        tree[[]] = None
+
+
+def test_dict_style_get_unseen_key():
+    tree = NoAho()
+    tree.compile()
+    with pytest.raises(KeyError):
+        tree["unseen"]
+    with pytest.raises(KeyError):
+        tree[""]
+
+
+def test_dict_style_containment():
+    tree = NoAho()
+    tree["foo"] = 5
+    tree.compile()
+    assert "foo" in tree
+    assert "" not in tree
+    assert "fo" not in tree
+    assert "o" not in tree
+    assert "oo" not in tree
+    assert "f" not in tree
+
+
+def test_dict_style_len():
+    tree = NoAho()
+    tree["a"] = None
+    tree["b"] = [1, 2]
+    tree["c"] = 12
+    tree.compile()
+    assert 3 == len(tree)
+
+
+# reminder that we need to figure out which version we're in, and
+# test Python 2 unicode explicitly
+@pytest.mark.xfail
+def test_unicode_in_python2():
+    assert False
+
+
+# key iteration is unimplemented
+@pytest.mark.xfail
+def test_iteration():
+    tree = NoAho()
+    tree.add("Harry")
+    tree.add("Hermione")
+    tree.add("Ron")
+    assert set("Harry", "Hermione", "Ron") == set(tree.keys())
+
+
+# reminder that we need to implement findall_short
+@pytest.mark.xfail
+def test_subset():
+    tree = NoAho()
+    tree.add("he")
+    tree.add("hers")
+    assert [(0, 2, None), (0, 4, None)] == list(tree.findall_short("hers"))
 
 
 def anchor(s):
     return s.replace(".", "\u001F")
 
 
-class AhoCorasickTest(unittest.TestCase):
-    def setUp(self):
-        self.tree = NoAho()
-
-    def tearDown(self):
-        self.tree = None
-
-    def test_compile_before_use(self):
-        self.tree.add("bar")
-        self.assertRaises(AssertionError, lambda: self.tree.find_short("xxxbaryyy"))
-        self.tree.compile()
-        self.tree.find_short("xxxbaryyy")
-        self.assertRaises(AssertionError, lambda: self.tree.add("foo"))
-
-    def test_keyword_as_prefix_of_another(self):
-        """According to John, there's a problem with the matcher.
-        this test case should expose the bug."""
-        self.tree.add("foobar")
-        self.tree.add("foo")
-        self.tree.add("bar")
-        self.tree.compile()
-        self.assertEqual((3, 6, None), self.tree.find_short("xxxfooyyy"))
-        self.assertEqual((0, 3, None), self.tree.find_short("foo"))
-        self.assertEqual((3, 6, None), self.tree.find_short("xxxbaryyy"))
-
-    def test_another_find(self):
-        """Just to triangulate the search code.  We want to make sure
-        that the implementation can do more than one search, at
-        least."""
-        self.tree.add("Python")
-        self.tree.add("PLT Scheme")
-        self.tree.compile()
-        self.assertEqual(
-            (19, 25, None),
-            self.tree.find_short("I am learning both Python and PLT Scheme"),
-        )
-        self.assertEqual(
-            (0, 10, None),
-            self.tree.find_short("PLT Scheme is an interesting language."),
-        )
-
-    def test_simple_construction(self):
-        self.tree.add("foo")
-        self.tree.add("bar")
-        self.tree.compile()
-        self.assertEqual((10, 13, None), self.tree.find_short("this is a foo message"))
-        self.assertEqual(self.tree.children_count(), 6)
-
-    def test_counts(self):
-        self.tree = NoAho()
-        self.tree.add("foo")
-        self.tree.compile()
-        self.assertEqual(self.tree.nodes_count(), 4)
-        self.assertEqual(self.tree.children_count(), 3)
-
-        self.tree = NoAho()
-        self.tree.add("foo")
-        self.tree.add("bar")
-        self.tree.compile()
-        self.assertEqual(self.tree.nodes_count(), 7)
-        self.assertEqual(self.tree.children_count(), 6)
-
-        self.tree = NoAho()
-        self.tree.add("fo")
-        self.tree.add("foo")
-        self.tree.compile()
-        self.assertEqual(self.tree.nodes_count(), 4)
-        self.assertEqual(self.tree.children_count(), 3)
-
-    def test_find_longest(self):
-        self.tree.add("a")
-        self.tree.add("alphabet")
-        self.tree.compile()
-        self.assertEqual((0, 1, None), self.tree.find_short("alphabet soup"))
-        self.assertEqual((0, 8, None), self.tree.find_long("alphabet soup"))
-        self.assertEqual(
-            (13, 14, None), self.tree.find_long("yummy, I see an alphabet soup bowl")
-        )
-
-    def test_find_with_whole_match(self):
-        """Make sure that longest search will match the whole string."""
-        longString = "supercalifragilisticexpialidocious"
-        self.tree.add(longString)
-        self.tree.compile()
-        self.assertEqual((0, len(longString), None), self.tree.find_short(longString))
-
-    def test_find_longest_with_whole_match(self):
-        """Make sure that longest search will match the whole string."""
-        longString = "supercalifragilisticexpialidocious"
-        self.tree.add(longString)
-        self.tree.compile()
-        self.assertEqual((0, len(longString), None), self.tree.find_long(longString))
-
-    def test_find_longest_with_no_match(self):
-        self.tree.add("foobar")
-        self.tree.compile()
-        self.assertEqual((None, None, None), self.tree.find_long("fooba"))
-
-    def test_with_expected_non_match(self):
-        """Check to see that we don't always get a successful match."""
-        self.tree.add("wise man")
-        self.tree.compile()
-        self.assertEqual(
-            (None, None, None),
-            self.tree.find_short("where fools and wise men fear to tread"),
-        )
-
-    def test_reject_empty_key(self):
-        self.assertRaises(ValueError, self.tree.add, "")
-
-    def test_empty_construction(self):
-        """Make sure that we can safely construct and dealloc a tree
-        with no initial keywords.  Important because the C
-        implementation assumes keywords exist on its dealloc, so we
-        have to do some work on the back end to avoid silly segmentation
-        errors."""
-        tree = NoAho()
-        del tree
-
-    def test_embedded_nulls(self):
-        """Check to see if we can accept embedded nulls"""
-        self.tree.add("hell\0 world")
-        self.tree.compile()
-        self.assertEqual((None, None, None), self.tree.find_short("ello\0 world"))
-        self.assertEqual((0, 11, None), self.tree.find_short("hell\0 world"))
-
-    def test_embedded_nulls_again(self):
-        self.tree.add("\0\0\0")
-        self.tree.compile()
-        self.assertEqual((0, 3, None), self.tree.find_short("\0\0\0\0\0\0\0\0"))
-
-    def test_findall_and_findall_longest(self):
-        self.tree.add("python")
-        self.tree.add("perl")
-        self.tree.add("scheme")
-        self.tree.add("java")
-        self.tree.add("pythonperl")
-        self.tree.compile()
-        self.assertEqual(
-            [(0, 6, None), (6, 10, None), (10, 16, None), (16, 20, None)],
-            list(self.tree.findall_short("pythonperlschemejava")),
-        )
-        self.assertEqual(
-            [(0, 10, None), (10, 16, None), (16, 20, None)],
-            list(self.tree.findall_long("pythonperlschemejava")),
-        )
-        self.assertEqual([], list(self.tree.findall_short("no pascal here")))
-        self.assertEqual([], list(self.tree.findall_long("no pascal here")))
-
-    def test_bug2_competing_longests(self):
-        """Previously we'd return the /last/ key found, now we look forward
-        while there are contiguous candidate keys, and actually return the
-        longest.
-        """
-        self.tree.add("cisco", "cisco")
-        self.tree.add("em", "em")
-        self.tree.add("cisco systems australia", "cisco systems")
-        self.tree.compile()
-        self.assertEqual(
-            [(0, 5, "cisco"), (10, 12, "em")],
-            list(self.tree.findall_long("cisco systems")),
-        )
-
-    def test_bug3_false_terminal_nodes(self):
-        self.tree.add("an", None)
-        self.tree.add("canal", None)
-        self.tree.add("e can oilfield", None)
-        self.tree.compile()
-        self.assertEqual([(4, 4 + 5, None)], list(self.tree.findall_long("one canal")))
-
-    def test_payload(self):
-        class RandomClass(object):
-            def __init__(self):
-                pass
-
-        obj = RandomClass()
-        self.tree.add("python", "yes-python")
-        self.tree.add("perl", "")
-        self.tree.add("scheme", None)
-        self.tree.add("lisp", [1, 2, 3])
-        # no payload, comes out None
-        self.tree.add("C++")
-        self.tree.add("dylan", obj)
-        self.tree.compile()
-
-        self.assertEqual((0, 6, "yes-python"), self.tree.find_short("python"))
-        self.assertEqual((0, 4, ""), self.tree.find_short("perl"))
-        self.assertEqual((0, 6, None), self.tree.find_short("scheme"))
-        self.assertEqual((0, 4, [1, 2, 3]), self.tree.find_short("lisp"))
-        self.assertEqual((0, 3, None), self.tree.find_short("C++"))
-        self.assertEqual((0, 5, obj), self.tree.find_short("dylan"))
-
-    def test_dict_style_get_and_set(self):
-        self.tree["foo"] = 5
-        self.tree.compile()
-        self.assertEqual(5, self.tree["foo"])
-
-    def test_dict_style_set_empty_key(self):
-        # equivalent to self.tree[''] = None
-        # __setitem__ implements this part of the [] protocol
-        self.assertRaises(ValueError, self.tree.__setitem__, "", None)
-
-    def test_dict_style_set_nonstring_key(self):
-        # equivalent to self.tree[''] = None
-        # __setitem__ implements this part of the [] protocol
-        self.assertRaises(ValueError, self.tree.__setitem__, 6, None)
-        self.assertRaises(ValueError, self.tree.__setitem__, None, None)
-        self.assertRaises(ValueError, self.tree.__setitem__, [], None)
-
-    def test_dict_style_get_unseen_key(self):
-        # __getitem__ implements this part of the [] protocol
-        self.tree.compile()
-        self.assertRaises(KeyError, self.tree.__getitem__, "unseen")
-        self.assertRaises(KeyError, self.tree.__getitem__, "")
-
-    def test_dict_style_containment(self):
-        self.tree["foo"] = 5
-        self.tree.compile()
-        self.assertEqual(True, "foo" in self.tree)
-        self.assertEqual(False, "" in self.tree)
-        self.assertEqual(False, "fo" in self.tree)
-        self.assertEqual(False, "o" in self.tree)
-        self.assertEqual(False, "oo" in self.tree)
-        self.assertEqual(False, "f" in self.tree)
-
-    def test_dict_style_len(self):
-        self.tree["a"] = None
-        self.tree["b"] = [1, 2]
-        self.tree["c"] = 12
-        self.tree.compile()
-        self.assertEqual(3, len(self.tree))
-
-    # reminder that we need to figure out which version we're in, and
-    # test Python 2 unicode explicitly
-    @unittest.expectedFailure
-    def test_unicode_in_python2(self):
-        self.assertEqual(True, False)
-
-    # key iteration is unimplemented
-    @unittest.expectedFailure
-    def test_iteration(self):
-        self.tree.add("Harry")
-        self.tree.add("Hermione")
-        self.tree.add("Ron")
-        self.assertEqual(set("Harry", "Hermione", "Ron"), set(self.tree.keys()))
-
-    # reminder that we need to implement findall_short
-    @unittest.expectedFailure
-    def test_subset(self):
-        self.tree.add("he")
-        self.tree.add("hers")
-        self.assertEqual(
-            [(0, 2, None), (0, 4, None)], list(self.tree.findall_short("hers"))
-        )
-
-    def test_utf8(self):
-        self.tree.add("étable")
-        self.tree.add("béret")
-        self.tree.add("blé")
-        self.tree.compile()
-        matches = list(self.tree.findall_long("étable béret blé"))
-        self.assertEqual(matches, [(0, 6, None), (7, 12, None), (13, 16, None)])
-
-    def test_anchored(self):
-        self.tree.add(anchor(".a..b..c."))
-        self.tree.add(anchor(".b."))
-        self.tree.compile()
-        matches = list(self.tree.findall_anchored(anchor(".a..b..z.")))
-        self.assertEqual(matches, [(3, 6, None)])
-
-    def test_mapped_trie(self):
-        self.tree.add(anchor(".a..b..c."), 0)
-        self.tree.add(anchor(".b."), 1)
-        self.tree.add(anchor(".a..c."), 2)
-        self.tree.add(anchor(".a..b."), 3)
-        self.tree.add(anchor(".é."), 4)
-        self.tree.compile()
-        with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
-            path = os.path.join(tmpdir, "mapped")
-            self.tree.write(path)
-
-            with contextlib.closing(Mapped(path)) as m:
-                self.assertEqual(m.nodes_count(), self.tree.nodes_count())
-                matches = list(m.findall_anchored(anchor(".a..b..c.")))
-                self.assertEqual(matches, [(0, 9, 0)])
-                matches = list(m.findall_anchored(anchor(".b.")))
-                self.assertEqual(matches, [(0, 3, 1)])
-                matches = list(m.findall_anchored(anchor(".a..c.")))
-                self.assertEqual(matches, [(0, 6, 2)])
-                matches = list(m.findall_anchored(anchor(".z.")))
-                self.assertEqual(matches, [])
-                matches = list(m.findall_anchored(anchor(".z..a..b..z.")))
-                self.assertEqual(matches, [(3, 9, 3)])
-                matches = list(m.findall_anchored(anchor(".é.")))
-                self.assertEqual(matches, [(0, 3, 4)])
-
-    def test_empty_mapped_trie(self):
-        self.tree.compile()
-        with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
-            path = os.path.join(tmpdir, "mapped")
-            self.tree.write(path)
-
-            with contextlib.closing(Mapped(path)) as m:
-                self.assertEqual(m.nodes_count(), 1)
-                self.assertEqual(m.nodes_count(), self.tree.nodes_count())
-                matches = list(m.findall_anchored(anchor(".a..b..c.")))
-                self.assertEqual(matches, [])
-
-    def test_bad_mapped_trie(self):
-        with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
-            path = os.path.join(tmpdir, "mapped")
-
-            # Input file is too short
-            with open(path, "wb") as fp:
-                fp.write(b"1")
-            self.assertRaises(AssertionError, lambda: Mapped(path))
-
-            # Invalid BOM
-            with open(path, "wb") as fp:
-                fp.write(b"1234")
-            self.assertRaises(AssertionError, lambda: Mapped(path))
+def test_utf8():
+    tree = NoAho()
+    tree.add("étable")
+    tree.add("béret")
+    tree.add("blé")
+    tree.compile()
+    matches = list(tree.findall_long("étable béret blé"))
+    assert matches == [(0, 6, None), (7, 12, None), (13, 16, None)]
 
 
-def main(args):
-    unittest.main()
+def test_anchored():
+    tree = NoAho()
+    tree.add(anchor(".a..b..c."))
+    tree.add(anchor(".b."))
+    tree.compile()
+    matches = list(tree.findall_anchored(anchor(".a..b..z.")))
+    assert matches == [(3, 6, None)]
 
 
-if __name__ == "__main__":
-    main(sys.argv[1:])
+def test_mapped_trie():
+    tree = NoAho()
+    tree.add(anchor(".a..b..c."), 0)
+    tree.add(anchor(".b."), 1)
+    tree.add(anchor(".a..c."), 2)
+    tree.add(anchor(".a..b."), 3)
+    tree.add(anchor(".é."), 4)
+    tree.compile()
+    with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
+        path = os.path.join(tmpdir, "mapped")
+        tree.write(path)
+
+        with contextlib.closing(Mapped(path)) as m:
+            assert m.nodes_count() == tree.nodes_count()
+            matches = list(m.findall_anchored(anchor(".a..b..c.")))
+            assert matches == [(0, 9, 0)]
+            matches = list(m.findall_anchored(anchor(".b.")))
+            assert matches == [(0, 3, 1)]
+            matches = list(m.findall_anchored(anchor(".a..c.")))
+            assert matches == [(0, 6, 2)]
+            matches = list(m.findall_anchored(anchor(".z.")))
+            assert matches == []
+            matches = list(m.findall_anchored(anchor(".z..a..b..z.")))
+            assert matches == [(3, 9, 3)]
+            matches = list(m.findall_anchored(anchor(".é.")))
+            assert matches == [(0, 3, 4)]
+
+
+def test_empty_mapped_trie():
+    tree = NoAho()
+    tree.compile()
+    with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
+        path = os.path.join(tmpdir, "mapped")
+        tree.write(path)
+
+        with contextlib.closing(Mapped(path)) as m:
+            assert m.nodes_count() == 1
+            assert m.nodes_count() == tree.nodes_count()
+            matches = list(m.findall_anchored(anchor(".a..b..c.")))
+            assert matches == []
+
+
+def test_bad_mapped_trie():
+    with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
+        path = os.path.join(tmpdir, "mapped")
+
+        # Input file is too short
+        with open(path, "wb") as fp:
+            fp.write(b"1")
+        with pytest.raises(AssertionError):
+            Mapped(path)
+
+        # Invalid BOM
+        with open(path, "wb") as fp:
+            fp.write(b"1234")
+
+        with pytest.raises(AssertionError):
+            Mapped(path)
