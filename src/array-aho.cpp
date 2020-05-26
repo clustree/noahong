@@ -952,6 +952,47 @@ PayloadT MappedTrie::find_anchored(char const* char_s, size_t n, char anchor,
    return find_anchored_in_trie(this, char_s, n, anchor, inout_istart, out_iend);
 }
 
+PayloadT MappedTrie::find_longest(char const* char_s, size_t n,
+                       int* inout_start,
+                       int* out_end) const {
+
+    int length_longest = -1;
+    int end_longest = -1;
+    bool have_match = false;
+
+    Node::Index inode = -1;
+    AC_CHAR_TYPE const* original_start =
+        reinterpret_cast<AC_CHAR_TYPE const*>(char_s);
+    AC_CHAR_TYPE const* start = original_start + *inout_start;
+    AC_CHAR_TYPE const* end = original_start + n;
+
+    for (;;) {
+        if (start >= end){
+            break;
+        }
+        Node::Index istate = 0;
+        for (AC_CHAR_TYPE const* c = start; c < end; ++c) {
+            istate = this->child_at(istate, *c);
+            if (istate < 0)
+            break;
+            const auto n = this->get_node(istate);
+            int keylen = n.length;
+            if (keylen && length_longest < keylen) {
+            have_match = true;
+            length_longest = keylen;
+            end_longest = c + 1 - original_start;
+            inode = istate;
+            }
+        }
+        if (have_match) {
+            *out_end = end_longest;
+            *inout_start = *out_end - length_longest;
+            return this->payload_at(inode);
+        }
+        ++start;
+    }
+    return -1;
+}
 
 PayloadT MappedTrie::payload_at(Node::Index i) const {
     if (i <= 0)
