@@ -1,173 +1,216 @@
-noahong is a fork https://github.com/JDonner/NoAho
+# Python Aho-Corasick implementation
 
-The initial objective was to reduce its memory consumption. When possible we
-try to preserve the existing interface. But specialization offers new
-optimization opportunities and we make no promise we will not break it at some
-point, or partially repurpose the library. You might still find it useful.
+`noahong` is a Python implementation of the [Aho-Corasick](https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm) algorithm for string matching, based on a fork of the [NoAho](https://github.com/JDonner/NoAho) C++ implementation.
 
-Regardless, many thanks to JDonner and the other people having worked on this
-project.
+## API
+
+The first thing to do is to instantiate a `NoAho` object and add some keys to it (optionally with different payloads for each).
+
+```
+from noahong import NoAho
+
+trie = NoAho()
+
+# fill with .add()
+trie.add("foo", "id_foo")
+trie.add("foobar", "id_foobar")
+
+# or fill with __setitem__
+trie["bar"] = "id_bar"
+```
+
+Once you have added the different keys and their payloads, the `NoAho` object needs to be compiled:
+
+```
+trie.compile()
+```
+
+Once it is compiled, keys can no longer be added to the `NoAho` object.
+
+`noahong` then exposes four functions to find matching substrings in text:
+
+### `find_short`
+
+`trie.find_short(text)` finds the first substring of `text` that is matched by a key added to the `trie`. 
+
+It returns a tuple `(start, stop, payload)` such that: 
+- `payload` is the object inserted with `trie.add()`
+- `start` and `stop` are indices of the match in the `text`: `text[start:stop] == key` 
+
+For example, using the above `trie`:
+
+```
+trie.find_short("something foo")
+# returns (10, 13, 'id_foo')
+# "something foo"[10:13] == "foo"
+```
+
+and returns the first match even though a longer match may start at the same position:
+
+```
+trie.find_short("something foobar")
+# returns (10, 13, 'id_foo')
+```
+
+### `find_long`
+
+`trie.find_long(text)` finds the first longest substring of `text` that is matched by a key added to the `trie`. 
+
+For example, using the above `trie`:
+
+```
+trie.find_long("something foobar")
+# returns (10, 16, 'id_foobar')
+```
+
+### `findall_*`
+
+Both `find_short` and `find_long` have a `findall_short` and `findall_long` counterparts that allow you to iterate on all non-overlapping matches found
+in the text:
+
+```
+for x in trie.findall_long("something foo bar foobar"): 
+    print(x)       
+
+# prints                          
+# (10, 13, 'id_foo')
+# (14, 17, 'id_bar')
+# (18, 24, 'id_foobar')
+```
+
+Because matches are non-overlapping:
+
+```
+list(trie.findall_short("foobar")) == [(0, 3, "id_foo"), (3, 6, "id_bar")]
+```
+
+whereas:
+
+```
+list(trie.findall_long("foobar")) == [(0, 6, "id_foobar")]
+```
+
+### Payloads
+
+`NoAho` tries accept any Python object as a payload:
+
+```
+trie = NoAho()
+trie.add("foo", 0)
+trie.add("bar", CustomClass())
+trie.add("baz", lambda x: x)
+```
+
+The same payload can be associated with different keys.
+
+### Length and inclusion
+
+`NoAho` trie objects also expose the number of keys with `len`:
+
+```
+len(trie)
+```
+
+And, when they are compiled, they can be used to test for key inclusion:
+
+```
+"foo" in trie
+```
+
+The number of nodes in the underlying Trie can be recovered with 
+
+```
+trie.nodes_count()
+```
+
+## Mapped `NoAho`
+
+In order to save memory, `noahong` exposes a `Mapped` matching object which can be written to disk and later loaded to perform matches with a smaller memory footprint. 
+
+The `Mapped` object exposes different finding method and only supports integer payloads.
+
+Construct it by adding keys and payloads to a `NoAho` object:
+
+```
+from noahong import NoAho, Mapped
+
+trie = NoAho()
+trie.add("baz", "id_baz")
+
+trie.compile()
+trie.write("./test.matcher")
+
+mapped_trie = Mapped("./test.matcher")
+```
+
+The `mapped_trie` object exposes a `findall_anchored` function that iterates over _anchored_ matches, matches that can be found within boundaries set with a special "anchor" character `\u001F`.
+
+This is useful to restrict matches to be found only between, say, spaces:
+
+```
+trie = NoAho()
+trie.add("foo", 0)
+trie.add("bar", 1)
+
+trie.compile()
+trie.write("./test.matcher")
+
+mapped_trie = Mapped("./test.matcher")
+mapped_trie.findall_anchored("\u001Fbar\u001F\u001Ffoo\u001F\u001Ffoobar\u001F")
+
+# returns [(1, 4, 1), (6, 9, 0), (11, 14, 0)]
+```
+
+Notice how `"bar"` is not found in the final `"foobar"` because it is not present between "anchor" characters.
+
+It is possible to place anchor characters in the keys:
+
+```
+trie = NoAho()
+trie.add("foo\u001F\u001Fbar", 0)
+trie.add("foo", 1)
+trie.add("bar", 2)
+
+trie.compile()
+trie.write("./test.matcher")
+
+mapped_trie = Mapped("./test.matcher")
+mapped_trie.findall_anchored("\u001Ffoo\u001F\u001Fbar\u001F")
+# returns [(1, 9, 0)]
+```
+
+In this case, the longest key found between anchors is returned.
 
 
-How does it differ from the original project:
+## Installation
 
-- Trie compilation is required before use. Once compiled it cannot be modified
-  anymore. It makes it easier to catch issues related to thread-safety.
-- Reduce memory consumption by 50% on our dataset without affecting match
-  performances.
-- We support Windows.
+### Devpi
 
+`noahong` is available on devpi:
 
-# ORIGINAL README
-
-Non-Overlapping Aho-Corasick Trie
-
-Features:
-- 'short' and 'long' (longest matching key) searches, both one-off and
-  iteration over all non-overlapping keyword matches in some text.
-- Works with both unicode and str in Python 2, and unicode in Python 3.  NOTE:
-  As everything is simply single UCS4 / UTF-32 codepoints under the hood, all
-  substrings and input unicode must be normalized, ie any separate modifying
-  marks must be folded into each codepoint. See:
-     http://stackoverflow.com/questions/16467479/normalizing-unicode
-  Or, theoretically, you could put into the tree all forms of the
-  keywords you expect to see in your text.
-- Allows you to associate an arbitrary Python object payload with each
-  keyword, and supports dict operations len(), [], and 'in' for the
-  keywords (though no del or traversal).
-- Does the 'compilation' (generation of Aho-Corasick failure links) of
-  the trie on-demand, ie you could mix adding keywords and searching
-  text, freely, but mostly it just relieves you of worrying about
-  compiling.
-- Can be used commercially, it's under the minimal, MIT license (if you
-  somehow need a different license, ask me, I mean for it to be used).
-
-Anti-Features:
-- Will not find overlapped keywords (eg given keywords 'abc' and 'cdef', will
-  not find 'cdef' in 'abcdef'. Any full Aho-Corasick implementation would give
-  you both. The package 'Acora' is an alternative package for this use.  (noaho
-  can be relatively easily modified to be a normal Aho-Corasick, but it wasn't
-  what I personally needed.)
-- Lacking overlap, find[all]_short is kind of useless.
-- Lacks key iteration and deletion from the mapping (dict) protocol.
-- Memory leaking untested (one run under valgrind turned up nothing, but it
-  wasn't extensive).
-- No /testcase/ for unicode in Python 2 (did manual test however)
-  Unicode chars represented as ucs4, and, each character has its own hashtable,
-  so it's relatively memory-heavy (see 'Ways to Reduce Memory Use' below).
-- Requires a C++ compiler (C++98 support is enough).
-
-Bug reports and patches welcome of course!
+```
+pip install noahong
+```
 
 
-To build and install, use either
-  pip install noaho
-or
-  # Python 2
-  python2 setup.py install # (or ... build, and copy the .so to where you want it)
-  pip install
-or
-  # Python 3
-  python3 setup.py install # (or ... build, and copy the .so to where you want it)
+### Python 2
 
+`noahong` can be installed manually:
 
-API:
-    from noaho import NoAho
-    trie = NoAho()
-'text' below applies to str and unicode in Python 2, or unicode in Python 3 (all there is)
-    trie.add(key_text, optional payload)
-    (key_start, key_end, key_value) = trie.find_short(text_to_search)
-    (key_start, key_end, key_value) = trie.find_long(text_to_search)
-    (key_start, key_end, key_value) = trie.findall_short(text_to_search)
-    (key_start, key_end, key_value) = trie.findall_long(text_to_search)
-    # keyword = text_to_search[key_start:key_end]
-    trie['keyword] = key_value
-    key_value = trie.find_long(text_to_search)
-    assert len(trie)
-    assert keyword in trie
+```
+python2 setup.py install
+pip install
+```
 
-Examples:
-    >>> a = NoAho()
-    >>> a.add('ms windows')
-    >>> a.add('ms windows 2000', "this is canonical")
-    >>> a.add('windows', None)
-    >>> a.add('windows 2000')
-    >>> a['apple'] = None
-    >>> text = 'windows 2000 ms windows 2000 windows'
-    >>> for k in a.findall_short(text):
-    ...     print text[k[0]:k[1]]
-    ...
-    windows
-    ms windows
-    windows
-    >>> for k in a.findall_long(text):
-    ...     print text[k[0]:k[1]]
-    ...
-    windows 2000
-    ms windows 2000
-    windows
+### Python 3
 
-Mapping (dictionary) methods:
-    trie = NoAho()
-    trie['apple'] = apple_handling_function
-    trie['orange'] = Orange()
-    trie.add('banana') # payload will be None
-    trie['pear'] # will give key error
-    assert isinstance(trie['orange'], Orange)
-    assert 'banana' in trie
-    len(trie)
-    # No del;
-    # no iteration over keys
+`noahong` can be installed manually:
 
-The 'find[all]_short' forms are named as long and awkwardly as they are,
-to leave plain 'find[all]' free if overlapping matches are ever implemented.
+```
+python3 setup.py install
+```
 
+## Legacy README
 
-For the fullest spec of what the code will and will not do, check out
-test-noaho.py (run it with: python[3] test-noaho.py)
-
-Untested: whether the payload handling is complete, ie that there are no
-memory leaks. It should be correct though.
-
-
-Regenerating the Python Wrapper:
-- Needs a C++ compiler (C++98 is fine) and Cython.
-
-You do not need to rebuild the Cython wrapper (the generated noaho.cpp), but if
-you want to make changes to the module itself, there is a script:
-
-  test-all-configurations.sh
-
-which will, with minor configuration tweaking, rebuild and test against both
-python 2 and 3. It requires you to have a Cython tarball in the top directory.
-Note that the python you used to install Cython should be the same as the one
-you use to do the regeneration, because the regeneration setup includes a module
-Cython.Distutils, from the installation.
-
-Cython generates python-wrapper noaho.cpp from noaho.pyx (be careful
-to distinguish it from the misnamed array-aho.* (it uses hash tables),
-which is the original C++ code).
-
-Ways to Reduce Memory Use:
-One of its aims is to handle Unicode, which means you have to accommodate a huge
-branching factor, thus the hashtable (a full array would be out of the
-question). Ways to attack memory size might be, to either force very
-conservative hashtable growth, or, once the trie is complete (in 'compile', say)
-go through the tree and replace the hashtables with just-the-right-size arrays -
-linear scan / binary search should be fast enough if small enough, and take less
-memory. If you're willing to do a linear scan at that point, you could switch to
-UTF-8, too, saving quite a bit of memory. Danny Yoo's original code I think just
-started out as arrays and would grow to hashtables when needed.
-
-Also, if all you need is ASCII, you could re-define AC_CHAR_TYPE to be 'char'.
-I've tried to be careful to use AC_CHAR_TYPE consistently, but you'd probably
-want to go through the code to make sure if you're going to rely on this. Python
-3 uses Unicode internally though and would do a lot of conversions anyway.
-Otherwise, I don't trust my knowledge of Unicode enough to try to play games
-with storing fewer bits.
-
-In the Hopper:
-I have a case-insensitive version (the easiest thing is just to downcase
-everything you add or search for in noaho.pyx), and, one that will only yield
-keywords at word boundaries, thanks to Python's unicode character classes.
-(However, this second is a bit raw, and you can do it manually anyway.)
+You can find more information on the package and C++ implementation by reading the 
+legacy README found [here](./README-legacy.md).
