@@ -13,7 +13,7 @@ import tempfile
 
 import pytest
 
-from noahong import Mapped, NoAho
+from noahong import Mapped, NoAho, PayloadWriteError
 
 
 def test_compile_before_use():
@@ -402,3 +402,12 @@ def test_bad_mapped_trie():
 
         with pytest.raises(AssertionError):
             Mapped(path)
+
+def test_mapped_trie_payload():
+    trie = NoAho()
+    trie.add("foo", None)
+    trie.compile()
+    with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
+        path = os.path.join(tmpdir, "mapped")
+        with pytest.raises(PayloadWriteError):
+            trie.write(path)
