@@ -1,3 +1,4 @@
+
 import sys
 
 from setuptools import setup, Extension
@@ -28,7 +29,7 @@ setup(
     author_email="jeffrey.donner@gmail.com",
     url="https://github.com/clustree/noahong",
     description="Fast, non-overlapping simultaneous multiple keyword search",
-    long_description=open("README.txt").read(),
+    long_description=open("README.md").read(),
     long_description_content_type="text/plain",
     ext_modules=[noaho_module],
     classifiers=[
