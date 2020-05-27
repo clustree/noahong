@@ -25,7 +25,7 @@ How does it differ from the original project:
 Features:
 - 'short' and 'long' (longest matching key) searches, both one-off and
   iteration over all non-overlapping keyword matches in some text.
-- Works with both unicode and str in Python 2, and unicode in Python 3.  NOTE:
+- Works with unicode Python strings.  NOTE:
   As everything is simply single UCS4 / UTF-32 codepoints under the hood, all
   substrings and input unicode must be normalized, ie any separate modifying
   marks must be folded into each codepoint. See:
@@ -52,9 +52,6 @@ Anti-Features:
 - Lacks key iteration and deletion from the mapping (dict) protocol.
 - Memory leaking untested (one run under valgrind turned up nothing, but it
   wasn't extensive).
-- No /testcase/ for unicode in Python 2 (did manual test however)
-  Unicode chars represented as ucs4, and, each character has its own hashtable,
-  so it's relatively memory-heavy (see 'Ways to Reduce Memory Use' below).
 - Requires a C++ compiler (C++98 support is enough).
 
 Bug reports and patches welcome of course!
@@ -65,7 +62,6 @@ Bug reports and patches welcome of course!
 ```python3
 from noaho import NoAho
 trie = NoAho()
-# 'text' below applies to str and unicode in Python 2, or unicode in Python 3 (all there is)
 trie.add(key_text, optional payload)
 # (key_start, key_end, key_value) = trie.find_short(text_to_search)
 # (key_start, key_end, key_value) = trie.find_long(text_to_search)
@@ -139,7 +135,7 @@ test-all-configurations.sh
 ```
 
 which will, with minor configuration tweaking, rebuild and test against both
-python 2 and 3. It requires you to have a Cython tarball in the top directory.
+python 3. It requires you to have a Cython tarball in the top directory.
 Note that the python you used to install Cython should be the same as the one
 you use to do the regeneration, because the regeneration setup includes a module
 Cython.Distutils, from the installation.
