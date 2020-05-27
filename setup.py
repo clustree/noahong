@@ -30,7 +30,7 @@ setup(
     url="https://github.com/clustree/noahong",
     description="Fast, non-overlapping simultaneous multiple keyword search",
     long_description=open("README.md").read(),
-    long_description_content_type="text/plain",
+    long_description_content_type="text/markdown",
     ext_modules=[noaho_module],
     classifiers=[
         "Intended Audience :: Developers",
