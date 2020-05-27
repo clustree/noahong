@@ -61,7 +61,7 @@ Bug reports and patches welcome of course!
 
 ## API
 
-```
+```python3
 from noaho import NoAho
 trie = NoAho()
 # 'text' below applies to str and unicode in Python 2, or unicode in Python 3 (all there is)
@@ -78,7 +78,7 @@ assert keyword in trie
 ```
 
 Examples:
-```
+```python3
 >>> a = NoAho()
 >>> a.add('ms windows')
 >>> a.add('ms windows 2000', "this is canonical")
@@ -102,7 +102,7 @@ windows
 
 Mapping (dictionary) methods:
 
-```
+```python3
 trie = NoAho()
 trie['apple'] = apple_handling_function
 trie['orange'] = Orange()

@@ -6,7 +6,7 @@
 
 The first thing to do is to instantiate a `NoAho` object and add some keys to it (optionally with different payloads for each).
 
-```
+```python3
 from noahong import NoAho
 
 trie = NoAho()
@@ -21,7 +21,7 @@ trie["bar"] = "id_bar"
 
 Once you have added the different keys and their payloads, the `NoAho` object needs to be compiled:
 
-```
+```python3
 trie.compile()
 ```
 
@@ -39,7 +39,7 @@ It returns a tuple `(start, stop, payload)` such that:
 
 For example, using the above `trie`:
 
-```
+```python3
 trie.find_short("something foo")
 # returns (10, 13, 'id_foo')
 # "something foo"[10:13] == "foo"
@@ -47,7 +47,7 @@ trie.find_short("something foo")
 
 and returns the first match even though a longer match may start at the same position:
 
-```
+```python3
 trie.find_short("something foobar")
 # returns (10, 13, 'id_foo')
 ```
@@ -58,7 +58,7 @@ trie.find_short("something foobar")
 
 For example, using the above `trie`:
 
-```
+```python3
 trie.find_long("something foobar")
 # returns (10, 16, 'id_foobar')
 ```
@@ -68,7 +68,7 @@ trie.find_long("something foobar")
 Both `find_short` and `find_long` have a `findall_short` and `findall_long` counterparts that allow you to iterate on all non-overlapping matches found
 in the text:
 
-```
+```python3
 for x in trie.findall_long("something foo bar foobar"): 
     print(x)       
 
@@ -80,13 +80,13 @@ for x in trie.findall_long("something foo bar foobar"):
 
 Because matches are non-overlapping:
 
-```
+```python3
 list(trie.findall_short("foobar")) == [(0, 3, "id_foo"), (3, 6, "id_bar")]
 ```
 
 whereas:
 
-```
+```python3
 list(trie.findall_long("foobar")) == [(0, 6, "id_foobar")]
 ```
 
@@ -94,7 +94,7 @@ list(trie.findall_long("foobar")) == [(0, 6, "id_foobar")]
 
 `NoAho` tries accept any Python object as a payload:
 
-```
+```python3
 trie = NoAho()
 trie.add("foo", 0)
 trie.add("bar", CustomClass())
@@ -107,19 +107,19 @@ The same payload can be associated with different keys.
 
 `NoAho` trie objects also expose the number of keys with `len`:
 
-```
+```python3
 len(trie)
 ```
 
 And, when they are compiled, they can be used to test for key inclusion:
 
-```
+```python3
 "foo" in trie
 ```
 
 The number of nodes in the underlying Trie can be recovered with 
 
-```
+```python3
 trie.nodes_count()
 ```
 
@@ -131,7 +131,7 @@ The `Mapped` object exposes different finding method and only supports integer p
 
 Construct it by adding keys and payloads to a `NoAho` object:
 
-```
+```python3
 from noahong import NoAho, Mapped
 
 trie = NoAho()
@@ -147,7 +147,7 @@ The `mapped_trie` object exposes a `findall_anchored` function that iterates ove
 
 This is useful to restrict matches to be found only between, say, spaces:
 
-```
+```python3
 trie = NoAho()
 trie.add("foo", 0)
 trie.add("bar", 1)
@@ -165,7 +165,7 @@ Notice how `"bar"` is not found in the final `"foobar"` because it is not presen
 
 It is possible to place anchor characters in the keys:
 
-```
+```python3
 trie = NoAho()
 trie.add("foo\u001F\u001Fbar", 0)
 trie.add("foo", 1)
