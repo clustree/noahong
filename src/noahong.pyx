@@ -72,6 +72,8 @@ cdef extern from "array-aho.h":
         MappedTrie(char* path, int n) except +AssertionError
         int find_anchored(char* text, int len, char anchor,
                           int* out_start, int* out_end) except +AssertionError
+        int find_longest(char* text, int len,
+                         int* out_start, int* out_end) except +AssertionError
         int num_nodes()
 
 class PayloadWriteError(BaseException):
@@ -296,9 +298,9 @@ cdef class MappedIterator:
     cdef Utf8CodePoints code_points
     cdef bytes utf8_data
     cdef int num_utf8_chars
-    cdef int start, end
+    cdef int start, end, want_longest
 
-    def __init__(self, mapped, utf8_data, num_utf8_chars):
+    def __init__(self, mapped, utf8_data, num_utf8_chars, want_longest):
         self.mapped = mapped
         self.code_points = Utf8CodePoints()
         self.code_points.create(utf8_data, num_utf8_chars)
@@ -306,6 +308,7 @@ cdef class MappedIterator:
         self.num_utf8_chars = num_utf8_chars
         self.start = 0
         self.end = 0
+        self.want_longest = want_longest
 
     def __iter__(self):
         return self
@@ -315,10 +318,15 @@ cdef class MappedIterator:
         cdef object py_payload
         cdef int out_start, out_end
 
-        payload_index = self.mapped.trie.find_anchored(
-            self.utf8_data, self.num_utf8_chars, 0x1F,
-            &self.start, &self.end)
-
+        if self.want_longest == 1:
+            payload_index = self.mapped.trie.find_longest(
+                self.utf8_data, self.num_utf8_chars,
+                &self.start, &self.end)
+        elif self.want_longest == 2:
+            payload_index = self.mapped.trie.find_anchored(
+                self.utf8_data, self.num_utf8_chars, 0x1F,
+                &self.start, &self.end)
+                
         if self.start < self.end:
             # set up for next time
             out_start = self.code_points.get_codepoint_index(self.start)
@@ -349,11 +357,18 @@ cdef class Mapped:
         del self.trie
         self.closed = True
 
+    def findall_long(self, text):
+        cdef bytes utf8_data
+        cdef int num_utf8_chars
+        utf8_data, num_utf8_chars = get_as_utf8(text)
+        # 1 is flag for 'long'
+        return MappedIterator(self, utf8_data, num_utf8_chars, 1)
+
     def findall_anchored(self, text):
         cdef bytes utf8_data
         cdef int num_utf8_chars
         utf8_data, num_utf8_chars = get_as_utf8(text)
-        return MappedIterator(self, utf8_data, num_utf8_chars)
+        return MappedIterator(self, utf8_data, num_utf8_chars, 2)
 
     def nodes_count(self):
         return self.trie.num_nodes()

@@ -224,6 +224,10 @@ public:
                           int* inout_start,
                           int* out_end) const;
 
+   PayloadT find_longest(char const* s, size_t n,
+                       int* inout_start,
+                       int* out_end) const ;
+
    int num_nodes() const;
 
    virtual Node::Index child_at(Node::Index i, AC_CHAR_TYPE c) const;

@@ -403,6 +403,7 @@ def test_bad_mapped_trie():
         with pytest.raises(AssertionError):
             Mapped(path)
 
+
 def test_mapped_trie_payload():
     trie = NoAho()
     trie.add("foo", None)
@@ -411,3 +412,94 @@ def test_mapped_trie_payload():
         path = os.path.join(tmpdir, "mapped")
         with pytest.raises(PayloadWriteError):
             trie.write(path)
+
+
+def test_mapped_trie_find():
+    trie = NoAho()
+    trie.add("foo", 0)
+    trie.add("bar", 1)
+    trie.add("foobar", 2)
+
+    trie.compile()
+    with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
+        path = os.path.join(tmpdir, "mapped")
+        trie.write(path)
+
+        with contextlib.closing(Mapped(path)) as m:
+            # import ipdb; ipdb.set_trace()
+            assert m.nodes_count() == trie.nodes_count()
+            matches = list(m.findall_long("foo"))
+            assert matches == [(0, 3, 0)]
+            matches = list(m.findall_long("bar"))
+            assert matches == [(0, 3, 1)]
+            matches = list(m.findall_long("foobar"))
+            assert matches == [(0, 6, 2)]
+            matches = list(m.findall_long("foobarfoobarfoobar"))
+            assert matches == [(0, 6, 2), (6, 12, 2), (12, 18, 2)]
+            matches = list(m.findall_long("nothing bar"))
+            assert matches == [(8, 11, 1)]
+
+
+def test_findall_longest_mapped():
+    """test_findall_and_findall_longest"""
+    trie = NoAho()
+    trie.add("python", 0)
+    trie.add("perl", 1)
+    trie.add("scheme", 2)
+    trie.add("java", 3)
+    trie.add("pythonperl", 4)
+    trie.compile()
+    with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
+        path = os.path.join(tmpdir, "mapped")
+        trie.write(path)
+
+        with contextlib.closing(Mapped(path)) as m:
+            assert [(0, 10, 4), (10, 16, 2), (16, 20, 3)] == list(
+                m.findall_long("pythonperlschemejava")
+            )
+            assert [] == list(m.findall_long("no pascal here"))
+
+
+def test_competing_longests_mapped():
+    """test_bug2_competing_longests"""
+    trie = NoAho()
+    trie.add("cisco", 0)
+    trie.add("em", 1)
+    trie.add("cisco systems australia", 2)
+    trie.compile()
+    with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
+        path = os.path.join(tmpdir, "mapped")
+        trie.write(path)
+
+        with contextlib.closing(Mapped(path)) as m:
+            assert [(0, 5, 0), (10, 12, 1)] == list(m.findall_long("cisco systems"))
+
+
+def test_false_terminal_nodes_mapped():
+    """test_bug3_false_terminal_nodes"""
+    trie = NoAho()
+    trie.add("an", 0)
+    trie.add("canal", 1)
+    trie.add("e can oilfield", 2)
+    trie.compile()
+    with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
+        path = os.path.join(tmpdir, "mapped")
+        trie.write(path)
+        with contextlib.closing(Mapped(path)) as m:
+            assert [(4, 4 + 5, 1)], list(m.findall_long("one canal"))
+
+
+def test_utf8_mapped():
+    """test_utf8"""
+    trie = NoAho()
+    trie.add("étable", 0)
+    trie.add("béret", 1)
+    trie.add("blé", 2)
+    trie.compile()
+
+    with tempfile.TemporaryDirectory(prefix="noahong-") as tmpdir:
+        path = os.path.join(tmpdir, "mapped")
+        trie.write(path)
+        with contextlib.closing(Mapped(path)) as m:
+            matches = list(m.findall_long("étable béret blé"))
+            assert matches == [(0, 6, 0), (7, 12, 1), (13, 16, 2)]
