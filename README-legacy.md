@@ -1,7 +1,7 @@
 # Legacy README
 
 
-## Differences with `NoAho`
+## Differences with `NoAho`
 
 The initial objective was to reduce its memory consumption. When possible we
 try to preserve the existing interface. But specialization offers new
@@ -20,8 +20,9 @@ How does it differs from the original project:
 - We support Windows.
 
 
-## Features & anti-features
+## Features & anti-features
 
+Features:
 - 'short' and 'long' (longest matching key) searches, both one-off and
   iteration over all non-overlapping keyword matches in some text.
 - Works with both unicode and str in Python 2, and unicode in Python 3.  NOTE:
@@ -126,7 +127,7 @@ Untested: whether the payload handling is complete, ie that there are no
 memory leaks. It should be correct though.
 
 
-### Regenerating the Python Wrapper
+## Regenerating the Python Wrapper
 
 - Needs a C++ compiler (C++98 is fine) and Cython.
 
@@ -166,7 +167,7 @@ want to go through the code to make sure if you're going to rely on this. Python
 Otherwise, I don't trust my knowledge of Unicode enough to try to play games
 with storing fewer bits.
 
-### In the Hopper
+## In the Hopper
 
 I have a case-insensitive version (the easiest thing is just to downcase
 everything you add or search for in noaho.pyx), and, one that will only yield
