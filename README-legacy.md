@@ -11,7 +11,7 @@ point, or partially repurpose the library. You might still find it useful.
 Regardless, many thanks to JDonner and the other people having worked on this
 project.
 
-How does it differs from the original project:
+How does it differ from the original project:
 
 - Trie compilation is required before use. Once compiled it cannot be modified
   anymore. It makes it easier to catch issues related to thread-safety.

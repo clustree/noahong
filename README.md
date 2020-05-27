@@ -2,6 +2,10 @@
 
 `noahong` is a Python implementation of the [Aho-Corasick](https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm) algorithm for string matching, based on a fork of the [NoAho](https://github.com/JDonner/NoAho) C++ implementation.
 
+
+`noahong` supports macOS, Linux, Windows on Python 3.6+.
+
+
 ## API
 
 The first thing to do is to instantiate a `NoAho` object and add some keys to it (optionally with different payloads for each).
@@ -125,9 +129,9 @@ trie.nodes_count()
 
 ## Mapped `NoAho`
 
-In order to save memory, `noahong` exposes a `Mapped` matching object which can be written to disk and later loaded to perform matches with a smaller memory footprint. 
+In order to save memory, `noahong` exposes a `Mapped` matching object which can be written to disk and later loaded directly to memory to perform matches with a smaller memory footprint.
 
-The `Mapped` object exposes different finding method and only supports integer payloads.
+The `Mapped` object exposes different finding methods and only supports integer payloads.
 
 Construct it by adding keys and payloads to a `NoAho` object:
 
@@ -190,16 +194,6 @@ In this case, the longest key found between anchors is returned.
 
 ```
 pip install noahong
-```
-
-
-### Python 2
-
-`noahong` can be installed manually:
-
-```
-python2 setup.py install
-pip install
 ```
 
 ### Python 3
