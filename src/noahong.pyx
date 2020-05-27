@@ -74,13 +74,18 @@ cdef extern from "array-aho.h":
                           int* out_start, int* out_end) except +AssertionError
         int num_nodes()
 
+class PayloadWriteError(BaseException):
+    pass
 
 cdef class NoAho:
     cdef AhoCorasickTrie *thisptr
     cdef object payloads_to_decref
+    cdef int has_noninteger_payload
+
     def __cinit__(self):
         self.thisptr = new AhoCorasickTrie()
         self.payloads_to_decref = []
+        self.has_noninteger_payload = 0
 
     def __dealloc__(self):
         for payload in self.payloads_to_decref:
@@ -100,6 +105,8 @@ cdef class NoAho:
         cdef bytes utf8_data
         cdef int num_utf8_chars
         utf8_data, num_utf8_chars = get_as_utf8(path)
+        if self.has_noninteger_payload:
+            raise PayloadWriteError("Cannot write a NoAho trie with non integer payload.")
         self.thisptr.write(utf8_data, num_utf8_chars)
 
     def __contains__(self, key_text):
@@ -136,6 +143,8 @@ cdef class NoAho:
             raise ValueError("Key cannot be empty (would cause Aho-Corasick automaton to spin)")
 
         payload_index = -1
+        if not isinstance(py_payload, int):
+            self.has_noninteger_payload = 1
         if py_payload is not None:
             Py_INCREF(py_payload)
             payload_index = len(self.payloads_to_decref)
