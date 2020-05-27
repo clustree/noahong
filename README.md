@@ -107,6 +107,9 @@ trie.add("baz", lambda x: x)
 
 The same payload can be associated with different keys.
 
+Notice that the non-pickable `lambda x: x` payload works because
+there is no serialization involved here.
+
 ### Length and inclusion
 
 `NoAho` trie objects also expose the number of keys with `len`:
