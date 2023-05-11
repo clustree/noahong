@@ -207,6 +207,15 @@ pip install noahong
 python3 setup.py install
 ```
 
+## Regenerate code
+
+If you need to regenerate cpp code from pyx (cython) files:
+
+```
+pip install cython
+cython --cplus src/noahong.pyx
+```
+
 ## Legacy README
 
 You can find more information on the package and C++ implementation by reading the 
