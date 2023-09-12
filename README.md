@@ -3,7 +3,7 @@
 `noahong` is a Python implementation of the [Aho-Corasick](https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm) algorithm for string matching, based on a fork of the [NoAho](https://github.com/JDonner/NoAho) C++ implementation.
 
 
-`noahong` supports macOS, Linux, Windows on Python 3.6+.
+`noahong` supports macOS, Linux, Windows on Python 3.7+.
 
 
 ## API

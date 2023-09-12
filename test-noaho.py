@@ -297,13 +297,13 @@ def test_dict_style_len():
 
 # reminder that we need to figure out which version we're in, and
 # test Python 2 unicode explicitly
-@pytest.mark.xfail
+@pytest.mark.xfail(strict=True)
 def test_unicode_in_python2():
     assert False
 
 
 # key iteration is unimplemented
-@pytest.mark.xfail
+@pytest.mark.xfail(strict=True)
 def test_iteration():
     tree = NoAho()
     tree.add("Harry")
@@ -313,7 +313,7 @@ def test_iteration():
 
 
 # reminder that we need to implement findall_short
-@pytest.mark.xfail
+@pytest.mark.xfail(strict=True)
 def test_subset():
     tree = NoAho()
     tree.add("he")
